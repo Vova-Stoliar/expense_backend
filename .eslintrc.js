@@ -7,11 +7,11 @@ module.exports = {
     },
     plugins: ['@typescript-eslint/eslint-plugin'],
     extends: [
+        'plugin:import/recommended',
+        'plugin:import/typescript',
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/strict',
-        'plugin:import/recommended',
-        'plugin:import/typescript',
         'plugin:prettier/recommended',
     ],
     root: true,
@@ -20,12 +20,22 @@ module.exports = {
         jest: true,
     },
     ignorePatterns: ['.eslintrc.js'],
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+        'import/parsers': {
+            '@typescript-eslint/parser': ['.ts'],
+        },
+    },
     rules: {
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
+        // '@typescript-eslint/explicit-function-return-type': 'error',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        indent: ['error', 4],
+        '@typescript-eslint/await-thenable': 'error',
+        indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
         'max-len': ['error', { code: 120 }],
         'import/no-extraneous-dependencies': 'off',
         'import/order': [
