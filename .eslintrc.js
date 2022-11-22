@@ -33,6 +33,7 @@ module.exports = {
     },
     rules: {
         // '@typescript-eslint/explicit-function-return-type': 'error',
+        '@typescript-eslint/no-extraneous-class': ['warn', { allowEmpty: true }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/await-thenable': 'error',
         indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
