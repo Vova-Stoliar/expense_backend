@@ -1,18 +1,21 @@
 import type { User } from '@prisma/client';
 
-export interface IUserDto extends Pick<User, 'email' | 'userName' | 'displayName' | 'password'> {
+export * from './utility-type';
+
+// TODO: rename
+export type BaseUser = Pick<User, 'email' | 'userName' | 'displayName' | 'id'>;
+
+export type BaseUserWith<K extends keyof User> = BaseUser & Pick<User, K>;
+
+export interface IUserDto extends Omit<BaseUser, 'id'>, Pick<User, 'password'> {
     confirmPassword: User['password'];
 }
 
-export type IUserToLoginDto = Pick<User, 'email' | 'password' | 'id'>;
+export type IUserToLoginDto = Pick<BaseUser, 'email' | 'id'> & Pick<User, 'password'>;
 
-// TODO don't use id in payload instead use displayName
-export type JwtPayload = Pick<User, 'id' | 'email'>;
+export type JwtPayload = Pick<BaseUser, 'id' | 'email'>;
 
 export interface Tokens {
     accessToken: string;
     refreshToken: string;
 }
-
-export type UserExistencePipeReturnValue = Promise<IUserToLoginDto & { encryptedPassword: User['password'] }>;
-export type UserPasswordPipeValue = Awaited<UserExistencePipeReturnValue>;

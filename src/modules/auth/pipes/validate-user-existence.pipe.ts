@@ -1,24 +1,27 @@
 import type { PipeTransform } from '@nestjs/common';
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import type { IUserToLoginDto, UserExistencePipeReturnValue } from '~/modules/auth/types';
+import { Injectable } from '@nestjs/common';
+import type { User } from '@prisma/client';
+import type { BaseUser, WithPayload } from '~/modules/auth/types';
 import { UserRepository } from '~/repositories/user';
-import { MESSAGES } from '~/shared/constants';
+
+type AcceptValue = User;
+type ReturnValue = Promise<{ user: BaseUser & Pick<User, 'password'> } & WithPayload<AcceptValue>>;
 
 @Injectable()
-export class ValidateUserExistencePipe implements PipeTransform<IUserToLoginDto, UserExistencePipeReturnValue> {
+export class ValidateUserExistencePipe implements PipeTransform<AcceptValue, ReturnValue> {
     constructor(private userRepository: UserRepository) {}
 
-    async transform(value: IUserToLoginDto) {
-        const { email } = value;
+    async transform(value: AcceptValue): ReturnValue {
+        const { displayName, userName, email, id } = value;
 
-        const user = await this.userRepository.findUnique({ where: { email }, select: { password: true } });
-
-        if (!user) throw new ForbiddenException(MESSAGES.notExist({ property: 'User' }));
+        const user = await this.userRepository.findFirstOrThrow({
+            where: { displayName, userName, email, id },
+            select: { password: true },
+        });
 
         return {
-            ...value,
-            id: user.id,
-            encryptedPassword: user.password,
+            user,
+            payload: value,
         };
     }
 }

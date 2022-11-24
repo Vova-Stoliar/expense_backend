@@ -1,15 +1,13 @@
 import * as NestCommon from '@nestjs/common';
-import type { User } from '@prisma/client';
 import type { Response } from 'express';
 import { RESPONSE_HEADERS } from '~/modules/auth/constants';
 import { UserDto, UserToLoginDto } from '~/modules/auth/dto';
-import { ValidateUserExistencePipe, ValidateUserPasswordPipe } from '~/modules/auth/pipes';
-import type { Tokens } from '~/modules/auth/types';
+import { addBearerKeyword } from '~/modules/auth/lib';
+import * as Pipes from '~/modules/auth/pipes';
+import type { BaseUser, BaseUserWith, Tokens } from '~/modules/auth/types';
 import { GetCurrentUser } from '~/shared/decorators/get-current-user.decorator';
 import { RefreshTokenGuard } from '~/shared/guards';
 import { AuthService } from './auth.service';
-
-// TODO refactor "Bearer"
 
 @NestCommon.Controller('auth')
 export class AuthController {
@@ -19,24 +17,24 @@ export class AuthController {
     async signup(@NestCommon.Body() userToSignUp: UserDto, @NestCommon.Res({ passthrough: true }) res: Response) {
         const { accessToken, refreshToken, user } = await this.authService.signup(userToSignUp);
 
-        res.setHeader(RESPONSE_HEADERS.authorization, `Bearer ${accessToken}`);
+        res.setHeader(RESPONSE_HEADERS.authorization, addBearerKeyword({ str: accessToken }));
 
         return { user, token: refreshToken };
     }
 
     @NestCommon.Post('login')
-    @NestCommon.UsePipes(ValidateUserExistencePipe, ValidateUserPasswordPipe)
+    @NestCommon.UsePipes(Pipes.ValidateUserExistencePipe, Pipes.ValidateUserPasswordPipe)
     async login(@NestCommon.Body() userToLogin: UserToLoginDto, @NestCommon.Res({ passthrough: true }) res: Response) {
         const { accessToken, refreshToken } = await this.authService.login(userToLogin);
 
-        res.setHeader(RESPONSE_HEADERS.authorization, `Bearer ${accessToken}`);
+        res.setHeader(RESPONSE_HEADERS.authorization, addBearerKeyword({ str: accessToken }));
 
         return { user: userToLogin, token: refreshToken };
     }
 
     @NestCommon.Get('logout')
     @NestCommon.HttpCode(NestCommon.HttpStatus.NO_CONTENT)
-    async logout(@GetCurrentUser('id') id: User['id'], @NestCommon.Res({ passthrough: true }) res: Response) {
+    async logout(@GetCurrentUser('id') id: BaseUser['id'], @NestCommon.Res({ passthrough: true }) res: Response) {
         res.removeHeader(RESPONSE_HEADERS.authorization);
 
         await this.authService.logout({ id });
@@ -45,16 +43,16 @@ export class AuthController {
     @NestCommon.UseGuards(RefreshTokenGuard)
     @NestCommon.Get('refresh')
     async refresh(
-        @GetCurrentUser('id') id: User['id'],
-        @GetCurrentUser('refreshToken') refreshToken: Tokens['refreshToken'],
+        @GetCurrentUser('id', Pipes.ValidateUserExistenceByFieldPipe) user: BaseUserWith<'hashedRefreshToken'>,
+        @GetCurrentUser('refreshToken', Pipes.ValidateRefreshTokenPipe) refreshToken: Tokens['refreshToken'],
         @NestCommon.Res({ passthrough: true }) res: Response
     ) {
         const { accessToken, refreshToken: generatedRefreshToken } = await this.authService.refresh({
-            id,
+            user,
             refreshToken,
         });
 
-        res.setHeader(RESPONSE_HEADERS.authorization, `Bearer ${accessToken}`);
+        res.setHeader(RESPONSE_HEADERS.authorization, addBearerKeyword({ str: accessToken }));
 
         return { token: generatedRefreshToken };
     }

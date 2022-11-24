@@ -1,10 +1,10 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { ErrorResponseFactory } from '~/shared/exceptions/prisma/classes';
+import { ErrorResponseFactory } from '~/shared/filters/prisma/filters/client-known-request-error';
 
 @Catch(PrismaClientKnownRequestError)
-export class PrismaExceptionsFilter implements ExceptionFilter {
+export class ClientKnownRequestErrorFilter implements ExceptionFilter {
     constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
     catch(exception: PrismaClientKnownRequestError, host: ArgumentsHost) {

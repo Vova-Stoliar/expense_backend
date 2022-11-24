@@ -1,10 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
-import type { IUserDto, IUserToLoginDto, JwtPayload, Tokens } from '~/modules/auth/types';
+import type { BaseUserWith, BaseUser, IUserDto, IUserToLoginDto, JwtPayload, Tokens } from '~/modules/auth/types';
 import { UserRepository } from '~/repositories/user';
-import { MESSAGES } from '~/shared/constants';
 import { CustomConfigService } from '~/shared/modules/config';
 
 // TODO use object to pass params
@@ -17,8 +16,7 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    // TODO move to another directory
-    async getTokens(params: JwtPayload): Promise<Tokens> {
+    private async getTokens(params: JwtPayload): Promise<Tokens> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(params, {
                 secret: 'AT_SECRET',
@@ -36,56 +34,24 @@ export class AuthService {
         };
     }
 
-    async login(userToLogin: IUserToLoginDto) {
-        const { accessToken, refreshToken } = await this.getTokens({ id: userToLogin.id, email: userToLogin.email });
+    private async updateHashedRefreshTokenById(params: Pick<BaseUser, 'id'> & Pick<User, 'hashedRefreshToken'>) {
+        const { hashedRefreshToken, id } = params;
 
-        const hashRefreshToken = await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);
-
-        await this.userRepository.update({
-            where: {
-                id: userToLogin.id,
-            },
-            data: {
-                hashedRefreshToken: hashRefreshToken,
-            },
-        });
-
-        return { accessToken, refreshToken };
+        return this.userRepository.update({ where: { id }, data: { hashedRefreshToken } });
     }
 
-    async refresh(params: Pick<User, 'id'> & Pick<Tokens, 'refreshToken'>) {
-        const { id, refreshToken } = params;
-
-        const user = await this.userRepository.findUnique({ where: { id }, select: { hashedRefreshToken: true } });
-
-        if (!user?.hashedRefreshToken) throw new ForbiddenException(MESSAGES.notExist({ property: 'User' }));
-
-        const isRefreshTokenValid = await compare(refreshToken, user.hashedRefreshToken);
-
-        if (!isRefreshTokenValid) throw new ForbiddenException('Access Denied');
-
-        const tokens = await this.getTokens({ id: user.id, email: user.email });
-
-        const hashedRefreshToken = await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);
-
-        await this.userRepository.update({
-            where: {
-                id: user.id,
-            },
-            data: {
-                hashedRefreshToken,
-            },
-        });
-
-        return tokens;
+    private async getHashedRefreshToken({ refreshToken }: Pick<Tokens, 'refreshToken'>) {
+        return await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);
     }
 
-    async signup(userToSignUp: IUserDto) {
-        const { displayName, userName, email, password } = userToSignUp;
+    private async getHashedPassword({ password }: Pick<User, 'password'>) {
+        return await hash(password, this.customConfigService.BCRYPT_SALT_ROUNDS);
+    }
 
-        const hashedPassword = await hash(password, this.customConfigService.BCRYPT_SALT_ROUNDS);
+    private async createUser(userToCreate: Omit<BaseUser, 'id'> & { hashedPassword: IUserDto['password'] }) {
+        const { displayName, userName, email, hashedPassword } = userToCreate;
 
-        const user = await this.userRepository.create({
+        return this.userRepository.create({
             data: {
                 password: hashedPassword,
                 email,
@@ -93,24 +59,58 @@ export class AuthService {
                 displayName,
             },
         });
+    }
 
-        const { accessToken, refreshToken } = await this.getTokens({
-            id: user.id,
-            email: user.email,
-        });
+    private async validateRefreshToken(
+        param: { hashedRefreshToken: Tokens['refreshToken'] } & Pick<Tokens, 'refreshToken'>
+    ) {
+        const { hashedRefreshToken, refreshToken } = param;
 
-        const hashRefreshToken = await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);
+        const isRefreshTokenValid = await compare(refreshToken, hashedRefreshToken);
 
-        await this.userRepository.update({
-            where: {
-                id: user.id,
-            },
-            data: {
-                hashedRefreshToken: hashRefreshToken,
-            },
-        });
+        if (!isRefreshTokenValid) throw new UnauthorizedException();
+    }
 
-        return { accessToken, refreshToken, user };
+    async login(userToLogin: IUserToLoginDto) {
+        const { id, email } = userToLogin;
+
+        const tokens = await this.getTokens({ id, email });
+
+        const hashedRefreshToken = await this.getHashedRefreshToken({ refreshToken: tokens.refreshToken });
+
+        await this.updateHashedRefreshTokenById({ id, hashedRefreshToken });
+
+        return tokens;
+    }
+
+    async refresh(params: { user: BaseUserWith<'hashedRefreshToken'> } & Pick<Tokens, 'refreshToken'>) {
+        const { user, refreshToken } = params;
+
+        await this.validateRefreshToken({ refreshToken, hashedRefreshToken: user.hashedRefreshToken ?? '' });
+
+        const tokens = await this.getTokens({ id: user.id, email: user.email });
+
+        const hashedRefreshToken = await this.getHashedRefreshToken({ refreshToken: tokens.refreshToken });
+
+        await this.updateHashedRefreshTokenById({ id: user.id, hashedRefreshToken });
+
+        return tokens;
+    }
+
+    async signup(userToSignUp: IUserDto) {
+        const { displayName, userName, email, password } = userToSignUp;
+
+        const hashedPassword = await this.getHashedPassword({ password });
+
+        const user = await this.createUser({ email, userName, displayName, hashedPassword });
+
+        const tokens = await this.getTokens({ id: user.id, email: user.email });
+
+        const hashedRefreshToken = await this.getHashedRefreshToken({ refreshToken: tokens.refreshToken });
+
+        await this.updateHashedRefreshTokenById({ id: user.id, hashedRefreshToken });
+
+        return { ...tokens, user };
     }
 
     async logout({ id }: Pick<User, 'id'>) {

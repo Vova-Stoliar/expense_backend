@@ -1,6 +1,10 @@
 import type { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { DefaultErrorResponse, ErrorResponseP2002, ErrorResponseP2025 } from '~/shared/exceptions/prisma/classes';
-import { PRISMA_ERROR_CODES } from '~/shared/exceptions/prisma/constants';
+import { ErrorResponse } from '~/shared/filters/prisma/classes/error-response.class';
+import {
+    ErrorResponseP2002,
+    ErrorResponseP2025,
+    PRISMA_ERROR_CODES,
+} from '~/shared/filters/prisma/filters/client-known-request-error';
 
 export class ErrorResponseFactory {
     createMessage(exception: PrismaClientKnownRequestError) {
@@ -8,6 +12,6 @@ export class ErrorResponseFactory {
 
         if (exception.code === PRISMA_ERROR_CODES.P2025) return new ErrorResponseP2025(exception);
 
-        return new DefaultErrorResponse();
+        return new ErrorResponse();
     }
 }

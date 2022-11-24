@@ -1,22 +1,21 @@
 import type { PipeTransform } from '@nestjs/common';
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import type { User } from '@prisma/client';
 import { compare } from 'bcrypt';
-import type { IUserToLoginDto, UserPasswordPipeValue } from '~/modules/auth/types';
 import { MESSAGES } from '~/shared/constants';
 
-@Injectable()
-export class ValidateUserPasswordPipe implements PipeTransform<UserPasswordPipeValue, Promise<IUserToLoginDto>> {
-    async transform(value: UserPasswordPipeValue) {
-        const { encryptedPassword, password } = value;
+type AcceptValue = { user: Pick<User, 'password'> } & {
+    payload: Pick<User, 'password'>;
+};
 
-        const passwordMatches = await compare(password, encryptedPassword);
+@Injectable()
+export class ValidateUserPasswordPipe implements PipeTransform<AcceptValue, Promise<void>> {
+    async transform(value: AcceptValue) {
+        const { password: hashedPassword } = value.user;
+        const { password = '' } = value.payload;
+
+        const passwordMatches = await compare(password, hashedPassword);
 
         if (!passwordMatches) throw new ForbiddenException(MESSAGES.notValid({ property: 'Password' }));
-
-        return {
-            password,
-            id: value.id,
-            email: value.email,
-        };
     }
 }
