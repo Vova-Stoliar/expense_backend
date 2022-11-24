@@ -16,6 +16,7 @@
         "noImplicitAny": true,
         "strictBindCallApply": false,
         "noUncheckedIndexedAccess": false,
+        "exactOptionalPropertyTypes": false
     },
     "exclude": ["node_modules"]
 }

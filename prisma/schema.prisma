@@ -13,7 +13,7 @@ model User {
     updatedAt DateTime @updatedAt
 
     userName    String
-    displayName String @unique
+    displayName String
     email       String @unique
     password    String
 

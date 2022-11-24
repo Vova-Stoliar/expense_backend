@@ -3,6 +3,7 @@ import type { IUserDto } from '~/modules/auth/types';
 import { MESSAGES } from '~/shared/constants';
 import { IsEqualTo } from '~/shared/decorators';
 
+// TODO rename user-to-sign-up
 export class UserDto implements IUserDto {
     @IsNotEmpty()
     @IsEmail()

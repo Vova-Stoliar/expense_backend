@@ -1,0 +1,1 @@
+export { PrismaExceptionsFilter } from './exception';

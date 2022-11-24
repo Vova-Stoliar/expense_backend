@@ -10,7 +10,7 @@ export function IsEqualTo<TObject extends Record<keyof TObject, unknown>>(
             target: object.constructor,
             propertyName: propertyName,
             constraints: [property],
-            ...(validationOptions && { options: validationOptions }),
+            options: validationOptions,
             validator: {
                 validate(value: unknown, validationArguments: ValidationArguments): boolean {
                     const relatedValue = (validationArguments.object as TObject)[property];
