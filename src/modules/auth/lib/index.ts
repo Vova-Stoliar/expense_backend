@@ -1,1 +1,1 @@
-export { addBearerKeyword } from './add-bearer-keyword';
+export { validateRefreshToken } from './validate-refresh-token';

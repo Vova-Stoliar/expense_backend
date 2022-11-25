@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, PrismaPromise } from '@prisma/client';
+import { getSelectValues } from '~/repositories/user/lib';
 import { PrismaService } from '~/shared/modules/prisma';
-import type { BaseUser } from '~/shared/types';
-
-type UserSelect = Prisma.UserSelect;
 
 // implements Prisma.UserDelegate<undefined>
 
@@ -11,23 +9,12 @@ type UserSelect = Prisma.UserSelect;
 export class UserRepository {
     constructor(private prismaService: PrismaService) {}
 
-    private getSelectValues({ select }: { select: UserSelect | null | undefined }) {
-        const customSelectValues: Record<keyof BaseUser, boolean> = {
-            id: true,
-            email: true,
-            userName: true,
-            displayName: true,
-        };
-
-        return Object.assign(customSelectValues, select);
-    }
-
     async create<T extends Prisma.UserCreateArgs>(args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>) {
         const { select, data } = args;
 
         return this.prismaService.user.create({
             data,
-            select: this.getSelectValues({ select }),
+            select: getSelectValues({ select }),
         });
     }
 
@@ -46,7 +33,7 @@ export class UserRepository {
 
         return this.prismaService.user.findUnique({
             ...args,
-            select: this.getSelectValues({ select }),
+            select: getSelectValues({ select }),
         });
     }
 
@@ -57,7 +44,7 @@ export class UserRepository {
 
         return this.prismaService.user.findFirstOrThrow({
             ...args,
-            select: this.getSelectValues({ select }),
+            select: getSelectValues({ select }),
         });
     }
 
@@ -68,7 +55,7 @@ export class UserRepository {
 
         return this.prismaService.user.findUniqueOrThrow({
             ...args,
-            select: this.getSelectValues({ select }),
+            select: getSelectValues({ select }),
         });
     }
 }

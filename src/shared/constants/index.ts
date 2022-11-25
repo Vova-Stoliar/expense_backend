@@ -6,3 +6,10 @@ export const MESSAGES = {
     notFond: ({ property }: { property: string }) => `No ${property} found`,
     notValid: ({ property }: { property: string }) => `${property} is not valid`,
 } as const;
+
+export const STRATEGIES_NAMES = {
+    accessToken: 'jwt',
+    refreshToken: 'jwt-refresh',
+} as const;
+
+export const PUBLIC_DECORATOR_KEYWORD = 'public' as const;

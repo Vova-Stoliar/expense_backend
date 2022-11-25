@@ -1,8 +1,8 @@
 import { PickType } from '@nestjs/mapped-types';
-import type { User } from '@prisma/client';
-import { UserDto } from '~/modules/auth/dto';
+import { UserToSignupDto } from '~/modules/auth/dto';
 import type { IUserToLoginDto } from '~/modules/auth/types';
+import type { BaseUser } from '~/shared/types';
 
-export class UserToLoginDto extends PickType(UserDto, ['email', 'password']) implements IUserToLoginDto {
-    id!: User['id'];
+export class UserToLoginDto extends PickType(UserToSignupDto, ['email', 'password']) implements IUserToLoginDto {
+    id!: BaseUser['id'];
 }
