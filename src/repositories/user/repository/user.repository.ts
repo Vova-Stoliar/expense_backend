@@ -9,11 +9,13 @@ import { PrismaService } from '~/shared/modules/prisma';
 export class UserRepository {
     constructor(private prismaService: PrismaService) {}
 
+    // TODO create fun transform args
+
     async create<T extends Prisma.UserCreateArgs>(args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>) {
-        const { select, data } = args;
+        const { select } = args;
 
         return this.prismaService.user.create({
-            data,
+            ...args,
             select: getSelectValues({ select }),
         });
     }
@@ -25,7 +27,12 @@ export class UserRepository {
     }
 
     update<T extends Prisma.UserUpdateArgs>(args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>) {
-        return this.prismaService.user.update(args);
+        const { select } = args;
+
+        return this.prismaService.user.update({
+            ...args,
+            select: getSelectValues({ select: getSelectValues({ select }) }),
+        });
     }
 
     findUnique<T extends Prisma.UserFindUniqueArgs>(args: Prisma.SelectSubset<T, Prisma.UserFindUniqueArgs>) {

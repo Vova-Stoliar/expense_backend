@@ -1,7 +1,14 @@
-import type { User } from '@prisma/client';
-import type { BcryptHelper, JwtHelper, RefreshTokenHelper, UserRepositoryHelper } from '~/modules/auth/helpers';
+import { Injectable } from '@nestjs/common';
+import type { Prisma, User } from '@prisma/client';
+import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt.helper';
+import { JwtHelper } from '~/modules/auth/helpers/classes/jwt.helper';
+import { RefreshTokenHelper } from '~/modules/auth/helpers/classes/refresh-token.helper';
+import { UserRepositoryHelper } from '~/modules/auth/helpers/classes/user-repository.helper';
 import type { BaseUser, BaseUserWith, JwtPayload, Tokens } from '~/shared/types';
 
+// TODO: fix imports
+
+@Injectable()
 export class AuthFacadeHelper {
     constructor(
         private userRepositoryHelper: UserRepositoryHelper,
@@ -10,27 +17,27 @@ export class AuthFacadeHelper {
         private refreshTokenHelper: RefreshTokenHelper
     ) {}
 
-    async getHashedRefreshToken(params: Pick<Tokens, 'refreshToken'>) {
+    async getHashedRefreshToken(
+        params: Pick<Tokens, 'refreshToken'>
+    ): Promise<NonNullable<User['hashedRefreshToken']>> {
         return this.bcryptHelper.getHashedRefreshToken(params);
-    }
-
-    async getHashedPassword(params: Pick<User, 'password'>) {
-        return this.bcryptHelper.getHashedPassword(params);
     }
 
     async getTokens(params: JwtPayload): Promise<Tokens> {
         return this.jwtHelper.getTokens(params);
     }
 
-    async updateHashedRefreshTokenById(params: Pick<BaseUser, 'id'> & Pick<User, 'hashedRefreshToken'>) {
+    async updateHashedRefreshTokenById(
+        params: Pick<BaseUser, 'id'> & Pick<User, 'hashedRefreshToken'>
+    ): Promise<BaseUser> {
         return this.refreshTokenHelper.updateHashedRefreshTokenById(params);
     }
 
-    async deleteRefreshToken(params: Pick<BaseUser, 'id'>) {
-        return this.refreshTokenHelper.deleteRefreshToken(params);
+    async deleteRefreshTokenById(params: Pick<BaseUser, 'id'>): Promise<Prisma.BatchPayload> {
+        return this.refreshTokenHelper.deleteRefreshTokenById(params);
     }
 
-    async createUser(user: Omit<BaseUserWith<'password'>, 'id'>) {
+    async createUser(user: Omit<BaseUserWith<'password'>, 'id'>): Promise<BaseUser> {
         return this.userRepositoryHelper.createUser(user);
     }
 }

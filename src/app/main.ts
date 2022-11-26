@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { PrismaService } from '~/shared/modules';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
+    const prismaService = app.get(PrismaService);
+    await prismaService.enableShutdownHooks(app);
 
     app.useGlobalPipes(
         new ValidationPipe({

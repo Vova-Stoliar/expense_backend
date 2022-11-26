@@ -15,8 +15,11 @@
         "incremental": true,
         "noImplicitAny": true,
         "strictBindCallApply": false,
+
         "noUncheckedIndexedAccess": false,
-        "exactOptionalPropertyTypes": false
+        "exactOptionalPropertyTypes": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
     },
     "exclude": ["node_modules"]
 }
