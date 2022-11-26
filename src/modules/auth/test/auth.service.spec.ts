@@ -113,7 +113,7 @@ describe('AuthService', () => {
                 throw new TypeError();
             });
 
-            await expect(authService.refresh({ user, refreshToken: getTokens().refreshToken })).rejects.toThrow(
+            await expect(() => authService.refresh({ user, refreshToken: getTokens().refreshToken })).rejects.toThrow(
                 TypeError
             );
         });

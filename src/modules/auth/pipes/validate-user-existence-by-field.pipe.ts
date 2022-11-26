@@ -16,7 +16,7 @@ export class ValidateUserExistenceByField implements PipeTransform<AcceptValue, 
     async transform(value: AcceptValue, metadata: ArgumentMetadata): ReturnValue {
         const propertyField = metadata.data;
 
-        if (!propertyField) throw new NotFoundError(MESSAGES.notFond({ property: 'User' }));
+        if (propertyField === undefined) throw new NotFoundError(MESSAGES.notFond({ property: 'User' }));
 
         return this.userRepository.findFirstOrThrow({
             where: { [propertyField]: value },

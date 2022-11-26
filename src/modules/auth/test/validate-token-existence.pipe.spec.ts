@@ -1,15 +1,56 @@
-import type { PipeTransform } from '@nestjs/common';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import type { Tokens } from '~/shared/types';
+import { Test } from '@nestjs/testing';
+import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
+import { ValidateTokenExistence } from '~/modules/auth/pipes';
+import { getTokens } from '~/modules/auth/test/stubs';
 
-type AcceptValue = Tokens['refreshToken'];
-type ReturnValue = AcceptValue;
+const moduleMocker = new ModuleMocker(global);
 
-@Injectable()
-export class ValidateTokenExistence implements PipeTransform<AcceptValue, ReturnValue> {
-    transform(token: AcceptValue): ReturnValue {
-        if (!token) throw new UnauthorizedException();
+const getMocks = async () => {
+    const moduleRef = await Test.createTestingModule({
+        providers: [ValidateTokenExistence],
+    })
+        .useMocker((token) => {
+            if (typeof token === 'function') {
+                const mockMetadata = moduleMocker.getMetadata(token) as MockFunctionMetadata<any, any>;
+                const Mock = moduleMocker.generateFromMetadata(mockMetadata);
 
-        return token;
-    }
-}
+                return new Mock();
+            }
+        })
+        .compile();
+
+    const validateTokenExistence = moduleRef.get<ValidateTokenExistence>(ValidateTokenExistence);
+
+    return { validateTokenExistence };
+};
+describe('ValidateTokenExistence', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should be defined', async () => {
+        const { validateTokenExistence } = await getMocks();
+
+        expect(validateTokenExistence).toBeDefined();
+    });
+
+    describe('when token is passed', () => {
+        it('should return "token"', async () => {
+            const { validateTokenExistence } = await getMocks();
+
+            expect(validateTokenExistence.transform(getTokens().refreshToken)).toBe(getTokens().refreshToken);
+        });
+    });
+
+    describe('when token is not passed', () => {
+        it('should throw error', async () => {
+            const { validateTokenExistence } = await getMocks();
+
+            jest.spyOn(validateTokenExistence, 'transform').mockImplementation(() => {
+                throw new TypeError();
+            });
+
+            expect(() => validateTokenExistence.transform()).toThrow(TypeError);
+        });
+    });
+});

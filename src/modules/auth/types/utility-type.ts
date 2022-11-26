@@ -1,1 +1,3 @@
-export type WithPayload<TPayload> = { payload: TPayload };
+export interface WithPayload<TPayload> {
+    payload: TPayload;
+}
