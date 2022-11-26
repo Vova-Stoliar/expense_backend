@@ -42,6 +42,7 @@ module.exports = {
         indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
         'max-len': ['error', { code: 120 }],
         'import/no-extraneous-dependencies': 'off',
+        'max-depth': ['error', 2],
         'import/order': [
             'error',
             {

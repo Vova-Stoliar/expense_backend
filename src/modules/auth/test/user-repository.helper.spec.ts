@@ -75,7 +75,5 @@ describe('UserRepositoryHelper', () => {
 
             expect(await userRepositoryHelper.createUser(passedValue)).toStrictEqual(returnValue);
         });
-
-        it.todo('should create user with hashed password');
     });
 });

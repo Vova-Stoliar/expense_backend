@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import { hash } from 'bcrypt';
-import { CustomConfigService } from '~/shared/modules';
 import type { BaseUser, Tokens } from '~/shared/types';
+import { CustomConfigService } from '~/shared/modules';
 
 @Injectable()
 export class BcryptHelper {

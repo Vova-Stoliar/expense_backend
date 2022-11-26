@@ -3,13 +3,20 @@ import type { User } from '@prisma/client';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade.helper';
 import * as validateRefreshTokenModule from '~/modules/auth/lib';
-import { AuthService } from '~/modules/auth/module/auth.service';
 import { getAuthFacadeHelperMock } from '~/modules/auth/test/mocks';
 import { getSignupReturnValue, getTokens, getUser } from '~/modules/auth/test/stubs';
 import type { IUserToLoginDto, IUserUserToSignupDto } from '~/modules/auth/types';
 import type { BaseUser } from '~/shared/types';
+import { AuthService } from '../auth.service';
 
-const moduleMocker = new ModuleMocker(global);
+const getFunctionMock = <Token>(token: Token) => {
+    const moduleMocker = new ModuleMocker(global);
+
+    const mockMetadata = moduleMocker.getMetadata(token) as MockFunctionMetadata<any, any>;
+    const Mock = moduleMocker.generateFromMetadata(mockMetadata);
+
+    return new Mock();
+};
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({
@@ -21,10 +28,7 @@ const getMocks = async () => {
             }
 
             if (typeof token === 'function') {
-                const mockMetadata = moduleMocker.getMetadata(token) as MockFunctionMetadata<any, any>;
-                const Mock = moduleMocker.generateFromMetadata(mockMetadata);
-
-                return new Mock();
+                return getFunctionMock(token);
             }
         })
         .compile();
