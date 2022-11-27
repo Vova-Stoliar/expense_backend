@@ -9,8 +9,6 @@ import { PrismaService } from '~/shared/modules/prisma';
 export class UserRepository {
     constructor(private prismaService: PrismaService) {}
 
-    // TODO create fun transform args
-
     async create<T extends Prisma.UserCreateArgs>(args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>) {
         const { select } = args;
 

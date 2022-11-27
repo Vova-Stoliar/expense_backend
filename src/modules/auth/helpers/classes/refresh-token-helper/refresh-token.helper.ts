@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { UserRepository } from '~/repositories/user';
-import type { BaseUser } from '~/shared/types';
+import type { BaseUser, BaseUserWith } from '~/shared/types';
 
 @Injectable()
 export class RefreshTokenHelper {
     constructor(private userRepository: UserRepository) {}
 
     async updateHashedRefreshTokenById(
-        params: Pick<BaseUser, 'id'> & Pick<User, 'hashedRefreshToken'>
+        params: Pick<BaseUserWith<'hashedRefreshToken'>, 'id' | 'hashedRefreshToken'>
     ): Promise<BaseUser> {
         const { hashedRefreshToken, id } = params;
 

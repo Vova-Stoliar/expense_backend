@@ -26,7 +26,7 @@ export class AuthFacadeHelper {
     }
 
     async updateHashedRefreshTokenById(
-        params: Pick<BaseUser, 'id'> & Pick<User, 'hashedRefreshToken'>
+        params: Pick<BaseUserWith<'hashedRefreshToken'>, 'id' | 'hashedRefreshToken'>
     ): Promise<BaseUser> {
         return this.refreshTokenHelper.updateHashedRefreshTokenById(params);
     }

@@ -1,14 +1,11 @@
-import type { User } from '@prisma/client';
 import { getUser } from '~/modules/auth/constants/test';
 import type { WithPayload } from '~/modules/auth/types';
 import type { BaseUser, BaseUserWith } from '~/shared/types';
 
-// TODO: delete IUserToLoginDto
-
 const getAcceptValue = () => {
     const { email, password } = getUser();
 
-    const acceptValue: Pick<User, 'email' | 'password'> = {
+    const acceptValue: Pick<BaseUserWith<'password'>, 'email' | 'password'> = {
         email,
         password,
     };

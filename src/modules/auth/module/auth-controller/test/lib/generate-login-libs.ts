@@ -1,11 +1,10 @@
-import { getUser, getAuthTokens } from '~/modules/auth/constants/test';
-import type { IUserToLoginDto } from '~/modules/auth/types';
-import type { BaseUser, Tokens } from '~/shared/types';
+import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
 const getLoginAcceptValue = () => {
     const { email, id, password } = getUser();
 
-    const acceptValue: IUserToLoginDto = {
+    const acceptValue: Pick<BaseUserWith<'password'>, 'email' | 'id' | 'password'> = {
         email,
         id,
         password,
