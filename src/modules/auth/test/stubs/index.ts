@@ -12,7 +12,7 @@ export const getUser = (): BaseUserWith<'password'> & {
     hashedRefreshToken: 'fdsfwfdvv',
 });
 
-export const getTokens = (): Tokens => ({
+export const getAuthTokens = (): Tokens => ({
     refreshToken: 'fdsvcxvvba',
     accessToken: 'fdsvsvzsfesr',
 });
@@ -22,7 +22,7 @@ export const getPrismaBatchPayload = (): Prisma.BatchPayload => ({
 });
 
 export const getSignupReturnValue = (): { user: BaseUser } & Tokens => ({
-    ...getTokens(),
+    ...getAuthTokens(),
     user: {
         email: getUser().email,
         userName: getUser().userName,
@@ -32,7 +32,7 @@ export const getSignupReturnValue = (): { user: BaseUser } & Tokens => ({
 });
 
 export const getLoginReturnValue = (): { user: Pick<BaseUser, 'email' | 'id'> } & Tokens => ({
-    ...getTokens(),
+    ...getAuthTokens(),
     user: {
         email: getUser().email,
         id: getUser().id,

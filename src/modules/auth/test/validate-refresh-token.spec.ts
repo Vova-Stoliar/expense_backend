@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { validateRefreshToken } from '~/modules/auth/lib';
-import { getTokens, getUser } from '~/modules/auth/test/stubs';
+import { getAuthTokens, getUser } from '~/modules/auth/test/stubs';
 import type { Tokens } from '~/shared/types';
 
 const getMocks = () => {
@@ -26,7 +26,7 @@ describe('validateRefreshToken', () => {
 
             const passedValue: { hashedRefreshToken: Tokens['refreshToken'] } & Pick<Tokens, 'refreshToken'> = {
                 hashedRefreshToken: getUser().hashedRefreshToken,
-                refreshToken: getTokens().refreshToken,
+                refreshToken: getAuthTokens().refreshToken,
             };
 
             await expect(validateRefreshToken(passedValue)).rejects.toThrow();
@@ -40,7 +40,7 @@ describe('validateRefreshToken', () => {
 
             const passedValue: { hashedRefreshToken: Tokens['refreshToken'] } & Pick<Tokens, 'refreshToken'> = {
                 hashedRefreshToken: getUser().hashedRefreshToken,
-                refreshToken: getTokens().refreshToken,
+                refreshToken: getAuthTokens().refreshToken,
             };
 
             await expect(validateRefreshToken(passedValue)).resolves.not.toThrow();

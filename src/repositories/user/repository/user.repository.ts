@@ -31,7 +31,7 @@ export class UserRepository {
 
         return this.prismaService.user.update({
             ...args,
-            select: getSelectValues({ select: getSelectValues({ select }) }),
+            select: getSelectValues({ select }),
         });
     }
 

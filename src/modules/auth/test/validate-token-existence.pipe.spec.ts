@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
 import { ValidateTokenExistence } from '~/modules/auth/pipes';
-import { getTokens } from '~/modules/auth/test/stubs';
+import { getAuthTokens } from '~/modules/auth/test/stubs';
 
 const moduleMocker = new ModuleMocker(global);
 
@@ -38,7 +38,7 @@ describe('ValidateTokenExistence', () => {
         it('should return "token"', async () => {
             const { validateTokenExistence } = await getMocks();
 
-            expect(validateTokenExistence.transform(getTokens().refreshToken)).toBe(getTokens().refreshToken);
+            expect(validateTokenExistence.transform(getAuthTokens().refreshToken)).toBe(getAuthTokens().refreshToken);
         });
     });
 

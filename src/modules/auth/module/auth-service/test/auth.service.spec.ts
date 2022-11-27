@@ -1,125 +1,76 @@
-import { Test } from '@nestjs/testing';
-import type { User } from '@prisma/client';
-import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
-import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade.helper';
-import * as validateRefreshTokenModule from '~/modules/auth/lib';
-import { getAuthFacadeHelperMock } from '~/modules/auth/test/mocks';
-import { getSignupReturnValue, getTokens, getUser } from '~/modules/auth/test/stubs';
-import type { IUserToLoginDto, IUserUserToSignupDto } from '~/modules/auth/types';
-import type { BaseUser } from '~/shared/types';
-import { AuthService } from '../auth.service';
-
-const getFunctionMock = <Token>(token: Token) => {
-    const moduleMocker = new ModuleMocker(global);
-
-    const mockMetadata = moduleMocker.getMetadata(token) as MockFunctionMetadata<any, any>;
-    const Mock = moduleMocker.generateFromMetadata(mockMetadata);
-
-    return new Mock();
-};
-
-const getMocks = async () => {
-    const moduleRef = await Test.createTestingModule({
-        providers: [AuthService],
-    })
-        .useMocker((token) => {
-            if (token === AuthFacadeHelper) {
-                return getAuthFacadeHelperMock();
-            }
-
-            if (typeof token === 'function') {
-                return getFunctionMock(token);
-            }
-        })
-        .compile();
-
-    const authService = moduleRef.get<AuthService>(AuthService);
-
-    return { authService };
-};
+import * as libs from './lib';
 
 describe('AuthService', () => {
     it('should be defined', async () => {
-        const { authService } = await getMocks();
+        const { authService } = await libs.getMocks();
 
         expect(authService).toBeDefined();
     });
 
     describe('signup', () => {
+        const { getSignupAcceptValue, getSignupReturnValue } = libs.generateSignupLibs();
+
         it('should return a "user", "refresh" and "access tokens"', async () => {
-            const { authService } = await getMocks();
+            const { authService } = await libs.getMocks();
 
-            const userToSignup: IUserUserToSignupDto = {
-                email: getUser().email,
-                userName: getUser().userName,
-                displayName: getUser().displayName,
-                password: getUser().password,
-                confirmPassword: getUser().password,
-            };
+            const { returnValue } = getSignupReturnValue();
+            const { acceptValue } = getSignupAcceptValue();
 
-            expect(await authService.signup(userToSignup)).toStrictEqual(getSignupReturnValue());
+            expect(await authService.signup(acceptValue)).toStrictEqual(returnValue);
         });
     });
 
     describe('logout', () => {
-        it('should return "void"', async () => {
-            const { authService } = await getMocks();
+        const { getLogoutAcceptValue } = libs.generateLogoutLibs();
 
-            expect(await authService.logout({ id: getUser().id })).toBe(void 0);
+        it('should return "void"', async () => {
+            const { authService } = await libs.getMocks();
+
+            const { acceptValue } = getLogoutAcceptValue();
+
+            expect(await authService.logout(acceptValue)).toBe(void 0);
         });
     });
 
     describe('login', () => {
-        it('should return a "user" and "tokens"', async () => {
-            const { authService } = await getMocks();
+        const { getLoginReturnValue, getLoginAcceptValue } = libs.generateLoginLibs();
 
-            const userToLogin: IUserToLoginDto = {
-                email: getUser().email,
-                id: getUser().id,
-                password: getUser().password,
-            };
+        it('should return "access" and "refresh" tokens', async () => {
+            const { authService } = await libs.getMocks();
 
-            expect(await authService.login(userToLogin)).toStrictEqual(getTokens());
+            const { returnValue } = getLoginReturnValue();
+            const { acceptValue } = getLoginAcceptValue();
+
+            expect(await authService.login(acceptValue)).toStrictEqual(returnValue);
         });
     });
 
     describe('refresh', () => {
+        const { getRefreshReturnValue, getRefreshAcceptValue, getRefreshMocks } = libs.generateRefreshLibs();
+
         it('should return "tokens"', async () => {
-            const { authService } = await getMocks();
+            const { authService } = await libs.getMocks();
 
-            const user: BaseUser & { hashedRefreshToken: NonNullable<User['hashedRefreshToken']> } = {
-                email: getUser().email,
-                id: getUser().id,
-                hashedRefreshToken: getUser().id,
-                userName: getUser().userName,
-                displayName: getUser().displayName,
-            };
+            const { acceptValue } = getRefreshAcceptValue();
+            const { returnValue } = getRefreshReturnValue();
+            const { validateRefreshToken } = getRefreshMocks();
 
-            jest.spyOn(validateRefreshTokenModule, 'validateRefreshToken').mockImplementation();
+            validateRefreshToken.mockImplementation();
 
-            expect(await authService.refresh({ user, refreshToken: getTokens().refreshToken })).toStrictEqual(
-                getTokens()
-            );
+            expect(await authService.refresh(acceptValue)).toStrictEqual(returnValue);
         });
 
         it('should throw error if "refresh token" is not valid', async () => {
-            const { authService } = await getMocks();
+            const { authService } = await libs.getMocks();
 
-            const user: BaseUser & { hashedRefreshToken: NonNullable<User['hashedRefreshToken']> } = {
-                email: getUser().email,
-                id: getUser().id,
-                hashedRefreshToken: getUser().id,
-                userName: getUser().userName,
-                displayName: getUser().displayName,
-            };
+            const { acceptValue } = getRefreshAcceptValue();
+            const { validateRefreshToken } = getRefreshMocks();
 
-            jest.spyOn(validateRefreshTokenModule, 'validateRefreshToken').mockImplementation(() => {
+            validateRefreshToken.mockImplementation(() => {
                 throw new TypeError();
             });
 
-            await expect(() => authService.refresh({ user, refreshToken: getTokens().refreshToken })).rejects.toThrow(
-                TypeError
-            );
+            await expect(() => authService.refresh(acceptValue)).rejects.toThrow(TypeError);
         });
     });
 });

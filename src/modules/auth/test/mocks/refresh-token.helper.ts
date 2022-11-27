@@ -1,4 +1,4 @@
-import { getPrismaBatchPayload, getUpdateHashedRefreshTokenByIdReturnValue, getUser } from '~/modules/auth/test/stubs';
+import { getPrismaBatchPayload, getUpdateHashedRefreshTokenByIdReturnValue } from '~/modules/auth/test/stubs';
 
 export const getRefreshTokenHelperMock = () => ({
     updateHashedRefreshTokenById: jest.fn().mockResolvedValue(getUpdateHashedRefreshTokenByIdReturnValue()),

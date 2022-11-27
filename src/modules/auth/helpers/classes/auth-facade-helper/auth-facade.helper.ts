@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, User } from '@prisma/client';
-import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt.helper';
-import { JwtHelper } from '~/modules/auth/helpers/classes/jwt.helper';
-import { RefreshTokenHelper } from '~/modules/auth/helpers/classes/refresh-token.helper';
+import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
+import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
+import { RefreshTokenHelper } from '~/modules/auth/helpers/classes/refresh-token-helper';
 import type { BaseUser, BaseUserWith, JwtPayload, Tokens } from '~/shared/types';
-import { UserRepositoryHelper } from './user-repository.helper';
-
-// TODO: fix imports
+import { UserRepositoryHelper } from '../user-repository.helper';
 
 @Injectable()
 export class AuthFacadeHelper {

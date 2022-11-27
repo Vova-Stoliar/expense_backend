@@ -1,10 +1,10 @@
 import * as NestCommon from '@nestjs/common';
 import { UserToLoginDto, UserToSignupDto } from '~/modules/auth/dto';
 import { RefreshTokenGuard } from '~/modules/auth/guards';
+import { AuthService } from '~/modules/auth/module/auth-service';
 import * as Pipes from '~/modules/auth/pipes';
 import { GetUserPropertyByKey, Public } from '~/shared/decorators';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
-import { AuthService } from './auth.service';
 
 @NestCommon.Controller('auth')
 export class AuthController {

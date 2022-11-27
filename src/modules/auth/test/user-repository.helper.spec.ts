@@ -1,16 +1,14 @@
 import { Test } from '@nestjs/testing';
-import type { User } from '@prisma/client';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
-import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt.helper';
-import { RefreshTokenHelper } from '~/modules/auth/helpers/classes/refresh-token.helper';
+import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { UserRepositoryHelper } from '~/modules/auth/helpers/classes/user-repository.helper';
 import { getBcryptHelperMock } from '~/modules/auth/test/mocks';
-import { getCreateUserReturnValue, getPrismaBatchPayload, getUser } from '~/modules/auth/test/stubs';
+import { getUser } from '~/modules/auth/test/stubs';
 import { UserRepository } from '~/repositories/user';
 import type { BaseUser, BaseUserWith } from '~/shared/types';
 
 const getUserRepositoryMock = () => {
-    const { displayName, userName, email, id, hashedRefreshToken } = getUser();
+    const { displayName, userName, email, id } = getUser();
 
     return {
         create: jest.fn().mockResolvedValue({ displayName, userName, email, id }),

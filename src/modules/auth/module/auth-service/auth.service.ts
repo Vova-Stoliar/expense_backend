@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade.helper';
+import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
 import { validateRefreshToken } from '~/modules/auth/lib';
 import type { IUserToLoginDto, IUserUserToSignupDto } from '~/modules/auth/types';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';

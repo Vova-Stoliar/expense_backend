@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt.helper';
+import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { UserRepository } from '~/repositories/user';
 import type { BaseUser, BaseUserWith } from '~/shared/types';
 
