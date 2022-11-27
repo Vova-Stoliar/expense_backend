@@ -1,4 +1,4 @@
-import { getPrismaBatchPayload, getUser } from '~/modules/auth/test/stubs';
+import { getPrismaBatchPayload, getUser } from '~/modules/auth/constants/test';
 
 export const getUserRepositoryMock = () => {
     const { displayName, userName, email, id } = getUser();
@@ -11,5 +11,6 @@ export const getUserRepositoryMock = () => {
             id,
         }),
         updateMany: jest.fn().mockResolvedValue(getPrismaBatchPayload()),
+        create: jest.fn().mockResolvedValue({ displayName, userName, email, id }),
     };
 };

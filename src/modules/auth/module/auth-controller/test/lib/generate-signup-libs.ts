@@ -1,4 +1,4 @@
-import { getAuthTokens, getUser } from '~/modules/auth/test/stubs';
+import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 import type { IUserUserToSignupDto } from '~/modules/auth/types';
 import type { BaseUser, Tokens } from '~/shared/types';
 

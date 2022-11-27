@@ -1,4 +1,4 @@
-import { getAuthTokens, getUser } from '~/modules/auth/test/stubs';
+import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 
 const getAcceptValue = () => {
     const { refreshToken } = getAuthTokens();

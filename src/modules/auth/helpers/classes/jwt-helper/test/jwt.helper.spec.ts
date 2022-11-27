@@ -1,4 +1,4 @@
-import { getAuthTokens } from '~/modules/auth/test/stubs';
+import { getAuthTokens } from '~/modules/auth/constants/test';
 import { libs } from './lib';
 
 describe('JwtHelper', () => {

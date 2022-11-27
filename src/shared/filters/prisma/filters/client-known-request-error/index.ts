@@ -1,3 +1,1 @@
-export * from './classes';
-export * from './filter';
-export * from './constants';
+export { ClientKnownRequestErrorFilter } from './client-known-request-error.filter';

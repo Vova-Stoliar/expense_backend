@@ -1,4 +1,4 @@
-import { getUser } from '~/modules/auth/test/stubs';
+import { getUser } from '~/modules/auth/constants/test';
 import { libs } from './lib';
 
 describe('BcryptHelper', () => {

@@ -1,5 +1,7 @@
-import { getUser } from '~/modules/auth/test/stubs';
+import { getUser } from '~/modules/auth/constants/test';
 import type { BaseUser } from '~/shared/types';
+
+// TODO fix code repetitiveness
 
 const getReturnValue = () => {
     const { email, id, userName, displayName } = getUser();

@@ -1,4 +1,4 @@
-import { getPrismaBatchPayload, getUser } from '~/modules/auth/test/stubs';
+import { getPrismaBatchPayload, getUser } from '~/modules/auth/constants/test';
 
 const getReturnValue = () => {
     return { returnValue: getPrismaBatchPayload() };

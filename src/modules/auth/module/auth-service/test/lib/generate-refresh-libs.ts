@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client';
 import * as validateRefreshTokenModule from '~/modules/auth/lib';
-import { getAuthTokens, getUser } from '~/modules/auth/test/stubs';
+import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
 const getRefreshAcceptValue = () => {

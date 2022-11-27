@@ -1,4 +1,4 @@
-import { getUser, getAuthTokens } from '~/modules/auth/test/stubs';
+import { getUser, getAuthTokens } from '~/modules/auth/constants/test';
 import type { IUserToLoginDto } from '~/modules/auth/types';
 
 const getLoginAcceptValue = () => {
