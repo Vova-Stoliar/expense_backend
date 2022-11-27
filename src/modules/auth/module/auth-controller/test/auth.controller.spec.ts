@@ -57,4 +57,17 @@ describe('CatsController', () => {
             expect(await authController.refresh(acceptValue.user, acceptValue.refreshToken)).toStrictEqual(returnValue);
         });
     });
+
+    describe('resetPassword', () => {
+        const { getAcceptValue, getReturnValue } = libs.resetPassword();
+
+        it(`should return a "user's id"`, async () => {
+            const { authController } = await libs.getMocks();
+
+            const { returnValue } = getReturnValue();
+            const { acceptValue } = getAcceptValue();
+
+            expect(await authController.resetPassword(acceptValue)).toStrictEqual(returnValue);
+        });
+    });
 });

@@ -7,6 +7,19 @@ describe('AuthService', () => {
         expect(authService).toBeDefined();
     });
 
+    describe('resetPassword', () => {
+        const { getAcceptValue, getReturnValue } = libs.resetPassword();
+
+        it(`should return a "user's id" and "refreshToken"`, async () => {
+            const { authService } = await libs.getMocks();
+
+            const { acceptValue } = getAcceptValue();
+            const { returnValue } = getReturnValue();
+
+            expect(authService.resetPassword(acceptValue)).toBe(returnValue);
+        });
+    });
+
     describe('signup', () => {
         const { getSignupAcceptValue, getSignupReturnValue } = libs.generateSignupLibs();
 

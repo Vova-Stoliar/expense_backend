@@ -1,5 +1,6 @@
 import * as NestCommon from '@nestjs/common';
 import { UserToLoginDto, UserToSignupDto } from '~/modules/auth/dto';
+import { UserToResetPasswordDto } from '~/modules/auth/dto/user-to-reset-password.dto';
 import { RefreshTokenGuard } from '~/modules/auth/guards';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import * as Pipes from '~/modules/auth/pipes';
@@ -31,6 +32,14 @@ export class AuthController {
     @NestCommon.HttpCode(NestCommon.HttpStatus.NO_CONTENT)
     async logout(@GetUserPropertyByKey('id') id: BaseUser['id']): Promise<void> {
         await this.authService.logout({ id });
+    }
+
+    @NestCommon.Get('resetPassword')
+    @NestCommon.HttpCode(NestCommon.HttpStatus.OK)
+    async resetPassword(
+        @NestCommon.Body(Pipes.ValidateUserExistence) user: UserToResetPasswordDto
+    ): Promise<{ user: BaseUser; tokens: Tokens }> {
+        return this.authService.resetPassword(user);
     }
 
     @NestCommon.UseGuards(RefreshTokenGuard)

@@ -1,6 +1,8 @@
 import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
+// TODO rename functions
+
 const getLoginAcceptValue = () => {
     const { email, id, password } = getUser();
 

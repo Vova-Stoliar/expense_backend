@@ -1,9 +1,9 @@
 import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
-import type { IUserUserToSignupDto } from '~/modules/auth/types';
+import type { IUserUserToSignup } from '~/modules/auth/types';
 import { MESSAGES } from '~/shared/constants';
 import { IsEqualTo } from '~/shared/decorators';
 
-export class UserToSignupDto implements IUserUserToSignupDto {
+export class UserToSignupDto implements IUserUserToSignup {
     @IsNotEmpty()
     @IsEmail()
     email!: string;
@@ -17,7 +17,7 @@ export class UserToSignupDto implements IUserUserToSignupDto {
 
     @IsNotEmpty()
     @IsString()
-    @IsEqualTo<IUserUserToSignupDto>('password')
+    @IsEqualTo<IUserUserToSignup>('password')
     confirmPassword!: string;
 
     @IsNotEmpty()

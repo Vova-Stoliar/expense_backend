@@ -35,7 +35,13 @@ export class AuthFacadeHelper {
         return this.refreshTokenHelper.deleteRefreshTokenById(params);
     }
 
-    async createUser(user: Omit<BaseUserWith<'password'>, 'id'>): Promise<BaseUser> {
-        return this.userRepositoryHelper.createUser(user);
+    async createUser(params: Omit<BaseUserWith<'password'>, 'id'>): Promise<BaseUser> {
+        return this.userRepositoryHelper.createUser(params);
+    }
+
+    async updateUser(
+        params: Pick<BaseUser, 'id'> & { user: Pick<User, 'password' | 'hashedRefreshToken'> }
+    ): Promise<BaseUser> {
+        return this.userRepositoryHelper.updateUser(params);
     }
 }

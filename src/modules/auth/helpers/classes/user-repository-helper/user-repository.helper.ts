@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { User } from '@prisma/client';
 import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { UserRepository } from '~/repositories/user';
 import type { BaseUser, BaseUserWith } from '~/shared/types';
@@ -20,5 +21,16 @@ export class UserRepositoryHelper {
                 displayName,
             },
         });
+    }
+
+    async updateUser(
+        params: Pick<BaseUser, 'id'> & { user: Pick<User, 'password' | 'hashedRefreshToken'> }
+    ): Promise<BaseUser> {
+        const { id, user } = params;
+        const { password } = user;
+
+        const hashedPassword = await this.bcryptHelper.getHashedPassword({ password });
+
+        return this.userRepository.update({ where: { id }, data: { ...user, password: hashedPassword } });
     }
 }

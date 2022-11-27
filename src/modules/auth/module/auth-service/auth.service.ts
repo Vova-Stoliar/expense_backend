@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
 import { validateRefreshToken } from '~/modules/auth/lib';
-import type { IUserToLoginDto, IUserUserToSignupDto } from '~/modules/auth/types';
+import type { IUserToLogin, IUserToResetPassword, IUserUserToSignup } from '~/modules/auth/types';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
 @Injectable()
 export class AuthService {
     constructor(private authFacadeHelper: AuthFacadeHelper) {}
 
-    async login(userToLogin: IUserToLoginDto): Promise<Tokens> {
+    async login(userToLogin: IUserToLogin): Promise<Tokens> {
         const { id, email } = userToLogin;
 
         const tokens = await this.authFacadeHelper.getTokens({ id, email });
@@ -41,7 +41,7 @@ export class AuthService {
         return tokens;
     }
 
-    async signup(userToSignUp: IUserUserToSignupDto): Promise<{ user: BaseUser } & Tokens> {
+    async signup(userToSignUp: IUserUserToSignup): Promise<{ user: BaseUser } & Tokens> {
         const { displayName, userName, email, password } = userToSignUp;
 
         const user = await this.authFacadeHelper.createUser({ email, userName, displayName, password });
@@ -59,5 +59,19 @@ export class AuthService {
 
     async logout({ id }: Pick<BaseUser, 'id'>): Promise<void> {
         await this.authFacadeHelper.deleteRefreshTokenById({ id });
+    }
+
+    async resetPassword(user: IUserToResetPassword): Promise<{ user: BaseUser; tokens: Tokens }> {
+        const { id, password } = user;
+
+        const tokens = await this.authFacadeHelper.getTokens({ id: user.id, email: user.email });
+
+        const hashedRefreshToken = await this.authFacadeHelper.getHashedRefreshToken({
+            refreshToken: tokens.refreshToken,
+        });
+
+        const updatedUser = await this.authFacadeHelper.updateUser({ id, user: { password, hashedRefreshToken } });
+
+        return { user: updatedUser, tokens };
     }
 }
