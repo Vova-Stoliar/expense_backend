@@ -6,7 +6,7 @@ export const getAuthFacadeMockHelper = () => {
     const baseUser = { email, userName, displayName, id };
 
     return {
-        getHashedRefreshToken: jest.fn().mockResolvedValue(getUser().hashedRefreshToken),
+        getHashedRefreshToken: jest.fn().mockResolvedValue('getUser().hashedRefreshToken'),
         getTokens: jest.fn().mockResolvedValue(getAuthTokens()),
         updateHashedRefreshTokenById: jest.fn().mockResolvedValue(baseUser),
         deleteRefreshTokenById: jest.fn().mockResolvedValue(getPrismaBatchPayload()),

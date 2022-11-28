@@ -3,17 +3,16 @@ import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
 const getRefreshAcceptValue = () => {
-    const { email, userName, displayName, id, hashedRefreshToken } = getUser();
+    const { email, userName, displayName, id } = getUser();
 
-    const user: BaseUser & { hashedRefreshToken: NonNullable<User['hashedRefreshToken']> } = {
+    const user: BaseUser = {
         email,
         id,
-        hashedRefreshToken,
         userName,
         displayName,
     };
 
-    const acceptValue: { user: BaseUserWith<'hashedRefreshToken'> } & Pick<Tokens, 'refreshToken'> = {
+    const acceptValue: { user: BaseUser } & Pick<Tokens, 'refreshToken'> = {
         user,
         refreshToken: getAuthTokens().refreshToken,
     };

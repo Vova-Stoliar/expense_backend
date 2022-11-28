@@ -2,7 +2,7 @@ import type { PipeTransform } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { getFirstDefinedValueFromObject } from '~/modules/auth/lib';
 import type { WithPayload } from '~/modules/auth/types';
-import { UserRepository } from '~/repositories/user';
+import { UserRepository } from '~/shared/repositories/user';
 import type { BaseUser, BaseUserWith, PartialPick } from '~/shared/types';
 
 type AcceptValue = PartialPick<BaseUser, 'id' | 'email'>;

@@ -17,7 +17,17 @@ model User {
     email       String @unique
     password    String
 
-    hashedRefreshToken String?
+    token              Token?
 
     @@map("users")
+}
+
+model Token {
+    id                 String   @id @default(uuid())
+    hashedRefreshToken String?
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+    userId             String   @unique
+
+    user User @relation(fields: [userId], references: [id])
 }

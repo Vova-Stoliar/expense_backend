@@ -13,10 +13,10 @@ const getAcceptValue = () => {
 };
 
 const getReturnValue = () => {
-    const { userName, displayName, id, email, hashedRefreshToken } = getUser();
+    const { userName, displayName, id, email } = getUser();
 
     const user: BaseUserWith<'password'> = {
-        password: hashedRefreshToken,
+        password: 'hashedRefreshToken',
         userName,
         displayName,
         id,

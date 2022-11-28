@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { ValidateUserExistence } from '~/modules/auth/pipes';
-import { UserRepository } from '~/repositories/user';
+import { UserRepository } from '~/shared/repositories/user';
 import { getMockByToken } from '~/shared/lib/get-mock-by-token';
 
 export const getMocks = async () => {

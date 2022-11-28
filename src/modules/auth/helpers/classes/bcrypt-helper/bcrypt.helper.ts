@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { User } from '@prisma/client';
+import type { Token, User } from '@prisma/client';
 import { hash } from 'bcrypt';
 import type { BaseUser, Tokens } from '~/shared/types';
 import { CustomConfigService } from '~/shared/modules';
@@ -10,7 +10,7 @@ export class BcryptHelper {
 
     async getHashedRefreshToken(
         params: Pick<Tokens, 'refreshToken'>
-    ): Promise<NonNullable<User['hashedRefreshToken']>> {
+    ): Promise<NonNullable<Token['hashedRefreshToken']>> {
         const { refreshToken } = params;
 
         return await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);

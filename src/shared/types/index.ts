@@ -6,7 +6,7 @@ export type BaseUser = Pick<User, 'email' | 'userName' | 'displayName' | 'id'>;
 
 export type BaseUserWith<K extends keyof User> = BaseUser & Pick<User, K>;
 
-export type JwtPayload = Pick<BaseUser, 'id' | 'email'>;
+export type JwtPayload = Pick<BaseUser, 'id' | 'email'> & { createdAt: string };
 
 export type JwtPayloadWithRefreshToken = JwtPayload & Pick<Tokens, 'refreshToken'>;
 

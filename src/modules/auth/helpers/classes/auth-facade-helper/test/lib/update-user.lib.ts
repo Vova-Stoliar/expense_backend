@@ -16,11 +16,10 @@ const getReturnValue = () => {
 };
 
 const getAcceptValue = () => {
-    const { hashedRefreshToken, id, password } = getUser();
+    const { id, password } = getUser();
 
-    const acceptValue: Pick<BaseUser, 'id'> & { user: Pick<User, 'password' | 'hashedRefreshToken'> } = {
+    const acceptValue = {
         user: {
-            hashedRefreshToken,
             password,
         },
         id,

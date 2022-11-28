@@ -1,11 +1,7 @@
 import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
 
 const getReturnValue = () => {
-    const { hashedRefreshToken } = getUser();
-
-    const returnValue = {
-        hashedRefreshToken,
-    };
+    const returnValue = {};
 
     return { returnValue };
 };

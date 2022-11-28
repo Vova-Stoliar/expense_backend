@@ -4,11 +4,11 @@ import type { WithPayload } from '~/modules/auth/types';
 import type { BaseUserWith } from '~/shared/types';
 
 const getAcceptValue = () => {
-    const { userName, displayName, id, email, password, hashedRefreshToken } = getUser();
+    const { userName, displayName, id, email, password } = getUser();
 
     const acceptValue: { user: BaseUserWith<'password'> } & WithPayload<Pick<User, 'password' | 'email'>> = {
         user: {
-            password: hashedRefreshToken,
+            password: 'hashedRefreshToken',
             userName,
             displayName,
             id,

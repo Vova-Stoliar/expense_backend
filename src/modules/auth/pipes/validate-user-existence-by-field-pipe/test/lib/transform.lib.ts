@@ -1,6 +1,6 @@
 import type { ArgumentMetadata } from '@nestjs/common';
 import { getUser } from '~/modules/auth/constants/test';
-import type { BaseUserWith } from '~/shared/types';
+import type { BaseUser, BaseUserWith } from '~/shared/types';
 
 const getAcceptValue = () => {
     const value = getUser().email;
@@ -18,10 +18,9 @@ const getAcceptValue = () => {
 };
 
 const getReturnValue = () => {
-    const { userName, displayName, id, email, hashedRefreshToken } = getUser();
+    const { userName, displayName, id, email } = getUser();
 
-    const returnValue: BaseUserWith<'hashedRefreshToken'> = {
-        hashedRefreshToken,
+    const returnValue: BaseUser = {
         userName,
         displayName,
         id,

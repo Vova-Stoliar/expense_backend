@@ -12,3 +12,8 @@ export type IUserToLogin = Pick<User, 'password' | 'id' | 'email'>;
 export type IUserToResetPassword = Pick<User, 'password' | 'id' | 'email'> & {
     confirmPassword: User['password'];
 };
+
+export interface DateTime {
+    createdAt: string;
+    updatedAt: string;
+}

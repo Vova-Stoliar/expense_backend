@@ -38,21 +38,21 @@ export class AuthController {
     @NestCommon.Post('resetPassword')
     @NestCommon.HttpCode(NestCommon.HttpStatus.OK)
     async resetPassword(
-        @NestCommon.Body('id', Pipes.ValidateUserExistenceByField) _id: IUserToResetPassword['id'],
+        // @NestCommon.Body('id', Pipes.ValidateUserExistenceByField) _id: IUserToResetPassword['id'],
         @NestCommon.Body() user: UserToResetPasswordDto
     ): Promise<{ user: BaseUser } & Tokens> {
         return this.authService.resetPassword(user);
     }
+    // TODO create @GetUser
 
     @NestCommon.UseGuards(RefreshTokenGuard)
     @NestCommon.Get('refresh')
-    async refresh(
-        @GetUserPropertyByKey('id', Pipes.ValidateUserExistenceByField) user: BaseUserWith<'hashedRefreshToken'>,
-        @GetUserPropertyByKey('refreshToken', Pipes.ValidateTokenExistence) refreshToken: Tokens['refreshToken']
-    ): Promise<Tokens> {
-        return this.authService.refresh({
-            user,
-            refreshToken,
-        });
+    async refresh(@GetUserPropertyByKey('id') user: BaseUser): Promise<Tokens> {
+        return this.authService.refresh(user);
+    }
+
+    @NestCommon.Get('check')
+    check() {
+        return 'I am check';
     }
 }

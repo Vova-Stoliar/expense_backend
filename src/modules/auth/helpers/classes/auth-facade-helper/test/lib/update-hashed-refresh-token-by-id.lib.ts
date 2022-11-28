@@ -15,10 +15,9 @@ const getReturnValue = () => {
 };
 
 const getAcceptValue = () => {
-    const { hashedRefreshToken, id } = getUser();
+    const { id } = getUser();
 
     const acceptValue = {
-        hashedRefreshToken,
         id,
     };
 

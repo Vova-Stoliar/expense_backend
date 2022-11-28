@@ -7,16 +7,25 @@ import type { JwtPayload, Tokens } from '~/shared/types';
 export class JwtHelper {
     constructor(private customConfigService: CustomConfigService, private jwtService: JwtService) {}
 
-    private ACCESS_TOKEN_EXPIRES_IN = '15m';
+    private ACCESS_TOKEN_EXPIRES_IN = '150m';
     private REFRESH_TOKEN_EXPIRES_IN = '7d';
 
-    async getTokens(params: JwtPayload): Promise<Tokens> {
+    private getJwtPayload(params: Omit<JwtPayload, 'createdAt'>): JwtPayload {
+        return {
+            createdAt: new Date().toISOString(),
+            ...params,
+        };
+    }
+
+    async getTokens(params: Omit<JwtPayload, 'createdAt'>): Promise<Tokens & Pick<JwtPayload, 'createdAt'>> {
+        const payload = this.getJwtPayload(params);
+
         const [accessToken, refreshToken] = await Promise.all([
-            this.jwtService.signAsync(params, {
+            this.jwtService.signAsync(payload, {
                 secret: this.customConfigService.ACCESS_TOKEN_SECRET,
                 expiresIn: this.ACCESS_TOKEN_EXPIRES_IN,
             }),
-            this.jwtService.signAsync(params, {
+            this.jwtService.signAsync(payload, {
                 secret: this.customConfigService.REFRESH_TOKEN_SECRET,
                 expiresIn: this.REFRESH_TOKEN_EXPIRES_IN,
             }),
@@ -25,6 +34,7 @@ export class JwtHelper {
         return {
             accessToken,
             refreshToken,
+            createdAt: payload.createdAt,
         };
     }
 }
