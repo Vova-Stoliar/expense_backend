@@ -1,5 +1,7 @@
-import { generateTokens } from '~/modules/auth/constants/test';
+import { dateTime, generateTokens } from '~/modules/auth/constants/test';
 
-export const getJwtHelperMock = () => ({
-    getTokens: jest.fn().mockResolvedValue(generateTokens()),
-});
+export const getJwtHelperMock = () => {
+    return {
+        getTokens: jest.fn().mockResolvedValue({ ...generateTokens(), createdAt: dateTime }),
+    };
+};

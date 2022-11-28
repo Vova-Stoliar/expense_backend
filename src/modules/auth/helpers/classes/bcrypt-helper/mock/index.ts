@@ -1,6 +1,6 @@
-import { generateUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 
 export const getBcryptHelperMock = () => ({
-    getHashedRefreshToken: jest.fn().mockResolvedValue('getUser().hashedRefreshToken'),
+    getHashedRefreshToken: jest.fn().mockResolvedValue(generateTokens().hashedRefreshToken),
     getHashedPassword: jest.fn().mockResolvedValue(generateUser().password),
 });

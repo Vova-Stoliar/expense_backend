@@ -1,87 +1,128 @@
-import { libs } from './lib';
+import { Test } from '@nestjs/testing';
+import { dateTime, generatePrismaBatchPayload, generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
+import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
+import { getBcryptHelperMock } from '~/modules/auth/helpers/classes/bcrypt-helper/mock';
+import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
+import { getJwtHelperMock } from '~/modules/auth/helpers/classes/jwt-helper/mock';
+import { getMockByToken } from '~/shared/lib/get-mock-by-token';
+import { TokenRepository } from '~/shared/repositories/token';
+import { UserRepository } from '~/shared/repositories/user';
+
+const getMocks = async () => {
+    const moduleRef = await Test.createTestingModule({
+        providers: [AuthFacadeHelper],
+    })
+        .useMocker((token) => {
+            if (token === BcryptHelper) return getBcryptHelperMock();
+
+            if (token === JwtHelper) return getJwtHelperMock();
+
+            if (typeof token === 'function') return getMockByToken(token);
+        })
+        .compile();
+
+    const authFacadeHelper = moduleRef.get<AuthFacadeHelper>(AuthFacadeHelper);
+    const tokenRepository = moduleRef.get<TokenRepository>(TokenRepository);
+    const userRepository = moduleRef.get<UserRepository>(UserRepository);
+
+    return { authFacadeHelper, tokenRepository, userRepository };
+};
 
 describe('AuthFacadeHelper', () => {
     it('should be defined', async () => {
-        const { authFacadeHelper } = await libs.getMocks();
+        const { authFacadeHelper } = await getMocks();
 
         expect(authFacadeHelper).toBeDefined();
     });
 
     describe('deleteRefreshTokenById', () => {
-        const { getReturnValue, getAcceptValue } = libs.deleteRefreshTokenById();
-
         it('should return "prisma batch payload - { count: 0 }"', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            const { authFacadeHelper, tokenRepository } = await getMocks();
+            const { id } = generateUser();
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
+            const acceptValue = { id };
+            const returnValue = generatePrismaBatchPayload();
 
-            expect(await authFacadeHelper.deleteRefreshToken(acceptValue)).toStrictEqual(returnValue);
+            jest.spyOn(tokenRepository, 'updateMany').mockResolvedValue(returnValue);
+
+            expect(await authFacadeHelper.deleteRefreshToken(acceptValue)).toEqual(returnValue);
         });
     });
 
     describe('getTokens', () => {
-        const { getAcceptValue, getReturnValue } = libs.getTokens();
+        it('should return "refresh", "access" tokens and "createdAt"', async () => {
+            const { authFacadeHelper } = await getMocks();
+            const { id, email } = generateUser();
 
-        it('should return "refresh" and "access" tokens', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            const returnValue = {
+                ...generateTokens(),
+                createdAt: dateTime,
+            };
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
+            const acceptValue = { id, email };
 
-            expect(await authFacadeHelper.getTokens(acceptValue)).toStrictEqual(returnValue);
+            expect(await authFacadeHelper.getTokens(acceptValue)).toEqual(returnValue);
         });
     });
 
     describe('createUser', () => {
-        const { getReturnValue, getAcceptValue } = libs.createUser();
-
         it('should return a "user"', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            const { authFacadeHelper, userRepository } = await getMocks();
+            const { email, userName, displayName, id, password } = generateUser();
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
+            const returnValue = {
+                email,
+                id,
+                userName,
+                displayName,
+            };
 
-            expect(await authFacadeHelper.createUser(acceptValue)).toStrictEqual(returnValue);
+            const acceptValue = {
+                email,
+                userName,
+                displayName,
+                password,
+            };
+
+            jest.spyOn(userRepository, 'create').mockResolvedValue(returnValue);
+
+            expect(await authFacadeHelper.createUser(acceptValue)).toEqual(returnValue);
         });
     });
 
     describe('getHashedRefreshToken', () => {
-        const { getAcceptValue, getReturnValue } = libs.getHashedRefreshToken();
-
         it('should return a "hashed refresh token"', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            const { authFacadeHelper } = await getMocks();
+            const { hashedRefreshToken, refreshToken } = generateTokens();
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
+            const returnValue = hashedRefreshToken;
+            const acceptValue = { refreshToken };
 
-            expect(await authFacadeHelper.getHashedRefreshToken(acceptValue)).toBe(returnValue.hashedRefreshToken);
+            expect(await authFacadeHelper.getHashedRefreshToken(acceptValue)).toBe(returnValue);
         });
     });
 
-    describe('updateHashedRefreshTokenById', () => {
-        const { getAcceptValue, getReturnValue } = libs.updateHashedRefreshTokenById();
-
+    describe('updateHashedRefreshToken', () => {
         it('should return a "user"', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            const { authFacadeHelper, tokenRepository } = await getMocks();
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
+            const { hashedRefreshToken } = generateTokens();
+            const { id } = generateUser();
 
-            expect(await authFacadeHelper.updateHashedRefreshTokenById(acceptValue)).toStrictEqual(returnValue);
-        });
-    });
+            const acceptValue = {
+                hashedRefreshToken,
+                userId: id,
+                updatedAt: dateTime,
+            };
 
-    describe('updateUser', () => {
-        const { getAcceptValue, getReturnValue } = libs.updateUser();
+            const returnValue = {
+                userId: id,
+            };
 
-        it('should return a "user"', async () => {
-            const { authFacadeHelper } = await libs.getMocks();
+            jest.spyOn(tokenRepository, 'update').mockResolvedValue(returnValue);
 
-            const { returnValue } = getReturnValue();
-            const { acceptValue } = getAcceptValue();
-
-            expect(await authFacadeHelper.updateUser(acceptValue)).toStrictEqual(returnValue);
+            expect(await authFacadeHelper.updateHashedRefreshToken(acceptValue)).toEqual(returnValue);
         });
     });
 });

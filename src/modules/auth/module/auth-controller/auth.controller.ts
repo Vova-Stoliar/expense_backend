@@ -39,9 +39,4 @@ export class AuthController {
     async refresh(@GetUserFromReq() user: User): Promise<Tokens> {
         return this.authService.refresh(user);
     }
-
-    @NestCommon.Get('check')
-    check() {
-        return 'I am check';
-    }
 }

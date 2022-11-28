@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma, Token } from '@prisma/client';
 import type { BaseUserWith, Tokens } from '~/shared/types';
 
 export const generateUser = (): BaseUserWith<'password'> => ({
@@ -9,11 +9,14 @@ export const generateUser = (): BaseUserWith<'password'> => ({
     password: 'Pasword@2313',
 });
 
-export const generateTokens = (): Tokens => ({
+export const generateTokens = (): Tokens & Pick<Token, 'hashedRefreshToken'> => ({
     refreshToken: 'fdsvcxvvba',
     accessToken: 'fdsvsvzsfesr',
+    hashedRefreshToken: 'fdstewtewtggbx',
 });
 
 export const generatePrismaBatchPayload = (): Prisma.BatchPayload => ({
     count: 0,
 });
+
+export const dateTime = new Date().toISOString();
