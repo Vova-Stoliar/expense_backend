@@ -1,5 +1,6 @@
 import type { User } from '@prisma/client';
 import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import type { BaseUser, Tokens } from '~/shared/types';
 
 const getAcceptValue = () => {
     const { email, password, id } = getUser();
@@ -15,9 +16,19 @@ const getAcceptValue = () => {
 };
 
 const getReturnValue = () => {
-    const { id } = getUser();
+    const { email, userName, displayName, id } = getUser();
 
-    return { returnValue: { id, ...getAuthTokens() } };
+    const returnValue: { user: BaseUser } & Tokens = {
+        ...getAuthTokens(),
+        user: {
+            email,
+            userName,
+            displayName,
+            id,
+        },
+    };
+
+    return { returnValue };
 };
 
 export const resetPassword = () => {

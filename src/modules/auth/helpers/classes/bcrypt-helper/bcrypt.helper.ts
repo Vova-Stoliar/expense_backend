@@ -8,9 +8,11 @@ import { CustomConfigService } from '~/shared/modules';
 export class BcryptHelper {
     constructor(private customConfigService: CustomConfigService) {}
 
-    async getHashedRefreshToken({
-        refreshToken,
-    }: Pick<Tokens, 'refreshToken'>): Promise<NonNullable<User['hashedRefreshToken']>> {
+    async getHashedRefreshToken(
+        params: Pick<Tokens, 'refreshToken'>
+    ): Promise<NonNullable<User['hashedRefreshToken']>> {
+        const { refreshToken } = params;
+
         return await hash(refreshToken, this.customConfigService.BCRYPT_SALT_ROUNDS);
     }
 

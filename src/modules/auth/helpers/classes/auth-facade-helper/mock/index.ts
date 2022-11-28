@@ -3,21 +3,14 @@ import { getAuthTokens, getPrismaBatchPayload, getUser } from '~/modules/auth/co
 export const getAuthFacadeMockHelper = () => {
     const { email, userName, displayName, id } = getUser();
 
+    const baseUser = { email, userName, displayName, id };
+
     return {
         getHashedRefreshToken: jest.fn().mockResolvedValue(getUser().hashedRefreshToken),
         getTokens: jest.fn().mockResolvedValue(getAuthTokens()),
-        updateHashedRefreshTokenById: jest.fn().mockResolvedValue({
-            email,
-            id,
-            userName,
-            displayName,
-        }),
+        updateHashedRefreshTokenById: jest.fn().mockResolvedValue(baseUser),
         deleteRefreshTokenById: jest.fn().mockResolvedValue(getPrismaBatchPayload()),
-        createUser: jest.fn().mockResolvedValue({
-            email,
-            id,
-            userName,
-            displayName,
-        }),
+        updateUser: jest.fn().mockResolvedValue(baseUser),
+        createUser: jest.fn().mockResolvedValue(baseUser),
     };
 };

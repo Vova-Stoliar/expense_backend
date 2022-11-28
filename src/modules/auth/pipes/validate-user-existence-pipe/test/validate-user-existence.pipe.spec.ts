@@ -21,7 +21,7 @@ describe('ValidateUserExistence', () => {
                 const { acceptValue } = getAcceptValue();
                 const { returnValue } = getReturnValue();
 
-                jest.spyOn(userRepository, 'findFirstOrThrow').mockResolvedValue(returnValue.user);
+                jest.spyOn(userRepository, 'findUniqueOrThrow').mockResolvedValue(returnValue.user);
 
                 expect(await validateUserExistence.transform(acceptValue)).toStrictEqual(returnValue);
             });
@@ -33,7 +33,7 @@ describe('ValidateUserExistence', () => {
 
                 const { acceptValue } = getAcceptValue();
 
-                jest.spyOn(userRepository, 'findFirstOrThrow').mockImplementation(() => {
+                jest.spyOn(userRepository, 'findUniqueOrThrow').mockImplementation(() => {
                     throw new TypeError();
                 });
 

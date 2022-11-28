@@ -17,8 +17,6 @@ export class AccessTokenGuard extends AuthGuard(STRATEGIES_NAMES.accessToken) {
 
         if (isPublic) return true;
 
-        console.log('-> context', context);
-
         return super.canActivate(context);
     }
 }

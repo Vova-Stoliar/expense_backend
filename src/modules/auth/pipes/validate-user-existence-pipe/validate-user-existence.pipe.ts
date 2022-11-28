@@ -1,5 +1,6 @@
 import type { PipeTransform } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
+import { getFirstDefinedValueFromObject } from '~/modules/auth/lib';
 import type { WithPayload } from '~/modules/auth/types';
 import { UserRepository } from '~/repositories/user';
 import type { BaseUser, BaseUserWith, PartialPick } from '~/shared/types';
@@ -12,10 +13,10 @@ export class ValidateUserExistence implements PipeTransform<AcceptValue, ReturnV
     constructor(private userRepository: UserRepository) {}
 
     async transform(value: AcceptValue): ReturnValue {
-        const { email, id } = value;
+        const { id, email } = value;
 
         const user = await this.userRepository.findUniqueOrThrow({
-            where: { email, id },
+            where: getFirstDefinedValueFromObject({ id, email }),
             select: { password: true },
         });
 

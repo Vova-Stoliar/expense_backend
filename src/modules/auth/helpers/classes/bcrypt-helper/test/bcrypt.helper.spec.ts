@@ -1,4 +1,3 @@
-import { getUser } from '~/modules/auth/constants/test';
 import { libs } from './lib';
 
 describe('BcryptHelper', () => {
@@ -17,9 +16,9 @@ describe('BcryptHelper', () => {
             const { returnValue } = getReturnValue();
             const { acceptValue } = getAcceptValue();
 
-            hash.mockImplementation(() => getUser().hashedRefreshToken);
+            hash.mockImplementation(() => returnValue.hashedRefreshToken);
 
-            expect(await bcryptHelper.getHashedRefreshToken(acceptValue)).toBe(returnValue);
+            expect(await bcryptHelper.getHashedRefreshToken(acceptValue)).toBe(returnValue.hashedRefreshToken);
         });
     });
 

@@ -71,4 +71,17 @@ describe('AuthFacadeHelper', () => {
             expect(await authFacadeHelper.updateHashedRefreshTokenById(acceptValue)).toStrictEqual(returnValue);
         });
     });
+
+    describe('updateUser', () => {
+        const { getAcceptValue, getReturnValue } = libs.updateUser();
+
+        it('should return a "user"', async () => {
+            const { authFacadeHelper } = await libs.getMocks();
+
+            const { returnValue } = getReturnValue();
+            const { acceptValue } = getAcceptValue();
+
+            expect(await authFacadeHelper.updateUser(acceptValue)).toStrictEqual(returnValue);
+        });
+    });
 });

@@ -61,7 +61,7 @@ describe('CatsController', () => {
     describe('resetPassword', () => {
         const { getAcceptValue, getReturnValue } = libs.resetPassword();
 
-        it(`should return a "user's id"`, async () => {
+        it('should return a "user" and "tokens"', async () => {
             const { authController } = await libs.getMocks();
 
             const { returnValue } = getReturnValue();

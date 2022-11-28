@@ -16,14 +16,14 @@ describe('AuthService', () => {
             const { acceptValue } = getAcceptValue();
             const { returnValue } = getReturnValue();
 
-            expect(authService.resetPassword(acceptValue)).toBe(returnValue);
+            expect(await authService.resetPassword(acceptValue)).toStrictEqual(returnValue);
         });
     });
 
     describe('signup', () => {
         const { getSignupAcceptValue, getSignupReturnValue } = libs.generateSignupLibs();
 
-        it('should return a "user", "refresh" and "access tokens"', async () => {
+        it('should return a "user", "tokens"', async () => {
             const { authService } = await libs.getMocks();
 
             const { returnValue } = getSignupReturnValue();

@@ -15,9 +15,18 @@ const getAcceptValue = () => {
 };
 
 const getReturnValue = () => {
-    const { id } = getUser();
+    const { email, userName, displayName, id } = getUser();
+    const returnValue = {
+        user: {
+            email,
+            userName,
+            displayName,
+            id,
+        },
+        ...getAuthTokens(),
+    };
 
-    return { returnValue: { id, ...getAuthTokens() } };
+    return { returnValue };
 };
 
 export const resetPassword = () => {

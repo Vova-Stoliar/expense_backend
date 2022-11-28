@@ -61,7 +61,7 @@ export class AuthService {
         await this.authFacadeHelper.deleteRefreshTokenById({ id });
     }
 
-    async resetPassword(user: IUserToResetPassword): Promise<{ user: BaseUser; tokens: Tokens }> {
+    async resetPassword(user: IUserToResetPassword): Promise<{ user: BaseUser } & Tokens> {
         const { id, password } = user;
 
         const tokens = await this.authFacadeHelper.getTokens({ id: user.id, email: user.email });
@@ -72,6 +72,6 @@ export class AuthService {
 
         const updatedUser = await this.authFacadeHelper.updateUser({ id, user: { password, hashedRefreshToken } });
 
-        return { user: updatedUser, tokens };
+        return { user: updatedUser, ...tokens };
     }
 }

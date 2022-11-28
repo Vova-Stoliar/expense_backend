@@ -4,6 +4,7 @@ import { UserToResetPasswordDto } from '~/modules/auth/dto/user-to-reset-passwor
 import { RefreshTokenGuard } from '~/modules/auth/guards';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import * as Pipes from '~/modules/auth/pipes';
+import type { IUserToResetPassword } from '~/modules/auth/types';
 import { GetUserPropertyByKey, Public } from '~/shared/decorators';
 import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
@@ -34,11 +35,12 @@ export class AuthController {
         await this.authService.logout({ id });
     }
 
-    @NestCommon.Get('resetPassword')
+    @NestCommon.Post('resetPassword')
     @NestCommon.HttpCode(NestCommon.HttpStatus.OK)
     async resetPassword(
-        @NestCommon.Body(Pipes.ValidateUserExistence) user: UserToResetPasswordDto
-    ): Promise<{ user: BaseUser; tokens: Tokens }> {
+        @NestCommon.Body('id', Pipes.ValidateUserExistenceByField) _id: IUserToResetPassword['id'],
+        @NestCommon.Body() user: UserToResetPasswordDto
+    ): Promise<{ user: BaseUser } & Tokens> {
         return this.authService.resetPassword(user);
     }
 
