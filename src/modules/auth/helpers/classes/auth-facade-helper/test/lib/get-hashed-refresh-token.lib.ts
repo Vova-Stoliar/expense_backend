@@ -1,4 +1,4 @@
-import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 
 const getReturnValue = () => {
     const returnValue = {};
@@ -7,7 +7,7 @@ const getReturnValue = () => {
 };
 
 const getAcceptValue = () => {
-    const { refreshToken } = getAuthTokens();
+    const { refreshToken } = generateTokens();
 
     const acceptValue = { refreshToken };
 

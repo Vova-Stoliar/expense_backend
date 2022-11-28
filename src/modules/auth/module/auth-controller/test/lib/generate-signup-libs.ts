@@ -1,11 +1,10 @@
-import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
-import type { IUserUserToSignup } from '~/modules/auth/types';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 import type { BaseUser, Tokens } from '~/shared/types';
 
 const getSignupAcceptValue = () => {
-    const { email, userName, displayName, password } = getUser();
+    const { email, userName, displayName, password } = generateUser();
 
-    const acceptValue: IUserUserToSignup = {
+    const acceptValue = {
         email,
         userName,
         displayName,
@@ -17,10 +16,10 @@ const getSignupAcceptValue = () => {
 };
 
 const getSignupReturnValue = () => {
-    const { email, userName, displayName, id } = getUser();
+    const { email, userName, displayName, id } = generateUser();
 
     const returnValue: { user: BaseUser } & Tokens = {
-        ...getAuthTokens(),
+        ...generateTokens(),
         user: {
             email,
             userName,

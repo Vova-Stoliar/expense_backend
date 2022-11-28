@@ -1,7 +1,7 @@
-import { getUser } from '~/modules/auth/constants/test';
+import { generateUser } from '~/modules/auth/constants/test';
 
 const getAcceptValue = () => {
-    const { password } = getUser();
+    const { password } = generateUser();
 
     const acceptValue = { password };
 

@@ -1,8 +1,8 @@
-import { getUser } from '~/modules/auth/constants/test';
+import { generateUser } from '~/modules/auth/constants/test';
 import type { BaseUserWith } from '~/shared/types';
 
 const getReturnValue = () => {
-    const { email, userName, displayName, id } = getUser();
+    const { email, userName, displayName, id } = generateUser();
 
     const returnValue = {
         email,
@@ -15,7 +15,7 @@ const getReturnValue = () => {
 };
 
 const getAcceptValue = () => {
-    const { email, userName, displayName, password } = getUser();
+    const { email, userName, displayName, password } = generateUser();
 
     const acceptValue: Omit<BaseUserWith<'password'>, 'id'> = {
         email,

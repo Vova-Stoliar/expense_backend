@@ -1,9 +1,9 @@
 import type { User } from '@prisma/client';
-import { getUser } from '~/modules/auth/constants/test';
+import { generateUser } from '~/modules/auth/constants/test';
 import type { BaseUser } from '~/shared/types';
 
 const getReturnValue = () => {
-    const { email, id, userName, displayName } = getUser();
+    const { email, id, userName, displayName } = generateUser();
 
     const returnValue: BaseUser = {
         email,
@@ -16,7 +16,7 @@ const getReturnValue = () => {
 };
 
 const getAcceptValue = () => {
-    const { id, password } = getUser();
+    const { id, password } = generateUser();
 
     const acceptValue = {
         user: {

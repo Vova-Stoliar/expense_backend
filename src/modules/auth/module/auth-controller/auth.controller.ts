@@ -1,10 +1,10 @@
 import * as NestCommon from '@nestjs/common';
-import { UserToLoginDto, UserToSignupDto } from '~/modules/auth/dto';
-import { UserToResetPasswordDto } from '~/modules/auth/dto/user-to-reset-password.dto';
+import type { User } from '@prisma/client';
+import { UserToLoginDto, UserToResetPasswordDto, UserToSignupDto } from '~/modules/auth/dto';
 import { RefreshTokenGuard } from '~/modules/auth/guards';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { GetUserFromReq, GetUserFromReqPropertyByKey, Public } from '~/shared/decorators';
-import type { BaseUser, JwtPayload, Tokens } from '~/shared/types';
+import type { BaseUser, Tokens } from '~/shared/types';
 
 @NestCommon.Controller('auth')
 export class AuthController {
@@ -18,18 +18,13 @@ export class AuthController {
 
     @Public()
     @NestCommon.Post('login')
-    async login(
-        @NestCommon.Body() userToLogin: UserToLoginDto
-    ): Promise<{ user: Pick<BaseUser, 'email' | 'id'> } & Tokens> {
-        const { id, email } = userToLogin;
-        const tokens = await this.authService.login(userToLogin);
-
-        return { user: { id, email }, ...tokens };
+    async login(@NestCommon.Body() userToLogin: UserToLoginDto): Promise<{ user: BaseUser } & Tokens> {
+        return this.authService.login(userToLogin);
     }
 
     @NestCommon.Get('logout')
     @NestCommon.HttpCode(NestCommon.HttpStatus.NO_CONTENT)
-    async logout(@GetUserFromReqPropertyByKey('id') id: BaseUser['id']): Promise<void> {
+    async logout(@GetUserFromReqPropertyByKey('id') id: User['id']): Promise<void> {
         await this.authService.logout({ id });
     }
 
@@ -41,7 +36,7 @@ export class AuthController {
 
     @NestCommon.UseGuards(RefreshTokenGuard)
     @NestCommon.Get('refresh')
-    async refresh(@GetUserFromReq() user: JwtPayload): Promise<Tokens> {
+    async refresh(@GetUserFromReq() user: User): Promise<Tokens> {
         return this.authService.refresh(user);
     }
 

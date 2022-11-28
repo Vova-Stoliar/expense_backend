@@ -1,7 +1,7 @@
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import type { BaseUserWith, Tokens } from '~/shared/types';
 
-export const getUser = (): BaseUserWith<'password'> => ({
+export const generateUser = (): BaseUserWith<'password'> => ({
     id: 'fdsgdfewfdfds',
     userName: 'Vova Stoliar',
     email: 'vova.stoliar123@gmail.com',
@@ -9,11 +9,11 @@ export const getUser = (): BaseUserWith<'password'> => ({
     password: 'Pasword@2313',
 });
 
-export const getAuthTokens = (): Tokens => ({
+export const generateTokens = (): Tokens => ({
     refreshToken: 'fdsvcxvvba',
     accessToken: 'fdsvsvzsfesr',
 });
 
-export const getPrismaBatchPayload = (): Prisma.BatchPayload => ({
+export const generatePrismaBatchPayload = (): Prisma.BatchPayload => ({
     count: 0,
 });

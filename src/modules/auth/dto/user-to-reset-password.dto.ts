@@ -1,8 +1,11 @@
 import { PickType } from '@nestjs/mapped-types';
+import type { User } from '@prisma/client';
 import { IsNotEmpty, IsUUID } from 'class-validator';
 import { UserToSignupDto } from '~/modules/auth/dto';
-import type { IUserToResetPassword } from '~/modules/auth/types';
-import type { BaseUser } from '~/shared/types';
+
+type IUserToResetPassword = Pick<User, 'password' | 'id' | 'email'> & {
+    confirmPassword: User['password'];
+};
 
 export class UserToResetPasswordDto
     extends PickType(UserToSignupDto, ['email', 'password', 'confirmPassword'])
@@ -10,5 +13,5 @@ export class UserToResetPasswordDto
 {
     @IsUUID()
     @IsNotEmpty()
-    id!: BaseUser['id'];
+    id!: User['id'];
 }

@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import type { User } from '@prisma/client';
 import type { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-// TODO move repositories on lover level
-import { TokenRepository } from '~/shared/repositories/token';
 import { STRATEGIES_NAMES } from '~/shared/constants';
 import { CustomConfigService } from '~/shared/modules/config';
+import { TokenRepository } from '~/shared/repositories/token';
 import type { JwtPayload } from '~/shared/types';
 
 @Injectable()
@@ -18,19 +18,22 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, STRATEGIES_N
         });
     }
 
-    async validate(req: Request, payload: JwtPayload): Promise<JwtPayload> {
-        await this.validateToken(payload);
-
-        return payload;
+    async validate(req: Request, payload: JwtPayload): Promise<User> {
+        return this.validateTokenByUser(payload);
     }
 
-    private async validateToken(payload: JwtPayload) {
+    private async validateTokenByUser(payload: JwtPayload): Promise<User> {
         const { id, createdAt } = payload;
 
-        const token = await this.tokenRepository.findUnique({ where: { userId: id }, select: { updatedAt: true } });
+        const token = await this.tokenRepository.findUnique({
+            where: { userId: id },
+            select: { updatedAt: true, user: true },
+        });
 
         if (createdAt !== token?.updatedAt.toISOString()) {
             throw new UnauthorizedException();
         }
+
+        return token.user;
     }
 }

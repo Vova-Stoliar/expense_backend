@@ -1,26 +1,26 @@
-import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 
 export const getAuthServiceMock = () => {
-    const { email, userName, displayName, id } = getUser();
+    const { email, userName, displayName, id } = generateUser();
 
     const baseUser = { email, userName, displayName, id };
 
     return {
         login: jest.fn().mockResolvedValue({
-            ...getAuthTokens(),
+            ...generateTokens(),
             user: {
-                email: getUser().email,
-                id: getUser().id,
+                email: generateUser().email,
+                id: generateUser().id,
             },
         }),
-        refresh: jest.fn().mockResolvedValue(getAuthTokens()),
+        refresh: jest.fn().mockResolvedValue(generateTokens()),
         signup: jest.fn().mockResolvedValue({
-            ...getAuthTokens(),
+            ...generateTokens(),
             user: baseUser,
         }),
         logout: jest.fn().mockResolvedValue(void 0),
         resetPassword: jest.fn().mockResolvedValue({
-            ...getAuthTokens(),
+            ...generateTokens(),
             user: baseUser,
         }),
     };

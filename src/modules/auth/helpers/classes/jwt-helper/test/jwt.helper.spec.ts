@@ -1,4 +1,4 @@
-import { getAuthTokens } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
 import { libs } from './lib';
 
 describe('JwtHelper', () => {
@@ -21,7 +21,7 @@ describe('JwtHelper', () => {
             const { returnValue } = getReturnValue();
             const { acceptValue } = getAcceptValue();
 
-            jest.spyOn(Promise, 'all').mockResolvedValue([getAuthTokens().accessToken, getAuthTokens().refreshToken]);
+            jest.spyOn(Promise, 'all').mockResolvedValue([generateTokens().accessToken, generateTokens().refreshToken]);
 
             expect(await jwtHelper.getTokens(acceptValue)).toStrictEqual(returnValue);
         });

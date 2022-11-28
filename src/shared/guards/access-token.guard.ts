@@ -10,9 +10,6 @@ export class AccessTokenGuard extends AuthGuard(STRATEGIES_NAMES.accessToken) {
     }
 
     override canActivate(context: ExecutionContext) {
-        const request = context.switchToHttp().getRequest();
-        console.log('-> request', request.user);
-
         const isPublic = this.reflector.getAllAndOverride(PUBLIC_DECORATOR_KEYWORD, [
             context.getHandler(),
             context.getClass(),

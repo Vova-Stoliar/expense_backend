@@ -1,11 +1,11 @@
-import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 
 const getReturnValue = () => {
-    return { returnValue: getAuthTokens() };
+    return { returnValue: generateTokens() };
 };
 
 const getAcceptValue = () => {
-    const { id, email } = getUser();
+    const { id, email } = generateUser();
 
     return { acceptValue: { id, email } };
 };

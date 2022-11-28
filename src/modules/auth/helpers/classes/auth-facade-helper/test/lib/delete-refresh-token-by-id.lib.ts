@@ -1,11 +1,11 @@
-import { getPrismaBatchPayload, getUser } from '~/modules/auth/constants/test';
+import { generatePrismaBatchPayload, generateUser } from '~/modules/auth/constants/test';
 
 const getReturnValue = () => {
-    return { returnValue: getPrismaBatchPayload() };
+    return { returnValue: generatePrismaBatchPayload() };
 };
 
 const getAcceptValue = () => {
-    return { acceptValue: { id: getUser().id } };
+    return { acceptValue: { id: generateUser().id } };
 };
 
 export const deleteRefreshTokenById = () => {

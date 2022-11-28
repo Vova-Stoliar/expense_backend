@@ -1,7 +1,7 @@
-import { getAuthTokens } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
 
 const getAcceptValue = () => {
-    const { refreshToken } = getAuthTokens();
+    const { refreshToken } = generateTokens();
 
     const acceptValue = { refreshToken };
 

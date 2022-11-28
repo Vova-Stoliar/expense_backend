@@ -1,7 +1,7 @@
-import { getUser } from '~/modules/auth/constants/test';
+import { generateUser } from '~/modules/auth/constants/test';
 
 const getLogoutAcceptValue = () => {
-    return { acceptValue: getUser().id };
+    return { acceptValue: generateUser().id };
 };
 
 export const generateLogoutLibs = () => {

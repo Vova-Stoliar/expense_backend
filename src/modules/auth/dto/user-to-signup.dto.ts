@@ -1,7 +1,12 @@
+import type { User } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
-import type { IUserUserToSignup } from '~/modules/auth/types';
 import { MESSAGES } from '~/shared/constants';
 import { IsEqualTo } from '~/shared/decorators';
+import type { BaseUserWith } from '~/shared/types';
+
+interface IUserUserToSignup extends Omit<BaseUserWith<'password'>, 'id'> {
+    confirmPassword: User['password'];
+}
 
 export class UserToSignupDto implements IUserUserToSignup {
     @IsNotEmpty()

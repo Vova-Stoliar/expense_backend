@@ -1,9 +1,9 @@
 import type { User } from '@prisma/client';
-import { getAuthTokens, getUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 import type { BaseUser, Tokens } from '~/shared/types';
 
 const getAcceptValue = () => {
-    const { email, password, id } = getUser();
+    const { email, password, id } = generateUser();
 
     const acceptValue: Pick<User, 'email' | 'id' | 'password'> & { confirmPassword: User['password'] } = {
         email,
@@ -16,10 +16,10 @@ const getAcceptValue = () => {
 };
 
 const getReturnValue = () => {
-    const { email, userName, displayName, id } = getUser();
+    const { email, userName, displayName, id } = generateUser();
 
     const returnValue: { user: BaseUser } & Tokens = {
-        ...getAuthTokens(),
+        ...generateTokens(),
         user: {
             email,
             userName,

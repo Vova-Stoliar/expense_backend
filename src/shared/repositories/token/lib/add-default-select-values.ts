@@ -1,5 +1,4 @@
 import type { Prisma, Token } from '@prisma/client';
-import type { BaseUser } from '~/shared/types';
 
 type UserSelect = Prisma.UserSelect;
 
