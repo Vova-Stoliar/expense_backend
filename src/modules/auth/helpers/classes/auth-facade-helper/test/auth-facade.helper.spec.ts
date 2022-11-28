@@ -16,7 +16,7 @@ describe('AuthFacadeHelper', () => {
             const { returnValue } = getReturnValue();
             const { acceptValue } = getAcceptValue();
 
-            expect(await authFacadeHelper.deleteRefreshTokenById(acceptValue)).toStrictEqual(returnValue);
+            expect(await authFacadeHelper.deleteRefreshToken(acceptValue)).toStrictEqual(returnValue);
         });
     });
 

@@ -1,3 +1,4 @@
 export { IsEqualTo } from './is-equal-to.decorator';
 export { Public } from './public.decorator';
-export { GetUserPropertyByKey } from './get-user-property-by-key.decorator';
+export { GetUserFromReq } from './get-user-from-req.decorator';
+export { GetUserFromReqPropertyByKey } from './get-user-from-req-property-by-key.decorator';

@@ -1,1 +1,1 @@
-export { validateRefreshToken } from './validate-refresh-token.lib';
+export { validateRefreshTokens } from './validate-refresh-token.lib';

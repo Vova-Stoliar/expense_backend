@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
-import { validateRefreshToken } from '~/modules/auth/lib';
 import type { IUserToLogin, IUserToResetPassword, IUserUserToSignup } from '~/modules/auth/types';
-import { TokenRepository } from '~/shared/repositories/token/repository/token.repository';
-import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
+import type { BaseUser, Tokens } from '~/shared/types';
 
 @Injectable()
 export class AuthService {
-    constructor(private authFacadeHelper: AuthFacadeHelper, private tokenRepository: TokenRepository) {}
+    constructor(private authFacadeHelper: AuthFacadeHelper) {}
 
     async login(userToLogin: IUserToLogin): Promise<Tokens> {
         const { id, email } = userToLogin;
@@ -23,7 +21,7 @@ export class AuthService {
         return { refreshToken, accessToken };
     }
 
-    async refresh(user: BaseUser) {
+    async refresh(user: Pick<BaseUser, 'email' | 'id'>) {
         const { refreshToken, accessToken, createdAt } = await this.authFacadeHelper.getTokens({
             id: user.id,
             email: user.email,

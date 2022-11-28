@@ -19,14 +19,18 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, STRATEGIES_N
     }
 
     async validate(req: Request, payload: JwtPayload): Promise<JwtPayload> {
-        const { id } = payload;
+        await this.validateToken(payload);
+
+        return payload;
+    }
+
+    private async validateToken(payload: JwtPayload) {
+        const { id, createdAt } = payload;
 
         const token = await this.tokenRepository.findUnique({ where: { userId: id }, select: { updatedAt: true } });
 
-        if (payload.createdAt !== token?.updatedAt.toISOString()) {
+        if (createdAt !== token?.updatedAt.toISOString()) {
             throw new UnauthorizedException();
         }
-
-        return payload;
     }
 }
