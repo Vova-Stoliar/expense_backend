@@ -1,1 +1,0 @@
-export { TokenStrategyProvider } from './provider';

@@ -1,6 +1,6 @@
 import { generateTokens } from '~/modules/auth/constants/test';
 import * as lib from '~/shared/lib';
-import { validateRefreshTokens } from '~/app/strategies/auth/lib';
+import { validateRefreshTokens } from '~/app/strategies/lib';
 
 describe('validateRefreshToken', () => {
     beforeEach(() => {
