@@ -14,10 +14,11 @@ model User {
 
     userName    String
     displayName String
-    email       String @unique
+    email       String  @unique
     password    String
+    isAdmin     Boolean @default(false)
 
-    token              Token?
+    token Token?
 
     @@map("users")
 }

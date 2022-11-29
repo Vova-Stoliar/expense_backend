@@ -12,4 +12,7 @@ export const STRATEGIES_NAMES = {
     refreshToken: 'jwt-refresh',
 } as const;
 
-export const PUBLIC_DECORATOR_KEYWORD = 'public' as const;
+export const DECORATORS_KEYS = {
+    public: 'public',
+    checkPolicies: 'checkPolicy',
+} as const;

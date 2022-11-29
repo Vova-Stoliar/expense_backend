@@ -1,0 +1,1 @@
+export { CaslModule } from './casl';
