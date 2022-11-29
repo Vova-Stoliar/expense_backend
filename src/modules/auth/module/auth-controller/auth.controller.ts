@@ -36,7 +36,7 @@ export class AuthController {
 
     @NestCommon.UseGuards(RefreshTokenGuard)
     @NestCommon.Get('refresh')
-    async refresh(@GetUserFromReq() user: User): Promise<Tokens> {
+    async refresh(@GetUserFromReq() user: Pick<User, 'email' | 'id'>): Promise<Tokens> {
         return this.authService.refresh(user);
     }
 }

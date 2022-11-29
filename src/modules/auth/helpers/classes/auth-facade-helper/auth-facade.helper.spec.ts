@@ -92,7 +92,7 @@ describe('AuthFacadeHelper', () => {
     });
 
     describe('getHashedRefreshToken', () => {
-        it('should return a "hashed refresh token"', async () => {
+        it('should return a "hashed refresh auth"', async () => {
             const { authFacadeHelper } = await getMocks();
             const { hashedRefreshToken, refreshToken } = generateTokens();
 

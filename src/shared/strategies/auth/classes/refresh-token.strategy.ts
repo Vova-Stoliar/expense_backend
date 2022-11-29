@@ -7,7 +7,7 @@ import { STRATEGIES_NAMES } from '~/shared/constants';
 import { validateIsValueDefined } from '~/shared/lib';
 import { CustomConfigService } from '~/shared/modules/config';
 import { TokenRepository } from '~/shared/repositories/token';
-import { validateRefreshTokens } from '~/shared/strategies/token/lib';
+import { validateRefreshTokens } from '~/shared/strategies/auth/lib';
 import type { JwtPayload, Tokens } from '~/shared/types';
 
 @Injectable()

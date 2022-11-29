@@ -1,5 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { compare } from 'bcrypt';
+import { validateIsValueDefined } from '~/shared/lib';
 import type { Tokens } from '~/shared/types';
 
 export async function validateRefreshTokens(
@@ -9,5 +10,5 @@ export async function validateRefreshTokens(
 
     const isRefreshTokenValid = await compare(refreshToken, hashedRefreshToken);
 
-    if (!isRefreshTokenValid) throw new UnauthorizedException();
+    validateIsValueDefined({ value: isRefreshTokenValid, error: new UnauthorizedException() });
 }
