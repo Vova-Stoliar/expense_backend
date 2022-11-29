@@ -1,1 +1,1 @@
-export * from './repository';
+export { TokenRepository } from './repository';

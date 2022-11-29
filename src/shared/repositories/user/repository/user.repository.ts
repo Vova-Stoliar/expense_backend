@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, PrismaPromise } from '@prisma/client';
+import { v4 as uuid } from 'uuid';
 import { addDefaultSelectValues } from '~/shared/repositories/user/lib';
 import { PrismaService } from '~/shared/modules/prisma';
+import type { Category } from '~/shared/types';
 
 // implements Prisma.UserDelegate<undefined>
 
@@ -10,10 +12,33 @@ export class UserRepository {
     constructor(private prismaService: PrismaService) {}
 
     async create<T extends Prisma.UserCreateArgs>(args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>) {
-        const { select } = args;
+        const { select, data } = args;
+
+        const addDefaultCategories = <TData extends Record<string, unknown>>(data: TData) => {
+            const date = new Date().toISOString();
+
+            const category: Category = {
+                id: uuid(),
+                notes: '',
+                amount: 0,
+                updatedAt: date,
+                createdAt: date,
+            };
+
+            const DEFAULT_CATEGORIES = {
+                other: category,
+                salary: category,
+                food: category,
+                trips: category,
+                presents: category,
+            };
+
+            return Object.assign(data, { category: DEFAULT_CATEGORIES });
+        };
 
         return this.prismaService.user.create({
             ...args,
+            data: addDefaultCategories(data),
             select: addDefaultSelectValues({ select }),
         });
     }

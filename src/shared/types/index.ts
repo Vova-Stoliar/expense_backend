@@ -34,3 +34,11 @@ export enum Action {
     Update = 'update',
     Delete = 'delete',
 }
+
+export interface Category {
+    id: string;
+    notes: string;
+    amount: number;
+    updatedAt: string;
+    createdAt: string;
+}
