@@ -1,12 +1,6 @@
-import bcrypt from 'bcrypt';
 import { generateTokens } from '~/modules/auth/constants/test';
-import { validateRefreshTokens } from '~/shared/strategies/auth/lib';
-
-const getMocks = () => {
-    const compare = jest.spyOn(bcrypt, 'compare');
-
-    return { compare };
-};
+import * as lib from '~/shared/lib';
+import { validateRefreshTokens } from '~/app/strategies/auth/lib';
 
 describe('validateRefreshToken', () => {
     beforeEach(() => {
@@ -20,22 +14,22 @@ describe('validateRefreshToken', () => {
     describe('when "refresh auth" is not valid', () => {
         it('should throw error', async () => {
             const { refreshToken, hashedRefreshToken } = generateTokens();
-            const { compare } = getMocks();
 
             const acceptValue = {
                 refreshToken,
                 hashedRefreshToken,
             };
 
-            compare.mockImplementation(() => Promise.resolve(false));
+            jest.spyOn(lib, 'validateIsValueDefined').mockImplementation(() => {
+                throw new TypeError();
+            });
 
-            await expect(validateRefreshTokens(acceptValue)).rejects.toThrow();
+            await expect(validateRefreshTokens(acceptValue)).rejects.toThrow(TypeError);
         });
     });
 
     describe('when "refresh auth" is valid', () => {
         it('should return void', async () => {
-            const { compare } = getMocks();
             const { refreshToken, hashedRefreshToken } = generateTokens();
 
             const acceptValue = {
@@ -43,7 +37,7 @@ describe('validateRefreshToken', () => {
                 hashedRefreshToken,
             };
 
-            compare.mockImplementation(() => Promise.resolve(true));
+            jest.spyOn(lib, 'validateIsValueDefined').mockImplementation();
 
             await expect(validateRefreshTokens(acceptValue)).resolves.not.toThrow();
         });

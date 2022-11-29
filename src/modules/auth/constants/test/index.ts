@@ -1,12 +1,16 @@
 import type { Prisma } from '@prisma/client';
-import type { BaseUserWith, Tokens } from '~/shared/types';
+import type { BaseUserWith, DateTime, Tokens } from '~/shared/types';
 
-export const generateUser = (): BaseUserWith<'password'> => ({
+export const dateTime = new Date().toISOString();
+
+export const generateUser = (): BaseUserWith<'password'> & DateTime => ({
     id: 'fdsgdfewfdfds',
     userName: 'Vova Stoliar',
     email: 'vova.stoliar123@gmail.com',
     displayName: 'Admiral',
     password: 'Pasword@2313',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
 });
 
 export const generateTokens = (): Tokens & { hashedRefreshToken: Tokens['refreshToken'] } => ({
@@ -18,5 +22,3 @@ export const generateTokens = (): Tokens & { hashedRefreshToken: Tokens['refresh
 export const generatePrismaBatchPayload = (): Prisma.BatchPayload => ({
     count: 0,
 });
-
-export const dateTime = new Date().toISOString();

@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { NotFoundError } from '@prisma/client/runtime';
-import { ErrorResponse } from '~/shared/filters/prisma/classes/error-response.class';
+import { ErrorResponse } from '~/app/filters/prisma/classes/error-response.class';
 
 @Catch(NotFoundError)
 export class PrismaNotFoundErrorFilter implements ExceptionFilter {

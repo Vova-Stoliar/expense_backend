@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { dateTime, generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
 import { getMockByToken } from '~/shared/lib/get-mock-by-token';
 
@@ -33,19 +33,19 @@ describe('JwtHelper', () => {
     describe('getTokens', () => {
         it('should return "refresh", "access" tokens and "createdAt"', async () => {
             const { jwtHelper } = await getMocks();
-            const { id, email } = generateUser();
+            const { id, email, createdAt } = generateUser();
             const { accessToken, refreshToken } = generateTokens();
 
             const returnValue = {
                 accessToken,
                 refreshToken,
-                createdAt: dateTime,
+                createdAt,
             };
 
             const acceptValue = { id, email };
 
             jest.spyOn(Promise, 'all').mockResolvedValue([generateTokens().accessToken, generateTokens().refreshToken]);
-            jest.useFakeTimers().setSystemTime(new Date(dateTime));
+            jest.useFakeTimers().setSystemTime(new Date(createdAt));
 
             expect(await jwtHelper.getTokens(acceptValue)).toEqual(returnValue);
         });
