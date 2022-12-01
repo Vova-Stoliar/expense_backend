@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, Token, User } from '@prisma/client';
 import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
+import { DefaultRepositoryHelper } from '~/modules/auth/helpers/classes/default-repository-helper';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
 import { TokenRepository } from '~/shared/repositories/token';
 import { UserRepository } from '~/shared/repositories/user';
@@ -12,7 +13,8 @@ export class AuthFacadeHelper {
         private bcryptHelper: BcryptHelper,
         private jwtHelper: JwtHelper,
         private tokenRepository: TokenRepository,
-        private userRepository: UserRepository
+        private userRepository: UserRepository,
+        private defaultRepositoryHelper: DefaultRepositoryHelper
     ) {}
 
     async getHashedRefreshToken(
@@ -50,12 +52,15 @@ export class AuthFacadeHelper {
 
         const hashedPassword = await this.bcryptHelper.getHashedPassword({ password });
 
+        const categories = await this.defaultRepositoryHelper.getCategories();
+
         return this.userRepository.create({
             data: {
                 password: hashedPassword,
                 email,
                 userName,
                 displayName,
+                categories,
             },
         });
     }

@@ -1,7 +1,7 @@
-import type { InferSubjects, MongoAbility } from '@casl/ability';
 import type { User } from '@prisma/client';
 
-export * from './utility-types';
+export * from './utility.types';
+export * from './casl.types';
 
 export type BaseUser = Pick<User, 'email' | 'userName' | 'displayName' | 'id'>;
 
@@ -19,23 +19,8 @@ export interface Tokens {
     refreshToken: string;
 }
 
-interface CaslUser extends User {
-    kind: 'User';
-}
-
-export type Subjects = InferSubjects<CaslUser>;
-export type AppAbility = MongoAbility<[Action, Subjects]>;
-export type PolicyHandler = (ability: AppAbility) => boolean;
-
-export enum Action {
-    Manage = 'manage',
-    Create = 'create',
-    Read = 'read',
-    Update = 'update',
-    Delete = 'delete',
-}
-
 export interface Category {
+    name: string;
     id: string;
     notes: string;
     amount: number;

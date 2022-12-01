@@ -4,9 +4,7 @@ import { UserToLoginDto, UserToResetPasswordDto, UserToSignupDto } from '~/modul
 import { RefreshTokenGuard } from '~/modules/auth/guards';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { GetUserFromReq, GetUserFromReqPropertyByKey, Public } from '~/shared/decorators';
-import { CheckPolicies } from '~/shared/decorators/check-policies.decorator';
-import type { AppAbility, BaseUser, Tokens } from '~/shared/types';
-import { Action } from '~/shared/types';
+import type { BaseUser, Tokens } from '~/shared/types';
 
 @NestCommon.Controller('auth')
 export class AuthController {
@@ -40,11 +38,5 @@ export class AuthController {
     @NestCommon.Get('refresh')
     async refresh(@GetUserFromReq() user: Pick<User, 'email' | 'id'>): Promise<Tokens> {
         return this.authService.refresh(user);
-    }
-
-    @NestCommon.Post('check')
-    @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, 'User'))
-    async check() {
-        return 'I am check';
     }
 }

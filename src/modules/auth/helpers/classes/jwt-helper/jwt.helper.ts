@@ -7,7 +7,7 @@ import type { JwtPayload, Tokens } from '~/shared/types';
 export class JwtHelper {
     constructor(private customConfigService: CustomConfigService, private jwtService: JwtService) {}
 
-    private ACCESS_TOKEN_EXPIRES_IN = '150m';
+    private ACCESS_TOKEN_EXPIRES_IN = '3d';
     private REFRESH_TOKEN_EXPIRES_IN = '7d';
 
     private getJwtPayload(params: Omit<JwtPayload, 'createdAt'>): JwtPayload {

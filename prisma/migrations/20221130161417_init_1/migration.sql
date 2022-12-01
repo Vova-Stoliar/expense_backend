@@ -8,6 +8,7 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "categories" JSONB,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -24,14 +25,13 @@ CREATE TABLE "Token" (
 );
 
 -- CreateTable
-CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
+CREATE TABLE "Default" (
+    "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "data" JSONB NOT NULL,
 
-    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Default_pkey" PRIMARY KEY ("name")
 );
 
 -- CreateIndex
@@ -40,14 +40,5 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "Token_userId_key" ON "Token"("userId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Category_userId_key" ON "Category"("userId");
-
 -- AddForeignKey
 ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

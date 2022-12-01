@@ -11,34 +11,21 @@ import type { Category } from '~/shared/types';
 export class UserRepository {
     constructor(private prismaService: PrismaService) {}
 
+    findMany<T extends Prisma.UserFindManyArgs>(args: Prisma.SelectSubset<T, Prisma.UserFindManyArgs>) {
+        const { select } = args;
+
+        return this.prismaService.user.findMany({
+            ...args,
+            select: addDefaultSelectValues({ select }),
+        });
+    }
+
     async create<T extends Prisma.UserCreateArgs>(args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>) {
         const { select, data } = args;
 
-        const addDefaultCategories = <TData extends Record<string, unknown>>(data: TData) => {
-            const date = new Date().toISOString();
-
-            const category: Category = {
-                id: uuid(),
-                notes: '',
-                amount: 0,
-                updatedAt: date,
-                createdAt: date,
-            };
-
-            const DEFAULT_CATEGORIES = {
-                other: category,
-                salary: category,
-                food: category,
-                trips: category,
-                presents: category,
-            };
-
-            return Object.assign(data, { category: DEFAULT_CATEGORIES });
-        };
-
         return this.prismaService.user.create({
             ...args,
-            data: addDefaultCategories(data),
+            data: data,
             select: addDefaultSelectValues({ select }),
         });
     }
