@@ -3,7 +3,7 @@ import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 import { AuthController } from '~/modules/auth/module/auth-controller';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { getAuthServiceMock } from '~/modules/auth/module/auth-service/mock';
-import { getMockByToken } from '~/shared/lib/get-mock-by-token';
+import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({

@@ -38,7 +38,7 @@ export class CategoryController {
         @Body() updateCategoryDto: UpdateCategoryDto,
         @GetUserFromReq() user: Replace<User, 'categories', Category[]>
     ) {
-        return this.categoryService.update({ id, categoryToUpdate: UpdateCategoryDto, user });
+        return this.categoryService.update({ id, user, fieldsToUpdateById: updateCategoryDto });
     }
 
     @Delete(':id')

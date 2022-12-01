@@ -1,1 +1,1 @@
-export { addDefaultSelectValues } from './add-default-select-values';
+export { addDefaultSelectValues } from './add-default-select-values.lib';

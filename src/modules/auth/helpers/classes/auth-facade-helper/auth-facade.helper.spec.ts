@@ -5,7 +5,7 @@ import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { getBcryptHelperMock } from '~/modules/auth/helpers/classes/bcrypt-helper/mock';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
 import { getJwtHelperMock } from '~/modules/auth/helpers/classes/jwt-helper/mock';
-import { getMockByToken } from '~/shared/lib/get-mock-by-token';
+import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 import { TokenRepository } from '~/shared/repositories/token';
 import { UserRepository } from '~/shared/repositories/user';
 

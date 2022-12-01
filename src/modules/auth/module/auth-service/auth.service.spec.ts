@@ -3,7 +3,7 @@ import { generateTokens, generateUser } from '~/modules/auth/constants/test';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
 import { getAuthFacadeMockHelper } from '~/modules/auth/helpers/classes/auth-facade-helper/mock';
 import { AuthService } from '~/modules/auth/module/auth-service';
-import { getMockByToken } from '~/shared/lib/get-mock-by-token';
+import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({
