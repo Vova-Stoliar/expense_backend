@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { CategoryHelper } from './category.helper';
 import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
-import { DefaultRepository } from '~/shared/repositories/default';
+import { DefaultRepository } from '~/repositories/default';
 import { UserRepository } from '~/shared/repositories/user';
 
 const getUserRepositoryMock = () => {

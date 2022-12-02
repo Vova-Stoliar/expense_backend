@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { getDefaultCategories } from '~/modules/auth/lib';
 import { DEFAULT_DATA_NAMES } from '~/shared/constants';
-import { DefaultRepository } from '~/shared/repositories/default';
+import { DefaultRepository } from '~/repositories/default';
 
 @Injectable()
 export class DefaultRepositoryHelper {

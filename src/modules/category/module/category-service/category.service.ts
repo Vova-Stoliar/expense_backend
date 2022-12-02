@@ -5,7 +5,7 @@ import { CategoryHelper } from '~/modules/category/helpers/classes/category-help
 import * as libs from '~/modules/category/lib';
 import type { CreateParams, DeleteParams, UpdateParams } from '~/modules/category/types';
 import { DEFAULT_DATA_NAMES, MESSAGES } from '~/shared/constants';
-import { DefaultRepository } from '~/shared/repositories/default';
+import { DefaultRepository } from '~/repositories/default';
 import { UserRepository } from '~/shared/repositories/user';
 import type { Category } from '~/shared/types';
 

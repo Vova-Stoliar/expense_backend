@@ -33,20 +33,6 @@ describe('BcryptHelper', () => {
         expect(bcryptHelper).toBeDefined();
     });
 
-    describe('getHashedRefreshToken', () => {
-        it('should return "hashedRefreshToken"', async () => {
-            const { bcryptHelper, hash } = await getMocks();
-            const { refreshToken, hashedRefreshToken } = generateTokens();
-
-            const returnValue = hashedRefreshToken;
-            const acceptValue = { refreshToken };
-
-            hash.mockImplementation(() => hashedRefreshToken);
-
-            expect(await bcryptHelper.getHashedRefreshToken(acceptValue)).toBe(returnValue);
-        });
-    });
-
     describe('getHashedPassword', () => {
         it('should return "hashedPassword"', async () => {
             const { bcryptHelper, hash } = await getMocks();

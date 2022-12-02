@@ -14,33 +14,35 @@ model User {
 
     userName              String
     displayName           String
-    email                 String  @unique
+    email                 String    @unique
     password              String
-    isAdmin               Boolean @default(false)
+    isAdmin               Boolean   @default(false)
     categories            Json?
     refreshTokenUpdatedAt DateTime?
 
-    Token Token?
+    Transaction Transaction[]
 
     @@map("users")
 }
 
-model Token {
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    hashedRefreshToken String?
-
-    userId String @unique
-    user   User   @relation(fields: [userId], references: [id])
-}
-
 model Default {
     id        String   @id @default(uuid())
-    name      String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    name String @unique
     data Json
+}
+
+model Transaction {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    categoryId String
+    userId     String
+    amount     Int
+    notes      String
+
+    user User @relation(fields: [userId], references: [id])
 }

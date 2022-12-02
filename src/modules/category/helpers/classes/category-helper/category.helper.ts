@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma, User } from '@prisma/client';
 import type { SaveCategoriesParams } from '~/modules/category/helpers/types';
 import { DEFAULT_DATA_NAMES } from '~/shared/constants';
-import { DefaultRepository } from '~/shared/repositories/default';
+import { DefaultRepository } from '~/repositories/default';
 import { UserRepository } from '~/shared/repositories/user';
 import type { Category } from '~/shared/types';
 

@@ -3,7 +3,7 @@ import type { Default, Prisma } from '@prisma/client';
 import { DEFAULT_DATA_NAMES } from '~/shared/constants';
 import { generateCategory } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
-import { DefaultRepository } from '~/shared/repositories/default';
+import { DefaultRepository } from '~/repositories/default';
 import { DefaultRepositoryHelper } from './default-repository.helper';
 import * as libs from '~/modules/auth/lib';
 

@@ -6,7 +6,7 @@ type ICreateCategoryDto = Pick<Category, 'name' | 'amount' | 'notes'>;
 export class CreateCategoryDto implements ICreateCategoryDto {
     @IsNotEmpty()
     @IsString()
-    name!: string;
+    name!: ICreateCategoryDto['name'];
 
     @IsNumber()
     amount = 0;

@@ -13,5 +13,5 @@ export class UserToResetPasswordDto
 {
     @IsUUID()
     @IsNotEmpty()
-    id!: User['id'];
+    id!: IUserToResetPassword['id'];
 }
