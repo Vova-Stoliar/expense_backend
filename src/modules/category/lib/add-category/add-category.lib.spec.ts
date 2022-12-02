@@ -2,8 +2,6 @@ import { addCategory } from '~/modules/category/lib';
 import { DATE_TIME, generateCategory } from '~/shared/constants/test';
 import * as getTransformedCategory from '../get-transformed-category';
 
-// TODO there is "generateUser" in shared/constants/test and modules/auth/constants/test
-
 const getAcceptValue = () => {
     const category = generateCategory();
     const { name, notes, amount } = generateCategory();
@@ -25,7 +23,7 @@ describe('addCategory', () => {
     });
 
     it('should add "category" to passed "categories and return "categories"', () => {
-        jest.spyOn(getTransformedCategory, 'getTransformCategory').mockReturnValue(generateCategory());
+        jest.spyOn(getTransformedCategory, 'getTransformedCategory').mockReturnValue(generateCategory());
 
         expect(addCategory(getAcceptValue())).toEqual(expect.arrayContaining([generateCategory()]));
     });

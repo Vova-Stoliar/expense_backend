@@ -1,1 +1,1 @@
-export { getTransformCategory } from './get-transformed-category.lib';
+export { getTransformedCategory } from './get-transformed-category.lib';

@@ -1,10 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { dateTime, generatePrismaBatchPayload, generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { dateTime, generatePrismaBatchPayload, generateTokens } from '~/modules/auth/constants/test';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
 import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { getBcryptHelperMock } from '~/modules/auth/helpers/classes/bcrypt-helper/mock';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
 import { getJwtHelperMock } from '~/modules/auth/helpers/classes/jwt-helper/mock';
+import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 import { TokenRepository } from '~/shared/repositories/token';
 import { UserRepository } from '~/shared/repositories/user';

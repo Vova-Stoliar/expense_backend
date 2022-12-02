@@ -1,7 +1,8 @@
 import { Test } from '@nestjs/testing';
 import bcrypt from 'bcrypt';
-import { generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
 import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
+import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
 import { UserRepository } from '~/shared/repositories/user';
 

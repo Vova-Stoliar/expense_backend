@@ -1,4 +1,5 @@
-import { dateTime, generatePrismaBatchPayload, generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { dateTime, generatePrismaBatchPayload, generateTokens } from '~/modules/auth/constants/test';
+import { generateUser } from '~/shared/constants/test';
 
 export const getAuthFacadeMockHelper = () => {
     const { email, userName, displayName, id } = generateUser();

@@ -1,4 +1,4 @@
-import { getTransformCategory } from '~/modules/category/lib';
+import { getTransformedCategory } from '~/modules/category/lib';
 import type { AddCategoryParams } from '~/modules/category/types';
 
 export function addCategory(params: AddCategoryParams) {
@@ -6,5 +6,5 @@ export function addCategory(params: AddCategoryParams) {
 
     const dateTime = new Date().toISOString();
 
-    return [...categories, getTransformCategory({ category: categoryToAdd, dateTime })];
+    return [...categories, getTransformedCategory({ category: categoryToAdd, dateTime })];
 }

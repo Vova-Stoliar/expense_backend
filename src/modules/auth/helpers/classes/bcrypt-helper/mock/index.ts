@@ -1,4 +1,5 @@
-import { generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
+import { generateUser } from '~/shared/constants/test';
 
 export const getBcryptHelperMock = () => {
     const { hashedRefreshToken } = generateTokens();

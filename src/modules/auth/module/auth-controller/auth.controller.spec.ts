@@ -1,8 +1,9 @@
 import { Test } from '@nestjs/testing';
-import { generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
 import { AuthController } from '~/modules/auth/module/auth-controller';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { getAuthServiceMock } from '~/modules/auth/module/auth-service/mock';
+import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 
 const getMocks = async () => {

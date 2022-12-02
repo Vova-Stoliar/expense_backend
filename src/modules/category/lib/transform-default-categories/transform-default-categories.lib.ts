@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getSetTransformedCategoriesLibs, getTransformCategory } from '~/modules/category/lib';
+import { getSetTransformedCategoriesLibs, getTransformedCategory } from '~/modules/category/lib';
 import type { TransformDefaultCategories } from '~/modules/category/types';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import type { Category, DateTime } from '~/shared/types';
@@ -29,7 +29,7 @@ function getTransformedCategories(params: GetTransformedCategories) {
     const { setCategories, setOtherCategory } = getSetTransformedCategoriesLibs();
 
     return categories.reduce((transformedCategories, defaultCategory) => {
-        const category = getTransformCategory({
+        const category = getTransformedCategory({
             category: defaultCategory,
             dateTime,
         });

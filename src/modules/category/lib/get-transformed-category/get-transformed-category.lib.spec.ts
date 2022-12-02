@@ -1,10 +1,10 @@
-import { getTransformCategory } from '~/modules/category/lib';
+import { getTransformedCategory } from '~/modules/category/lib';
 import { DATE_TIME, generateCategory } from '~/shared/constants/test';
 jest.mock('uuid', () => ({ v4: () => generateCategory().id }));
 
 describe('getTransformCategory', () => {
     it('should be defined', () => {
-        expect(getTransformCategory).toBeDefined();
+        expect(getTransformedCategory).toBeDefined();
     });
 
     it('should add "id", "createdAt", "updatedAt" and passed "dateTime"', () => {
@@ -12,6 +12,6 @@ describe('getTransformCategory', () => {
 
         const acceptValue = { category: { name, amount, notes }, dateTime: DATE_TIME };
 
-        expect(getTransformCategory(acceptValue)).toEqual(generateCategory());
+        expect(getTransformedCategory(acceptValue)).toEqual(generateCategory());
     });
 });

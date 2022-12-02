@@ -1,3 +1,4 @@
+import type { SetTransformedCategories } from '~/modules/category/types';
 import type { Category } from '~/shared/types';
 
 interface TransformedCategories {
@@ -5,17 +6,12 @@ interface TransformedCategories {
     otherCategory?: Category;
 }
 
-interface SetTransformedCategoriesParams<T> {
-    transformedCategories: T;
-    category: Category;
-}
-
 export const getSetTransformedCategoriesLibs = () => {
     return { setCategories, setOtherCategory };
 };
 
 function setOtherCategory<T extends Pick<TransformedCategories, 'otherCategory'>>(
-    params: SetTransformedCategoriesParams<T>
+    params: SetTransformedCategories<T>
 ): Pick<TransformedCategories, 'otherCategory'> & T {
     const { transformedCategories, category } = params;
 
@@ -26,7 +22,7 @@ function setOtherCategory<T extends Pick<TransformedCategories, 'otherCategory'>
 }
 
 function setCategories<T extends Pick<TransformedCategories, 'categories'>>(
-    params: SetTransformedCategoriesParams<T>
+    params: SetTransformedCategories<T>
 ): Pick<TransformedCategories, 'categories'> & T {
     const { transformedCategories, category } = params;
     const { categories = [] } = transformedCategories;

@@ -52,3 +52,8 @@ export interface AddCategoryParams {
     categories: Category[];
     categoryToAdd: Pick<Category, 'name' | 'amount' | 'notes'>;
 }
+
+export interface SetTransformedCategories<T> {
+    transformedCategories: T;
+    category: Category;
+}

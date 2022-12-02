@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
-import { generateTokens, generateUser } from '~/modules/auth/constants/test';
+import { generateTokens } from '~/modules/auth/constants/test';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
+import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib/get-mock-by-token.lib';
 
 const getMocks = async () => {
