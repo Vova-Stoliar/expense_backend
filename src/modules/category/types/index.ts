@@ -22,9 +22,15 @@ export interface ValidateCategoryConstraintParams {
     categoryToValidateId: Category['id'];
 }
 
+export interface GetTransformCategoryParams {
+    category: TransformDefaultCategories['categories'][0];
+    dateTime: Category['createdAt'];
+}
+
 export interface ValidateCategoryExistenceParams {
     categories: Category[];
     matchCategoryCallback: (category: Category) => boolean;
+    error: Error;
 }
 
 export interface UpdateCategoryParams {

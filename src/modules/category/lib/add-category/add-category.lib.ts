@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { getTransformCategory } from '~/modules/category/lib';
 import type { AddCategoryParams } from '~/modules/category/types';
 
 export function addCategory(params: AddCategoryParams) {
@@ -6,5 +6,5 @@ export function addCategory(params: AddCategoryParams) {
 
     const dateTime = new Date().toISOString();
 
-    return [...categories, { ...categoryToAdd, createdAt: dateTime, updatedAt: dateTime, id: uuid() }];
+    return [...categories, getTransformCategory({ category: categoryToAdd, dateTime })];
 }

@@ -9,12 +9,12 @@ export class DefaultRepositoryHelper {
     constructor(private defaultRepository: DefaultRepository) {}
 
     async getCategories() {
-        const [{ data: categories }] = await this.defaultRepository.findMany({
+        const categories = await this.defaultRepository.findMany({
             where: { name: DEFAULT_DATA_NAMES.category },
             select: { data: true },
         });
 
-        if (categories) return categories;
+        if (categories.length) return categories[0].data as unknown as Prisma.JsonArray;
 
         return getDefaultCategories() as unknown as Prisma.JsonArray;
     }

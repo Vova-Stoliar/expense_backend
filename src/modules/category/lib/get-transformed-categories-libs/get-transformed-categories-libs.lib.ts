@@ -1,7 +1,7 @@
 import type { Category } from '~/shared/types';
 
 interface TransformedCategories {
-    categories: Category[];
+    categories?: Category[];
     otherCategory?: Category;
 }
 
@@ -29,7 +29,7 @@ function setCategories<T extends Pick<TransformedCategories, 'categories'>>(
     params: SetTransformedCategoriesParams<T>
 ): Pick<TransformedCategories, 'categories'> & T {
     const { transformedCategories, category } = params;
-    const { categories } = transformedCategories;
+    const { categories = [] } = transformedCategories;
 
     return {
         ...transformedCategories,

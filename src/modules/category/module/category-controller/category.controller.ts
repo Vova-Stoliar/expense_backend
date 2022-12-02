@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { CreateCategoryDto } from '~/modules/category/dto/create-category.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from '~/modules/category/dto';
 import { CreateDefaultCategoriesDto } from '~/modules/category/dto/create-default-categories.dto';
-import { UpdateCategoryDto } from '~/modules/category/dto/update-category.dto';
-import { getPolicyHandlers } from '~/modules/category/lib/get-policy-handlers.lib';
-import { GetUserFromReq } from '~/shared/decorators';
+import { getPolicyHandlers } from '~/modules/category/lib/get-policy-handlers/get-policy-handlers.lib';
+import type { CreateParams, DeleteParams, UpdateParams } from '~/modules/category/types';
+import { GetUserFromReq, GetUserFromReqPropertyByKey } from '~/shared/decorators';
 import { CheckPolicies } from '~/shared/decorators/check-policies.decorator';
-import type { Category, Replace } from '~/shared/types';
+import type { Category } from '~/shared/types';
 import { CategoryService } from '../category-service/category.service';
 
 @Controller('categories')
@@ -16,7 +16,7 @@ export class CategoryController {
     @Post()
     create(
         @Body() createCategoryDto: CreateCategoryDto,
-        @GetUserFromReq() user: Replace<User, 'categories', Category[]>
+        @GetUserFromReq() user: CreateParams['user']
     ): Promise<Category[]> {
         return this.categoryService.create({ categoryToCreate: createCategoryDto, user });
     }
@@ -28,24 +28,24 @@ export class CategoryController {
     }
 
     @Get()
-    getAll() {
-        return this.categoryService.getAll();
+    getAll(@GetUserFromReqPropertyByKey('id') id: User['id']): Promise<Category[]> {
+        return this.categoryService.getAll({ id });
     }
 
     @Patch(':id')
     update(
-        @Param('id') id: Category['id'],
-        @Body() updateCategoryDto: UpdateCategoryDto,
-        @GetUserFromReq() user: Replace<User, 'categories', Category[]>
-    ) {
-        return this.categoryService.update({ id, user, fieldsToUpdateById: updateCategoryDto });
+        @Body() fieldsToUpdateById: UpdateCategoryDto,
+        @Param('id') id: UpdateParams['id'],
+        @GetUserFromReq() user: UpdateParams['user']
+    ): Promise<Category[]> {
+        return this.categoryService.update({ id, user, fieldsToUpdateById });
     }
 
     @Delete(':id')
     delete(
-        @Param('id', ParseUUIDPipe) id: Category['id'],
-        @GetUserFromReq() user: Replace<User, 'categories', Category[]>
-    ) {
+        @Param('id', ParseUUIDPipe) id: DeleteParams['id'],
+        @GetUserFromReq() user: DeleteParams['user']
+    ): Promise<Category[]> {
         return this.categoryService.delete({ id, user });
     }
 }

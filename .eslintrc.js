@@ -36,10 +36,20 @@ module.exports = {
     },
     rules: {
         // '@typescript-eslint/explicit-function-return-type': 'error',
+        'no-console': ['warn', { allow: ['warn', 'error'] }],
         '@typescript-eslint/prefer-reduce-type-parameter': 'off',
         '@typescript-eslint/no-extraneous-class': ['warn', { allowEmpty: true }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/await-thenable': 'error',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            {
+                argsIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                caughtErrorsIgnorePattern: '^_',
+            },
+        ],
         indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
         'max-len': ['error', { code: 120 }],
         'import/no-extraneous-dependencies': 'off',

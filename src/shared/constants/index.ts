@@ -18,6 +18,8 @@ export const DECORATORS_KEYS = {
     checkPolicies: 'checkPolicy',
 } as const;
 
+// There is the same in
+
 export const DEFAULT_CATEGORIES = {
     other: 'Other',
     salary: 'Salary',

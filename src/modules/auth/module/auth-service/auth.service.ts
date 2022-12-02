@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { v4 as uuid } from 'uuid';
-import type { UserToResetPasswordDto, UserToSignupDto, UserToLoginDto } from '~/modules/auth/dto';
+import type { UserToLoginDto, UserToResetPasswordDto, UserToSignupDto } from '~/modules/auth/dto';
 import { AuthFacadeHelper } from '~/modules/auth/helpers/classes/auth-facade-helper';
-import { getDefaultCategories } from '~/modules/auth/lib';
-import { DEFAULT_CATEGORIES } from '~/shared/constants';
-import { DefaultRepository } from '~/shared/repositories/default';
-import type { Category, BaseUser, Tokens } from '~/shared/types';
+import type { BaseUser, Tokens } from '~/shared/types';
 
 @Injectable()
 export class AuthService {
-    constructor(private authFacadeHelper: AuthFacadeHelper, private defaultRepository: DefaultRepository) {}
+    constructor(private authFacadeHelper: AuthFacadeHelper) {}
 
     async login(userToLogin: UserToLoginDto): Promise<{ user: BaseUser } & Tokens> {
         const { email, password } = userToLogin;

@@ -1,8 +1,9 @@
-export { getPolicyHandlers } from './get-policy-handlers.lib';
-export { addCategory } from './add-category.lib';
-export { deleteCategory } from './delete-category.lib';
-export { getSetTransformedCategoriesLibs } from './get-transformed-categories-libs.lib';
-export { updateCategory } from './update-category.lib';
-export { transformDefaultCategories } from './transform-default-categories.lib';
-export { validateCategoryConstraint } from './validate-category-constraint.lib';
-export { validateCategoryExistence } from './validate-category-existence.lib';
+export { getPolicyHandlers } from './get-policy-handlers';
+export { addCategory } from './add-category';
+export { deleteCategory } from './delete-category';
+export { getSetTransformedCategoriesLibs } from './get-transformed-categories-libs';
+export { updateCategory } from './update-category';
+export { transformDefaultCategories } from './transform-default-categories';
+export { validateCategoryConstraint } from './validate-category-constraint';
+export { validateCategoryExistence } from './validate-category-existence';
+export { getTransformCategory } from './get-transformed-category';

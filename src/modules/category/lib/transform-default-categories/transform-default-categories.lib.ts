@@ -1,18 +1,13 @@
 import { v4 as uuid } from 'uuid';
-import { DEFAULT_CATEGORIES } from '~/modules/category/constants';
-import { getSetTransformedCategoriesLibs } from '~/modules/category/lib';
+import { getSetTransformedCategoriesLibs, getTransformCategory } from '~/modules/category/lib';
 import type { TransformDefaultCategories } from '~/modules/category/types';
+import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import type { Category, DateTime } from '~/shared/types';
 
 interface TransformedCategories {
     categories: Category[];
     otherCategory: Category;
     deletedCategory: Category;
-}
-
-interface AddCategoryCategoryFieldsParams {
-    category: TransformDefaultCategories['categories'][0];
-    dateTime: Category['createdAt'];
 }
 
 interface GetTransformedCategories extends Pick<TransformDefaultCategories, 'categories'> {
@@ -26,9 +21,7 @@ export function transformDefaultCategories(params: TransformDefaultCategories) {
 
     const { categories, otherCategory = createDefaultOtherCategory({ dateTime }) } = transformedCategories;
 
-    categories.push(otherCategory);
-
-    return categories;
+    return [...categories, otherCategory];
 }
 
 function getTransformedCategories(params: GetTransformedCategories) {
@@ -36,7 +29,7 @@ function getTransformedCategories(params: GetTransformedCategories) {
     const { setCategories, setOtherCategory } = getSetTransformedCategoriesLibs();
 
     return categories.reduce((transformedCategories, defaultCategory) => {
-        const category = transformCategory({
+        const category = getTransformCategory({
             category: defaultCategory,
             dateTime,
         });
@@ -47,15 +40,6 @@ function getTransformedCategories(params: GetTransformedCategories) {
 
         return setCategories<TransformedCategories>({ transformedCategories, category });
     }, {} as TransformedCategories);
-}
-
-function transformCategory(params: AddCategoryCategoryFieldsParams): Category {
-    return {
-        ...params.category,
-        createdAt: params.dateTime,
-        updatedAt: params.dateTime,
-        id: uuid(),
-    };
 }
 
 function createDefaultOtherCategory({ dateTime }: { dateTime: Category['createdAt'] }): Category {

@@ -22,7 +22,6 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, STRATEGIES_
 
     async validate(req: Request, payload: JwtPayload): Promise<User> {
         const { id } = payload;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_keyword, refreshToken] = req.get('authorization')?.split(' ') ?? [];
 
         return this.validateRefreshToken({ refreshToken, userId: id });

@@ -1,6 +1,6 @@
-import { DEFAULT_CATEGORIES } from '~/modules/category/constants';
 import { getSetTransformedCategoriesLibs } from '~/modules/category/lib';
 import type { DeleteCategory } from '~/modules/category/types';
+import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import type { Category } from '~/shared/types';
 
 interface TransformedCategories {
@@ -8,6 +8,8 @@ interface TransformedCategories {
     otherCategory: Category;
     deletedCategory: Category;
 }
+
+type UpdateOtherCategory = Pick<TransformedCategories, 'deletedCategory' | 'otherCategory'>;
 
 export function deleteCategory(params: DeleteCategory) {
     const { categories, otherCategory, deletedCategory } = getTransformedCategories({
@@ -33,6 +35,7 @@ function getTransformedCategories(params: DeleteCategory) {
     }, {} as TransformedCategories);
 }
 
+// TODO repetitive type the same as in SetTransformedCategoriesParams
 function setCategoryToDelete(params: { transformedCategories: TransformedCategories; category: Category }) {
     const { transformedCategories, category } = params;
 
@@ -41,7 +44,7 @@ function setCategoryToDelete(params: { transformedCategories: TransformedCategor
     return transformedCategories;
 }
 
-function updateOtherCategory(params: Pick<TransformedCategories, 'deletedCategory' | 'otherCategory'>): Category {
+function updateOtherCategory(params: UpdateOtherCategory): Category {
     const { deletedCategory, otherCategory } = params;
 
     return {
