@@ -1,0 +1,1 @@
+export { PrismaErrorsFilterProvider } from './provider';

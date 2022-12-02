@@ -5,29 +5,55 @@ module.exports = {
         tsconfigRootDir: __dirname,
         sourceType: 'module',
     },
-    plugins: ['@typescript-eslint/eslint-plugin'],
+    plugins: ['@typescript-eslint/eslint-plugin', 'jest'],
     extends: [
+        'plugin:import/recommended',
+        'plugin:import/typescript',
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/strict',
-        'plugin:import/recommended',
-        'plugin:import/typescript',
         'plugin:prettier/recommended',
+        'plugin:jest/recommended',
+        'plugin:jest/style',
     ],
     root: true,
     env: {
         node: true,
         jest: true,
+        'jest/globals': true,
     },
     ignorePatterns: ['.eslintrc.js'],
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+        'import/parsers': {
+            '@typescript-eslint/parser': ['.ts'],
+        },
+    },
     rules: {
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
+        // '@typescript-eslint/explicit-function-return-type': 'error',
+        'no-console': ['warn', { allow: ['warn', 'error'] }],
+        '@typescript-eslint/prefer-reduce-type-parameter': 'off',
+        '@typescript-eslint/no-extraneous-class': ['warn', { allowEmpty: true }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        indent: ['error', 4],
+        '@typescript-eslint/await-thenable': 'error',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            {
+                argsIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                caughtErrorsIgnorePattern: '^_',
+            },
+        ],
+        indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
         'max-len': ['error', { code: 120 }],
         'import/no-extraneous-dependencies': 'off',
+        'max-depth': ['error', 2],
         'import/order': [
             'error',
             {
