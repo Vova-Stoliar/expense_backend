@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import type { Token, User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
-import { normalizeUser } from '~/modules/auth/lib/normalize-user.lib';
-import { CustomConfigService } from '~/shared/modules';
+import { normalizeUser } from '~/modules/auth/lib';
+import { CustomConfigService } from '~/shared/modules/config';
 import { UserRepository } from '~/shared/repositories/user';
 import type { BaseUser, Tokens } from '~/shared/types';
 

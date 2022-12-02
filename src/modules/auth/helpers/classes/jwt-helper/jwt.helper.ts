@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CustomConfigService } from '~/shared/modules';
+import type { User } from '@prisma/client';
+import { CustomConfigService } from '~/shared/modules/config';
 import type { JwtPayload, Tokens } from '~/shared/types';
 
 @Injectable()
@@ -17,7 +18,9 @@ export class JwtHelper {
         };
     }
 
-    async getTokens(params: Omit<JwtPayload, 'createdAt'>): Promise<Tokens & Pick<JwtPayload, 'createdAt'>> {
+    async getTokens(
+        params: Omit<JwtPayload, 'createdAt'>
+    ): Promise<Tokens & { createdAt: User['refreshTokenUpdatedAt'] }> {
         const payload = this.getJwtPayload(params);
 
         const [accessToken, refreshToken] = await Promise.all([
@@ -34,7 +37,7 @@ export class JwtHelper {
         return {
             accessToken,
             refreshToken,
-            createdAt: payload.createdAt,
+            createdAt: new Date(payload.createdAt),
         };
     }
 }

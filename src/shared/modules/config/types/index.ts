@@ -3,5 +3,5 @@ export interface EnvironmentVariables {
     BCRYPT_SALT_ROUNDS: number;
     ACCESS_TOKEN_SECRET: string;
     REFRESH_TOKEN_SECRET: string;
-    NODE_ENV: 'TEST' | 'PROD';
+    NODE_ENV: 'DEV' | 'PROD';
 }

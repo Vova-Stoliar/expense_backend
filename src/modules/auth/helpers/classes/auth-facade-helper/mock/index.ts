@@ -1,4 +1,4 @@
-import { dateTime, generatePrismaBatchPayload, generateTokens } from '~/modules/auth/constants/test';
+import { dateTime, generateTokens } from '~/modules/auth/constants/test';
 import { generateUser } from '~/shared/constants/test';
 
 export const getAuthFacadeMockHelper = () => {
@@ -8,13 +8,10 @@ export const getAuthFacadeMockHelper = () => {
     const baseUser = { email, userName, displayName, id };
 
     return {
-        getHashedRefreshToken: jest.fn().mockResolvedValue(generateTokens().hashedRefreshToken),
         getTokens: jest.fn().mockResolvedValue({ refreshToken, accessToken, createdAt: dateTime }),
-        updateHashedRefreshToken: jest.fn().mockResolvedValue(baseUser),
-        deleteRefreshToken: jest.fn().mockResolvedValue(generatePrismaBatchPayload()),
         createUser: jest.fn().mockResolvedValue(baseUser),
-        createRefreshToken: jest.fn().mockResolvedValue({ userId: id }),
         validateUserPassword: jest.fn().mockResolvedValue(baseUser),
-        updatePassword: jest.fn().mockResolvedValue(baseUser),
+        getHashedPassword: jest.fn().mockResolvedValue({ userId: id }),
+        updateUser: jest.fn().mockResolvedValue(baseUser),
     };
 };

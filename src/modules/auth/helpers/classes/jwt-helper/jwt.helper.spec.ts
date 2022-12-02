@@ -40,7 +40,7 @@ describe('JwtHelper', () => {
             const returnValue = {
                 accessToken,
                 refreshToken,
-                createdAt,
+                createdAt: new Date(createdAt),
             };
 
             const acceptValue = { id, email };

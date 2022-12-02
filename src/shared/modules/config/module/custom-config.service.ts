@@ -17,7 +17,6 @@ export class CustomConfigService extends ConfigService<EnvironmentVariables, tru
         this.BCRYPT_SALT_ROUNDS = Number(this.get('BCRYPT_SALT_ROUNDS', { infer: true }));
         this.ACCESS_TOKEN_SECRET = this.get('ACCESS_TOKEN_SECRET', { infer: true });
         this.REFRESH_TOKEN_SECRET = this.get('REFRESH_TOKEN_SECRET', { infer: true });
-        this.REFRESH_TOKEN_SECRET = this.get('REFRESH_TOKEN_SECRET', { infer: true });
         this.NODE_ENV = this.get('NODE_ENV', { infer: true });
     }
 }

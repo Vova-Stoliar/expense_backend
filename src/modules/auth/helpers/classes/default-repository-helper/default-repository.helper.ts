@@ -8,7 +8,7 @@ import { DefaultRepository } from '~/shared/repositories/default';
 export class DefaultRepositoryHelper {
     constructor(private defaultRepository: DefaultRepository) {}
 
-    async getCategories() {
+    async getCategories(): Promise<Prisma.JsonArray> {
         const categories = await this.defaultRepository.findMany({
             where: { name: DEFAULT_DATA_NAMES.category },
             select: { data: true },

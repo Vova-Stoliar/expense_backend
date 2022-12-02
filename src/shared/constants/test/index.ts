@@ -1,5 +1,4 @@
-import type { User } from '@prisma/client';
-import type { Category, DateTime, Replace } from '~/shared/types';
+import type { Category } from '~/shared/types';
 
 export const DATE_TIME = new Date().toISOString();
 
@@ -16,9 +15,7 @@ export const generateCategory = (params?: Partial<Category>): Category => {
     };
 };
 
-type GenerateUser = () => Replace<Omit<User, 'createdAt' | 'updatedAt'>, 'categories', Category[]> & DateTime;
-
-export const generateUser: GenerateUser = () => ({
+export const generateUser = () => ({
     id: 'fdsgdfewfdfds',
     userName: 'Vova Stoliar',
     email: 'vova.stoliar123@gmail.com',

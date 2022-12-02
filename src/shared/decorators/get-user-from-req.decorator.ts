@@ -2,10 +2,12 @@ import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@
 import type { User } from '@prisma/client';
 import type { Request } from 'express';
 
-export const GetUserFromReq = createParamDecorator((key: undefined, context: ExecutionContext) => {
-    const request = context.switchToHttp().getRequest<Request>();
+export const GetUserFromReq = createParamDecorator(
+    (key: undefined, context: ExecutionContext): Omit<User, 'updatedAt' | 'createdAt'> => {
+        const request = context.switchToHttp().getRequest<Request>();
 
-    if (!request.user) throw new UnauthorizedException();
+        if (!request.user) throw new UnauthorizedException();
 
-    return request.user as User;
-});
+        return request.user as Omit<User, 'updatedAt' | 'createdAt'>;
+    }
+);

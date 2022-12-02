@@ -15,15 +15,7 @@ export class AuthService {
 
         const { createdAt, refreshToken, accessToken } = await this.authFacadeHelper.getTokens({ id: user.id, email });
 
-        const hashedRefreshToken = await this.authFacadeHelper.getHashedRefreshToken({
-            refreshToken,
-        });
-
-        await this.authFacadeHelper.updateHashedRefreshToken({
-            userId: user.id,
-            hashedRefreshToken,
-            updatedAt: createdAt,
-        });
+        await this.authFacadeHelper.updateUser({ id: user.id, refreshTokenUpdatedAt: createdAt });
 
         return { refreshToken, accessToken, user };
     }
@@ -34,15 +26,7 @@ export class AuthService {
             email: user.email,
         });
 
-        const hashedRefreshToken = await this.authFacadeHelper.getHashedRefreshToken({
-            refreshToken,
-        });
-
-        await this.authFacadeHelper.updateHashedRefreshToken({
-            userId: user.id,
-            hashedRefreshToken,
-            updatedAt: createdAt,
-        });
+        await this.authFacadeHelper.updateUser({ id: user.id, refreshTokenUpdatedAt: createdAt });
 
         return { refreshToken, accessToken };
     }
@@ -57,37 +41,32 @@ export class AuthService {
             email: user.email,
         });
 
-        const hashedRefreshToken = await this.authFacadeHelper.getHashedRefreshToken({
-            refreshToken,
-        });
-
-        await this.authFacadeHelper.createRefreshToken({ hashedRefreshToken, userId: user.id, updatedAt: createdAt });
+        await this.authFacadeHelper.updateUser({ id: user.id, refreshTokenUpdatedAt: createdAt });
 
         return { accessToken, refreshToken, user };
     }
 
     async logout({ id }: Pick<User, 'id'>): Promise<void> {
-        await this.authFacadeHelper.deleteRefreshToken({ id });
+        await this.authFacadeHelper.updateUser({
+            id,
+            refreshTokenUpdatedAt: new Date(new Date().toISOString()),
+        });
     }
 
     async resetPassword(user: UserToResetPasswordDto): Promise<{ user: BaseUser } & Tokens> {
-        const { id, password } = user;
+        const { id, password, email } = user;
 
         const { refreshToken, accessToken, createdAt } = await this.authFacadeHelper.getTokens({
-            id: user.id,
-            email: user.email,
+            id,
+            email,
         });
 
-        const hashedRefreshToken = await this.authFacadeHelper.getHashedRefreshToken({
-            refreshToken,
-        });
+        const hashedPassword = await this.authFacadeHelper.getHashedPassword({ password });
 
-        const updatedUser = await this.authFacadeHelper.updatePassword({ id, password });
-
-        await this.authFacadeHelper.updateHashedRefreshToken({
-            userId: user.id,
-            hashedRefreshToken,
-            updatedAt: createdAt,
+        const updatedUser = await this.authFacadeHelper.updateUser({
+            id,
+            password: hashedPassword,
+            refreshTokenUpdatedAt: createdAt,
         });
 
         return { user: updatedUser, accessToken, refreshToken };
