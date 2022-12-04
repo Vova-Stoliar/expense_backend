@@ -1,1 +1,1 @@
-export { getSetTransformedCategoriesLibs } from './get-set-transformed-categories-libs.lib';
+export { setTransformedCategoriesLibs } from './set-transformed-categories-libs.lib';

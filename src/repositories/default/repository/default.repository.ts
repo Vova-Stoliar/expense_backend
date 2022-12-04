@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { PrismaService } from '~/shared/modules/prisma';
 
-// implements Prisma.DefaultDelegate<undefined>
-
 @Injectable()
 export class DefaultRepository {
     constructor(private prismaService: PrismaService) {}

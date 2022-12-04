@@ -1,16 +1,12 @@
-import type { SetTransformedCategories } from '~/modules/category/types';
-import type { Category } from '~/shared/types';
+import type { SetTransformedCategories } from './set-transformed-categories-libs.types';
+import type { TransformedCategories } from '~/modules/category/types';
+import type { PartialPick } from '~/shared/types';
 
-interface TransformedCategories {
-    categories?: Category[];
-    otherCategory?: Category;
-}
-
-export const getSetTransformedCategoriesLibs = () => {
+export const setTransformedCategoriesLibs = () => {
     return { setCategories, setOtherCategory };
 };
 
-function setOtherCategory<T extends Pick<TransformedCategories, 'otherCategory'>>(
+function setOtherCategory<T extends PartialPick<TransformedCategories, 'otherCategory'>>(
     params: SetTransformedCategories<T>
 ): Pick<TransformedCategories, 'otherCategory'> & T {
     const { transformedCategories, category } = params;
@@ -21,7 +17,7 @@ function setOtherCategory<T extends Pick<TransformedCategories, 'otherCategory'>
     };
 }
 
-function setCategories<T extends Pick<TransformedCategories, 'categories'>>(
+function setCategories<T extends PartialPick<TransformedCategories, 'categories'>>(
     params: SetTransformedCategories<T>
 ): Pick<TransformedCategories, 'categories'> & T {
     const { transformedCategories, category } = params;

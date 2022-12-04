@@ -1,4 +1,4 @@
-import type { UpdateCategoryParams } from '~/modules/category/types';
+import type { UpdateCategoryParams } from './update-category.types';
 
 export function updateCategory(params: UpdateCategoryParams) {
     const { fieldsToUpdateById, categories, categoryToUpdateId } = params;

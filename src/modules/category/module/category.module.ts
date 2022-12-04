@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { CategoryHelper } from '~/modules/category/helpers/classes/category-helper';
+import { HelpersProvider } from '~/modules/category/helpers/provider';
 import { DefaultRepository } from '~/repositories/default';
+import { TransactionRepository } from '~/repositories/transaction';
 import { UserRepository } from '~/shared/repositories/user';
-import { CategoryService } from './category-service/category.service';
 import { CategoryController } from './category-controller/category.controller';
+import { CategoryService } from './category-service/category.service';
 
 @Module({
     controllers: [CategoryController],
-    providers: [CategoryService, UserRepository, DefaultRepository, CategoryHelper],
+    providers: [CategoryService, UserRepository, DefaultRepository, TransactionRepository, ...HelpersProvider],
 })
 export class CategoryModule {}

@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { CategoryHelper } from './category.helper';
+import { CategoryFacadeHelper } from './category-facade.helper';
 import { generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
 import { DefaultRepository } from '~/repositories/default';
@@ -24,7 +24,7 @@ const getDefaultRepositoryMock = () => {
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({
-        controllers: [CategoryHelper],
+        controllers: [CategoryFacadeHelper],
     })
         .useMocker((token) => {
             if (token === UserRepository) {
@@ -41,7 +41,7 @@ const getMocks = async () => {
         })
         .compile();
 
-    const categoryHelper = moduleRef.get<CategoryHelper>(CategoryHelper);
+    const categoryHelper = moduleRef.get<CategoryFacadeHelper>(CategoryFacadeHelper);
     const userRepository = moduleRef.get<UserRepository>(UserRepository);
 
     return { categoryHelper, userRepository };

@@ -20,7 +20,7 @@ model User {
     categories            Json?
     refreshTokenUpdatedAt DateTime?
 
-    Transaction Transaction[]
+    Transaction CategoryTransaction[]
 
     @@map("users")
 }
@@ -34,7 +34,7 @@ model Default {
     data Json
 }
 
-model Transaction {
+model CategoryTransaction {
     id        String   @id @default(uuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

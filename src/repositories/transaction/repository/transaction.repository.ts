@@ -15,4 +15,16 @@ export class TransactionRepository {
     findMany<T extends Prisma.TransactionFindManyArgs>(args: Prisma.SelectSubset<T, Prisma.TransactionFindManyArgs>) {
         return this.prismaService.transaction.findMany(args);
     }
+
+    createMany<T extends Prisma.TransactionCreateManyArgs>(
+        args: Prisma.SelectSubset<T, Prisma.TransactionCreateManyArgs>
+    ) {
+        return this.prismaService.transaction.createMany(args);
+    }
+
+    updateMany<T extends Prisma.TransactionUpdateManyArgs>(
+        args: Prisma.SelectSubset<T, Prisma.TransactionUpdateManyArgs>
+    ) {
+        return this.prismaService.transaction.updateMany(args);
+    }
 }

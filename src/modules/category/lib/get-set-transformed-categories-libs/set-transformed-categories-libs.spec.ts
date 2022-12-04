@@ -1,10 +1,10 @@
-import { getSetTransformedCategoriesLibs } from '~/modules/category/lib';
+import { setTransformedCategoriesLibs } from '~/modules/category/lib';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import { generateCategory } from '~/shared/constants/test';
 
 describe('getSetTransformedCategoriesLibs', () => {
     it('should be defined', () => {
-        expect(getSetTransformedCategoriesLibs()).toBeDefined();
+        expect(setTransformedCategoriesLibs()).toBeDefined();
     });
 
     describe('setCategories', () => {
@@ -21,13 +21,13 @@ describe('getSetTransformedCategoriesLibs', () => {
         };
 
         it('should add "a category" to "categories"', () => {
-            const { setCategories } = getSetTransformedCategoriesLibs();
+            const { setCategories } = setTransformedCategoriesLibs();
 
             expect(setCategories(getAcceptValue()).categories).toEqual(expect.arrayContaining([getCategory()]));
         });
 
         it('should return "categories"', () => {
-            const { setCategories } = getSetTransformedCategoriesLibs();
+            const { setCategories } = setTransformedCategoriesLibs();
 
             expect(setCategories(getAcceptValue())).toEqual(getReturnValue());
         });
@@ -47,7 +47,7 @@ describe('getSetTransformedCategoriesLibs', () => {
         };
 
         it('should set "other category"', () => {
-            const { setOtherCategory } = getSetTransformedCategoriesLibs();
+            const { setOtherCategory } = setTransformedCategoriesLibs();
 
             expect(setOtherCategory(getAcceptValue())).toEqual(getReturnValue());
         });
