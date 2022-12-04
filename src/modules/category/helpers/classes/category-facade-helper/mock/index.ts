@@ -7,5 +7,6 @@ export const getCategoryHelperMock = () => {
         saveCategories: jest.fn().mockResolvedValue(categories),
         upsertDefaultCategories: jest.fn().mockResolvedValue(categories),
         getAllCategories: jest.fn().mockResolvedValue(categories),
+        deleteCategory: jest.fn().mockResolvedValue(categories),
     };
 };

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, User } from '@prisma/client';
-import { CategoryTransactionHelper } from '~/modules/category/helpers/classes/category-transaction-helper';
+import { TransactionHelper } from '~/modules/category/helpers/classes/transaction-helper';
 import type { SaveCategoriesParams } from '~/modules/category/helpers/types';
 import * as libs from '~/modules/category/lib';
 import type { DeleteParams } from '~/modules/category/types';
@@ -14,7 +14,7 @@ export class CategoryFacadeHelper {
     constructor(
         private userRepository: UserRepository,
         private defaultRepository: DefaultRepository,
-        private categoryTransactionHelper: CategoryTransactionHelper
+        private transactionHelper: TransactionHelper
     ) {}
 
     async saveCategories(params: SaveCategoriesParams): Promise<Category[]> {
@@ -73,7 +73,7 @@ export class CategoryFacadeHelper {
             categories: user.categories,
         });
 
-        await this.categoryTransactionHelper.deleteCategoryTransaction({
+        await this.transactionHelper.deleteCategoryTransaction({
             categories,
             deletedCategoryId: categoryToDelete.id,
             userId: user.id,

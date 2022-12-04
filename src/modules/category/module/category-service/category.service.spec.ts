@@ -6,6 +6,7 @@ import * as libs from '~/modules/category/lib';
 import { CategoryService } from '~/modules/category/module/category-service/category.service';
 import { generateCategory, generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
+import * as __shared_lib from '~/shared/lib';
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({
@@ -24,8 +25,10 @@ const getMocks = async () => {
 
     const categoryService = moduleRef.get<CategoryService>(CategoryService);
     const validateCategoryConstraint = jest.spyOn(libs, 'validateCategoryConstraint');
+    const validateValueExistence = jest.spyOn(__shared_lib, 'validateValueExistence');
+    const validateIsValueDefined = jest.spyOn(__shared_lib, 'validateIsValueDefined');
 
-    return { categoryService, validateCategoryConstraint };
+    return { categoryService, validateCategoryConstraint, validateValueExistence, validateIsValueDefined };
 };
 
 describe('CategoryService', () => {
@@ -50,30 +53,30 @@ describe('CategoryService', () => {
 
         describe('when "category to create" exists', () => {
             it('should throw error', async () => {
-                // const { categoryService, validateCategoryExistence } = await getMocks();
-                //
-                // validateCategoryExistence.mockImplementation(() => {
-                //     throw new TypeError();
-                // });
-                //
-                // const categoryToCreate = getCategoryToCrate();
-                // const user = getUser();
-                //
-                // await expect(categoryService.create({ categoryToCreate, user })).rejects.toThrow(TypeError);
+                const { categoryService, validateValueExistence } = await getMocks();
+
+                validateValueExistence.mockImplementation(() => {
+                    throw new TypeError();
+                });
+
+                const categoryToCreate = getCategoryToCrate();
+                const user = getUser();
+
+                await expect(categoryService.create({ categoryToCreate, user })).rejects.toThrow(TypeError);
             });
         });
 
         describe('when "category to create" does not exist', () => {
             it('should return categories', async () => {
-                // const { categoryService, validateCategoryExistence } = await getMocks();
-                // const { categories } = generateUser();
-                //
-                // validateCategoryExistence.mockImplementation();
-                //
-                // const categoryToCreate = getCategoryToCrate();
-                // const user = getUser();
-                //
-                // expect(await categoryService.create({ categoryToCreate, user })).toEqual(categories);
+                const { categoryService, validateValueExistence } = await getMocks();
+                const { categories } = generateUser();
+
+                validateValueExistence.mockImplementation();
+
+                const categoryToCreate = getCategoryToCrate();
+                const user = getUser();
+
+                expect(await categoryService.create({ categoryToCreate, user })).toEqual(categories);
             });
         });
     });
@@ -118,17 +121,17 @@ describe('CategoryService', () => {
 
         describe('when "category to update" does not exist', () => {
             it('should throw error', async () => {
-                // const { categoryService, validateCategoryExistence } = await getMocks();
-                // const { id } = generateCategory();
-                //
-                // const fieldsToUpdateById = getFieldsToUpdateById();
-                // const user = getUser();
-                //
-                // validateCategoryExistence.mockImplementation(() => {
-                //     throw new TypeError();
-                // });
-                //
-                // await expect(categoryService.update({ fieldsToUpdateById, id, user })).rejects.toThrow(TypeError);
+                const { categoryService, validateIsValueDefined } = await getMocks();
+                const { id } = generateCategory();
+
+                const fieldsToUpdateById = getFieldsToUpdateById();
+                const user = getUser();
+
+                validateIsValueDefined.mockImplementation(() => {
+                    throw new TypeError();
+                });
+
+                await expect(categoryService.update({ fieldsToUpdateById, id, user })).rejects.toThrow(TypeError);
             });
         });
 
@@ -151,18 +154,17 @@ describe('CategoryService', () => {
         describe('when "category to update" exists', () => {
             describe('and when "category to update" matches constraint', () => {
                 it('should return categories', async () => {
-                    // const { categoryService, validateCategoryExistence,
-                    // validateCategoryConstraint } = await getMocks();
-                    // const { categories } = generateUser();
-                    // const { id } = generateCategory();
-                    //
-                    // validateCategoryConstraint.mockImplementation();
-                    // validateCategoryExistence.mockImplementation();
-                    //
-                    // const fieldsToUpdateById = getFieldsToUpdateById();
-                    // const user = getUser();
-                    //
-                    // expect(await categoryService.update({ fieldsToUpdateById, id, user })).toEqual(categories);
+                    const { categoryService, validateIsValueDefined, validateCategoryConstraint } = await getMocks();
+                    const { categories } = generateUser();
+                    const { id } = generateCategory();
+
+                    validateCategoryConstraint.mockImplementation();
+                    validateIsValueDefined.mockImplementation();
+
+                    const fieldsToUpdateById = getFieldsToUpdateById();
+                    const user = getUser();
+
+                    expect(await categoryService.update({ fieldsToUpdateById, id, user })).toEqual(categories);
                 });
             });
         });
@@ -177,16 +179,16 @@ describe('CategoryService', () => {
 
         describe('when "category to delete" does not exist', () => {
             it('should throw error', async () => {
-                // const { categoryService, validateCategoryExistence } = await getMocks();
-                // const { id } = generateCategory();
-                //
-                // const user = getUser();
-                //
-                // validateCategoryExistence.mockImplementation(() => {
-                //     throw new TypeError();
-                // });
-                //
-                // await expect(categoryService.delete({ id, user })).rejects.toThrow(TypeError);
+                const { categoryService, validateIsValueDefined } = await getMocks();
+                const { id } = generateCategory();
+
+                const user = getUser();
+
+                validateIsValueDefined.mockImplementation(() => {
+                    throw new TypeError();
+                });
+
+                await expect(categoryService.delete({ id, user })).rejects.toThrow(TypeError);
             });
         });
 
@@ -208,19 +210,16 @@ describe('CategoryService', () => {
         describe('when "category to delete" exists', () => {
             describe('and when "category to delete" matches constraint', () => {
                 it('should return categories', async () => {
-                    // const { categoryService, validateCategoryExistence,
-                    // validateCategoryConstraint } = await getMocks();
-                    // const { categories } = generateUser();
-                    // const { id } = generateCategory();
-                    //
-                    // validateCategoryConstraint.mockImplementation();
-                    // validateCategoryExistence.mockImplementation();
-                    //
-                    // jest.spyOn(libs, 'deleteCategory').mockImplementation();
-                    //
-                    // const user = getUser();
-                    //
-                    // expect(await categoryService.delete({ id, user })).toEqual(categories);
+                    const { categoryService, validateIsValueDefined, validateCategoryConstraint } = await getMocks();
+                    const { categories } = generateUser();
+                    const { id } = generateCategory();
+
+                    validateCategoryConstraint.mockImplementation();
+                    validateIsValueDefined.mockImplementation();
+
+                    const user = getUser();
+
+                    expect(await categoryService.delete({ id, user })).toEqual(categories);
                 });
             });
         });

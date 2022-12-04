@@ -21,6 +21,8 @@ model User {
     refreshTokenUpdatedAt DateTime?
 
     Transaction CategoryTransaction[]
+
+    @@map("users")
 }
 
 model Default {
@@ -30,6 +32,8 @@ model Default {
 
     name String @unique
     data Json
+
+    @@map("defaults")
 }
 
 model CategoryTransaction {
@@ -38,9 +42,11 @@ model CategoryTransaction {
     updatedAt DateTime @updatedAt
 
     categoryId String
-    userId     String
     amount     Int
     notes      String
 
-    user User @relation(fields: [userId], references: [id])
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("category_transactions")
 }

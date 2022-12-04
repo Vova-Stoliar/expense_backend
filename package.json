@@ -22,7 +22,10 @@
         "prisma:studio": "prisma studio",
         "prisma:migrate:dev:create:only": "prisma migrate dev --create-only",
         "prisma:db:push": "prisma db push",
-        "prisma:generate": "prisma generate"
+        "prisma:generate": "prisma generate",
+        "db:restart": "docker compose down && docker compose up -d",
+        "pretest:int": "yarn db:restart && dotenv -e .env.test -- prisma migrate reset --force",
+        "test:int:watch": "dotenv -e .env.test -- jest -i --no-cache --watch --config jest-int.json"
     },
     "dependencies": {
         "@casl/ability": "^6.3.2",
@@ -59,6 +62,7 @@
         "@types/uuid": "^9.0.0",
         "@typescript-eslint/eslint-plugin": "^5.0.0",
         "@typescript-eslint/parser": "^5.0.0",
+        "dotenv-cli": "^6.0.0",
         "eslint": "^8.0.1",
         "eslint-config-prettier": "^8.3.0",
         "eslint-import-resolver-typescript": "^3.5.2",

@@ -9,6 +9,8 @@ export function deleteCategory(params: DeleteCategory): TransformedCategories {
     const { setCategories } = setTransformedCategoriesLibs();
 
     return categories.reduce((transformedCategories, category) => {
+        if (categoryToDelete.id === category.id) return transformedCategories;
+
         if (category.name === DEFAULT_CATEGORIES.other) {
             return handleOtherCategory({
                 otherCategory: updateOtherCategory({ categoryToDelete, otherCategory: category }),

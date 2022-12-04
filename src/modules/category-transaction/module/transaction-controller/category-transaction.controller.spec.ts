@@ -1,20 +1,66 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
+import { CategoryTransactionService } from '~/modules/category-transaction/module/transaction-service';
+import { getCategoryTransactionServiceMock } from '~/modules/category-transaction/module/transaction-service/mock';
+import { generateCategory, generateUser } from '~/shared/constants/test';
+import { getMockByToken } from '~/shared/lib';
 import { CategoryTransactionController } from './category-transaction.controller';
-import { CategoryTransactionService } from '../transaction-service/category-transaction.service';
 
-describe('TransactionController', () => {
-    let controller: CategoryTransactionController;
+const getMocks = async () => {
+    const moduleRef = await Test.createTestingModule({
+        controllers: [CategoryTransactionController],
+    })
+        .useMocker((token) => {
+            if (token === CategoryTransactionService) {
+                return getCategoryTransactionServiceMock();
+            }
 
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            controllers: [CategoryTransactionController],
-            providers: [CategoryTransactionService],
-        }).compile();
+            if (typeof token === 'function') {
+                return getMockByToken(token);
+            }
+        })
+        .compile();
 
-        controller = module.get<CategoryTransactionController>(CategoryTransactionController);
+    const categoryTransactionController = moduleRef.get<CategoryTransactionController>(CategoryTransactionController);
+
+    return { categoryTransactionController };
+};
+
+describe('CategoryTransactionController', () => {
+    it('should be defined', async () => {
+        const { categoryTransactionController } = await getMocks();
+
+        expect(categoryTransactionController).toBeDefined();
     });
 
-    it('should be defined', () => {
-        expect(controller).toBeDefined();
+    describe('create', () => {
+        it('should return "created category transaction"', async () => {
+            const { categoryTransactionController } = await getMocks();
+
+            const { amount, notes, id } = generateCategoryTransaction();
+            const { id: categoryId } = generateCategory();
+
+            const user = { id: generateUser().id, categories: generateUser().categories };
+            const createTransactionDto = { amount, notes };
+            const returnValue = { amount, notes, id };
+
+            expect(await categoryTransactionController.create(createTransactionDto, categoryId, user)).toEqual(
+                returnValue
+            );
+        });
+    });
+
+    describe('getAll', () => {
+        it('should return all "transactions" by "category"', async () => {
+            const { categoryTransactionController } = await getMocks();
+
+            const { amount, notes, id } = generateCategoryTransaction();
+            const { id: categoryId } = generateCategory();
+            const { id: userId } = generateUser();
+
+            const returnValue = { amount, notes, id };
+
+            expect(await categoryTransactionController.getAll(userId, categoryId)).toEqual([returnValue]);
+        });
     });
 });

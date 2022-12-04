@@ -6,7 +6,7 @@ import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
 
 @Injectable()
-export class CategoryTransactionHelper {
+export class TransactionHelper {
     constructor(
         private userRepository: UserRepository,
         private prismaService: PrismaService,
@@ -22,7 +22,6 @@ export class CategoryTransactionHelper {
                     categoryId: deletedCategoryId,
                 },
                 data: {
-                    // categoryId: otherCategoryId,
                     categoryId: otherCategoryId,
                 },
             }),

@@ -8,23 +8,21 @@ export const setTransformedCategoriesLibs = () => {
 
 function setOtherCategory<T extends PartialPick<TransformedCategories, 'otherCategory'>>(
     params: SetTransformedCategories<T>
-): Pick<TransformedCategories, 'otherCategory'> & T {
+): T {
     const { transformedCategories, category } = params;
 
-    return {
-        ...transformedCategories,
-        otherCategory: category,
-    };
+    transformedCategories.otherCategory = category;
+
+    return transformedCategories;
 }
 
 function setCategories<T extends PartialPick<TransformedCategories, 'categories'>>(
     params: SetTransformedCategories<T>
-): Pick<TransformedCategories, 'categories'> & T {
+): T {
     const { transformedCategories, category } = params;
     const { categories = [] } = transformedCategories;
 
-    return {
-        ...transformedCategories,
-        categories: [...categories, category],
-    };
+    transformedCategories.categories = [...categories, category];
+
+    return transformedCategories;
 }

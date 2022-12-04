@@ -1,18 +1,27 @@
 import { Test } from '@nestjs/testing';
 import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
-import { TransactionFacadeHelper } from '../../helpers/classes/transaction-facade-helper';
-import { getTransactionFacadeHelperMock } from '../../helpers/classes/transaction-facade-helper/mock';
-import { CategoryTransactionService } from './category-transaction.service';
+import { CategoryTransactionRepository } from '~/repositories/category-transaction';
 import { generateCategory, generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
+import { TransactionFacadeHelper } from './transaction-facade.helper';
+
+const getCategoryTransactionRepositoryMock = () => {
+    const { amount, notes, id } = generateCategoryTransaction();
+
+    const categoryTransaction = { amount, notes, id };
+
+    return {
+        findMany: jest.fn().mockResolvedValue([categoryTransaction]),
+    };
+};
 
 const getMocks = async () => {
     const moduleRef = await Test.createTestingModule({
-        controllers: [CategoryTransactionService],
+        controllers: [TransactionFacadeHelper],
     })
         .useMocker((token) => {
-            if (token === TransactionFacadeHelper) {
-                return getTransactionFacadeHelperMock();
+            if (token === CategoryTransactionRepository) {
+                return getCategoryTransactionRepositoryMock();
             }
 
             if (typeof token === 'function') {
@@ -21,30 +30,30 @@ const getMocks = async () => {
         })
         .compile();
 
-    const categoryTransactionService = moduleRef.get<CategoryTransactionService>(CategoryTransactionService);
+    const transactionFacadeHelper = moduleRef.get<TransactionFacadeHelper>(TransactionFacadeHelper);
 
-    return { categoryTransactionService };
+    return { transactionFacadeHelper };
 };
 
-describe('CategoryTransactionService', () => {
+describe('TransactionFacadeHelper', () => {
     it('should be defined', async () => {
-        const { categoryTransactionService } = await getMocks();
+        const { transactionFacadeHelper } = await getMocks();
 
-        expect(categoryTransactionService).toBeDefined();
+        expect(transactionFacadeHelper).toBeDefined();
     });
 
     describe('create', () => {
         it('should return "created category transaction"', async () => {
-            const { categoryTransactionService } = await getMocks();
+            const { transactionFacadeHelper } = await getMocks();
 
             const { amount, notes, id } = generateCategoryTransaction();
             const { id: categoryId } = generateCategory();
 
             const user = { id: generateUser().id, categories: generateUser().categories };
-            const transactionToCreate = { amount, notes };
+            const transactionToCreate = { amount, notes, id };
             const returnValue = { amount, notes, id };
 
-            expect(await categoryTransactionService.create({ categoryId, transactionToCreate, user })).toEqual(
+            expect(await transactionFacadeHelper.createTransaction({ transactionToCreate, categoryId, user })).toEqual(
                 returnValue
             );
         });
@@ -52,7 +61,7 @@ describe('CategoryTransactionService', () => {
 
     describe('getAll', () => {
         it('should return all "transactions" by "category"', async () => {
-            const { categoryTransactionService } = await getMocks();
+            const { transactionFacadeHelper } = await getMocks();
 
             const { amount, notes, id } = generateCategoryTransaction();
             const { id: categoryId } = generateCategory();
@@ -60,7 +69,7 @@ describe('CategoryTransactionService', () => {
 
             const returnValue = { amount, notes, id };
 
-            expect(await categoryTransactionService.getAll({ userId, categoryId })).toEqual([returnValue]);
+            expect(await transactionFacadeHelper.getAll({ userId, categoryId })).toEqual([returnValue]);
         });
     });
 });

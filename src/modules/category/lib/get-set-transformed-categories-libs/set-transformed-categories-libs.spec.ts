@@ -2,9 +2,9 @@ import { setTransformedCategoriesLibs } from '~/modules/category/lib';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import { generateCategory } from '~/shared/constants/test';
 
-describe('getSetTransformedCategoriesLibs', () => {
+describe('setTransformedCategoriesLibs', () => {
     it('should be defined', () => {
-        expect(setTransformedCategoriesLibs()).toBeDefined();
+        expect(setTransformedCategoriesLibs).toBeDefined();
     });
 
     describe('setCategories', () => {

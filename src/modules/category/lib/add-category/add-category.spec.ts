@@ -1,3 +1,4 @@
+import * as libs from '~/modules/category/lib';
 import { addCategory } from '~/modules/category/lib';
 import { DATE_TIME, generateCategory } from '~/shared/constants/test';
 
@@ -22,8 +23,8 @@ describe('addCategory', () => {
     });
 
     it('should add "category" to passed "categories and return "categories"', () => {
-        // jest.spyOn(getTransformedCategory, 'getTransformedCategory').mockReturnValue(generateCategory());
-        // expect(addCategory(getAcceptValue())).toEqual(expect.arrayContaining([generateCategory()]));
+        jest.spyOn(libs, 'transformCategory').mockReturnValue(generateCategory());
+        expect(addCategory(getAcceptValue())).toEqual(expect.arrayContaining([generateCategory()]));
     });
 
     it('should return "categories"', () => {

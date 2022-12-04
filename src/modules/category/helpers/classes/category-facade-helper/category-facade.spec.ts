@@ -1,24 +1,21 @@
 import { Test } from '@nestjs/testing';
+import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import { CategoryFacadeHelper } from './category-facade.helper';
-import { generateUser } from '~/shared/constants/test';
+import { generateCategory, generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
 import { DefaultRepository } from '~/repositories/default';
 import { UserRepository } from '~/shared/repositories/user';
 
 const getUserRepositoryMock = () => {
-    const { categories } = generateUser();
-
     return {
-        update: jest.fn().mockImplementation(() => ({ categories })),
-        findMany: jest.fn().mockImplementation(() => [{ categories }]),
+        update: jest.fn().mockImplementation(() => ({ categories: [generateCategory()] })),
+        findMany: jest.fn().mockImplementation(() => [{ categories: [generateCategory()] }]),
     };
 };
 
 const getDefaultRepositoryMock = () => {
-    const { categories } = generateUser();
-
     return {
-        upsert: jest.fn().mockImplementation(() => ({ data: categories })),
+        upsert: jest.fn().mockImplementation(() => ({ data: [generateCategory()] })),
     };
 };
 
@@ -78,6 +75,29 @@ describe('CategoryHelper', () => {
             const { id, categories } = generateUser();
 
             expect(await categoryHelper.getAllCategories({ userId: id })).toEqual(categories);
+        });
+    });
+
+    describe('deleteCategory', () => {
+        it('should return categories', async () => {
+            const { categoryHelper } = await getMocks();
+            const { id } = generateUser();
+
+            const otherCategory = generateCategory({ id: 'I am otherCategory id', name: DEFAULT_CATEGORIES.other });
+            const categoryToDelete = generateCategory({ id: 'I am categoryToDelete id', name: 'categoryToDelete' });
+            const category = generateCategory();
+
+            const acceptValue = {
+                categoryToDelete,
+                user: {
+                    categories: [category, categoryToDelete, otherCategory],
+                    id,
+                },
+            };
+
+            jest.useFakeTimers().setSystemTime(new Date(category.createdAt));
+
+            expect(await categoryHelper.deleteCategory(acceptValue)).toEqual([category, otherCategory]);
         });
     });
 });

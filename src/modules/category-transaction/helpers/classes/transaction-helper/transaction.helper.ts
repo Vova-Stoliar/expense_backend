@@ -13,7 +13,7 @@ export class TransactionHelper {
         private prismaService: PrismaService
     ) {}
 
-    async createTransaction(params: CreateTransaction) {
+    async createCategoryTransaction(params: CreateTransaction) {
         const { transactionToCreate, categoryId, user } = params;
         const { categories, id } = user;
 

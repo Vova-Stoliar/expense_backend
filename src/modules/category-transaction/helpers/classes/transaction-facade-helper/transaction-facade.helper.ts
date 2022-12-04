@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionHelper } from '~/modules/category-transaction/helpers/classes/transaction.helper';
+import { TransactionHelper } from '~/modules/category-transaction/helpers/classes/transaction-helper';
 import type { CreateTransaction } from '~/modules/category-transaction/helpers/types';
 import type { GetAll } from '~/modules/category-transaction/types';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
@@ -8,11 +8,11 @@ import { CategoryTransactionRepository } from '~/repositories/category-transacti
 export class TransactionFacadeHelper {
     constructor(
         private transactionHelper: TransactionHelper,
-        private transactionRepository: CategoryTransactionRepository
+        private categoryTransactionRepository: CategoryTransactionRepository
     ) {}
 
-    async createTransaction(params: CreateTransaction) {
-        await this.transactionHelper.createTransaction(params);
+    async createTransaction(params: CreateTransaction): Promise<CreateTransaction['transactionToCreate']> {
+        await this.transactionHelper.createCategoryTransaction(params);
 
         return params.transactionToCreate;
     }
@@ -20,7 +20,7 @@ export class TransactionFacadeHelper {
     async getAll(params: GetAll) {
         const { userId, categoryId } = params;
 
-        return this.transactionRepository.findMany({
+        return this.categoryTransactionRepository.findMany({
             where: { userId, categoryId },
             select: { notes: true, amount: true, createdAt: true },
         });

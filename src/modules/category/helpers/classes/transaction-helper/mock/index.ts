@@ -1,6 +1,6 @@
 import { generateUser } from '~/shared/constants/test';
 
-export const getCategoryHelperMock = () => {
+export const getCategoryTransactionHelperMock = () => {
     const { categories } = generateUser();
 
     return {

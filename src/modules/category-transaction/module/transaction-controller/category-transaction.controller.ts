@@ -1,10 +1,9 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import type { CategoryTransaction } from '@prisma/client';
 import { CreateTransactionDto } from '~/modules/category-transaction/dto';
 import { CategoryTransactionService } from '~/modules/category-transaction/module/transaction-service';
 import type { CreateParams, GetAll } from '~/modules/category-transaction/types';
 import { GetUserFromReq, GetUserFromReqPropertyByKey } from '~/shared/decorators';
-
-// TODO probably rename to CategoryTransactionController
 
 @Controller('categories/transaction')
 export class CategoryTransactionController {
@@ -15,7 +14,7 @@ export class CategoryTransactionController {
         @Body() createTransactionDto: CreateTransactionDto,
         @Param('categoryId', ParseUUIDPipe) categoryId: CreateParams['categoryId'],
         @GetUserFromReq() user: CreateParams['user']
-    ) {
+    ): Promise<Pick<CategoryTransaction, 'id' | 'amount' | 'notes'>> {
         return this.transactionService.create({ transactionToCreate: createTransactionDto, categoryId, user });
     }
 

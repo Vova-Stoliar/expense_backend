@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { TransactionFacadeHelper } from '~/modules/category-transaction/helpers/classes/transaction-facade.helper';
+import type { CategoryTransaction } from '@prisma/client';
+import { TransactionFacadeHelper } from '~/modules/category-transaction/helpers/classes/transaction-facade-helper';
 import { transformTransaction, transformCategories } from '~/modules/category-transaction/lib';
 import type { CreateParams, GetAll } from '~/modules/category-transaction/types';
 import { validateIsValueDefined } from '~/shared/lib';
@@ -8,7 +9,7 @@ import { validateIsValueDefined } from '~/shared/lib';
 export class CategoryTransactionService {
     constructor(private transactionFacadeHelper: TransactionFacadeHelper) {}
 
-    async create(params: CreateParams) {
+    async create(params: CreateParams): Promise<Pick<CategoryTransaction, 'id' | 'amount' | 'notes'>> {
         const { transactionToCreate, categoryId, user } = params;
 
         validateIsValueDefined({

@@ -5,8 +5,7 @@ import { CategoryFacadeHelper } from '~/modules/category/helpers/classes/categor
 import * as libs from '~/modules/category/lib';
 import type { CreateParams, DeleteParams, UpdateParams } from '~/modules/category/types';
 import { DEFAULT_DATA_NAMES, MESSAGES } from '~/shared/constants';
-import { validateIsValueDefined } from '~/shared/lib';
-import { validateValueExistence } from '~/shared/lib/validate-value-existence.lib';
+import { validateIsValueDefined, validateValueExistence } from '~/shared/lib';
 import type { Category } from '~/shared/types';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { transformCategory } from '~/modules/category/lib';
 import { DATE_TIME, generateCategory } from '~/shared/constants/test';
 jest.mock('uuid', () => ({ v4: () => generateCategory().id }));
 
-describe('getTransformCategory', () => {
+describe('transformCategory', () => {
     it('should be defined', () => {
         expect(transformCategory).toBeDefined();
     });
