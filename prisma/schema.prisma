@@ -21,8 +21,6 @@ model User {
     refreshTokenUpdatedAt DateTime?
 
     Transaction CategoryTransaction[]
-
-    @@map("users")
 }
 
 model Default {
