@@ -22,7 +22,7 @@ export class TransactionFacadeHelper {
 
         return this.categoryTransactionRepository.findMany({
             where: { userId, categoryId },
-            select: { notes: true, amount: true, createdAt: true },
+            select: { notes: true, amount: true, createdAt: true, id: true },
         });
     }
 }

@@ -1,3 +1,5 @@
+// TODO move jenerics to as global types
+
 export type KeysOfType<T> = T[keyof T];
 
 export type Nullable<T> = T | null;

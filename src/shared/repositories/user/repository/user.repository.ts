@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma, PrismaPromise } from '@prisma/client';
-import { v4 as uuid } from 'uuid';
-import { addDefaultSelectValues } from '~/shared/repositories/user/lib';
 import { PrismaService } from '~/shared/modules/prisma';
-import type { Category } from '~/shared/types';
+import { addDefaultSelectValues } from '~/shared/repositories/user/lib';
 
 // implements Prisma.UserDelegate<undefined>
 
@@ -74,5 +72,9 @@ export class UserRepository {
             ...args,
             select: addDefaultSelectValues({ select }),
         });
+    }
+
+    deleteMany<T extends Prisma.UserDeleteManyArgs>(args?: Prisma.SelectSubset<T, Prisma.UserDeleteManyArgs>) {
+        return this.prismaService.user.deleteMany(args);
     }
 }

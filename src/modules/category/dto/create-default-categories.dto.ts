@@ -11,5 +11,5 @@ export class CreateDefaultCategoriesDto implements ICreateDefaultCategoryDto {
     @IsArray()
     @Type(() => CreateCategoryDto)
     @ValidateNested({ each: true })
-    categories!: [CreateCategoryDto];
+    categories!: CreateCategoryDto[];
 }

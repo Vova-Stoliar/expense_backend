@@ -22,7 +22,7 @@ export class BcryptHelper {
 
         const isPasswordValid = await compare(params.password, user.password);
 
-        if (!isPasswordValid) new UnauthorizedException();
+        if (!isPasswordValid) throw new UnauthorizedException();
 
         return normalizeUser(user);
     }

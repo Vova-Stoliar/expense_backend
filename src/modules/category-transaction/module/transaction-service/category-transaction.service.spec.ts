@@ -34,7 +34,7 @@ describe('CategoryTransactionService', () => {
     });
 
     describe('create', () => {
-        it('should return "created category transaction"', async () => {
+        it('should return "category transaction"', async () => {
             const { categoryTransactionService } = await getMocks();
 
             const { amount, notes, id } = generateCategoryTransaction();

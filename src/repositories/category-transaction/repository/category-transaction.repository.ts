@@ -31,4 +31,10 @@ export class CategoryTransactionRepository {
     ) {
         return this.prismaService.categoryTransaction.updateMany(args);
     }
+
+    deleteMany<T extends Prisma.CategoryTransactionDeleteManyArgs>(
+        args?: Prisma.SelectSubset<T, Prisma.CategoryTransactionDeleteManyArgs>
+    ) {
+        return this.prismaService.categoryTransaction.deleteMany(args);
+    }
 }

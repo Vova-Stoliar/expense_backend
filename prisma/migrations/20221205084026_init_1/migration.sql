@@ -1,18 +1,18 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "users" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userName" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "categories" JSONB,
+    "refreshTokenUpdatedAt" TIMESTAMP(3),
 
-  - You are about to drop the `CategoryTransaction` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Default` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "CategoryTransaction" DROP CONSTRAINT "CategoryTransaction_userId_fkey";
-
--- DropTable
-DROP TABLE "CategoryTransaction";
-
--- DropTable
-DROP TABLE "Default";
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "defaults" (
@@ -37,6 +37,9 @@ CREATE TABLE "category_transactions" (
 
     CONSTRAINT "category_transactions_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "defaults_name_key" ON "defaults"("name");

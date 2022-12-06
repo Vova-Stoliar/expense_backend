@@ -19,7 +19,8 @@
         "noUncheckedIndexedAccess": false,
         "exactOptionalPropertyTypes": false,
         "noUnusedLocals": false,
-        "noUnusedParameters": false,
+        "noUnusedParameters": false
     },
+    "include": ["src", "**/*.d.ts", "test"],
     "exclude": ["node_modules", "dist"]
 }
