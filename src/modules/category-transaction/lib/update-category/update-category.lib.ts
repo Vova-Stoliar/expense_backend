@@ -1,6 +1,6 @@
-import type { TransformCategories } from './transform-categories.types';
+import type { UpdateCategory } from './update-category.types';
 
-export function transformCategories(params: TransformCategories) {
+export function updateCategory(params: UpdateCategory) {
     const { categories, categoryId, transactionAmount } = params;
 
     return categories.map((category) => {

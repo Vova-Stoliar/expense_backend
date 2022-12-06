@@ -6,5 +6,10 @@ export function addCategory(params: AddCategoryParams) {
 
     const dateTime = new Date().toISOString();
 
-    return [...categories, transformCategory({ category: categoryToAdd, dateTime })];
+    const transformedCategory = transformCategory({ category: categoryToAdd, dateTime });
+
+    return {
+        categories: [...categories, transformedCategory],
+        category: transformedCategory,
+    };
 }

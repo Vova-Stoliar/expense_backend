@@ -18,12 +18,10 @@ async function getCreatedCategory(params: {
 }) {
     const { categoryService, user, categoryToCreate = getCategoryToCrate() } = params;
 
-    const [createdCategory] = await categoryService.create({
+    return categoryService.create({
         categoryToCreate,
         user: { id: user.id, categories: [] },
     });
-
-    return createdCategory;
 }
 
 describe('CategoryService', () => {
@@ -83,7 +81,7 @@ describe('CategoryService', () => {
         });
 
         describe('when "category to create" does not exist', () => {
-            it('should return categories', async () => {
+            it('should return created category', async () => {
                 const user = await getCreatedUser({ authService });
 
                 const categoryToCreate = getCategoryToCrate();
@@ -104,9 +102,7 @@ describe('CategoryService', () => {
                     notes,
                 };
 
-                expect(await categoryService.create(acceptValue)).toEqual(
-                    expect.arrayContaining([expect.objectContaining(expectedValue)])
-                );
+                expect(await categoryService.create(acceptValue)).toMatchObject(expectedValue);
             });
         });
     });
@@ -232,7 +228,7 @@ describe('CategoryService', () => {
 
         describe('when "category to update" exists', () => {
             describe('and when "category to update" matches constraint', () => {
-                it('should return categories', async () => {
+                it('should return updated category', async () => {
                     const user = await getCreatedUser({ authService });
                     const createdCategory = await getCreatedCategory({ categoryService, user });
 
@@ -258,9 +254,7 @@ describe('CategoryService', () => {
                         notes,
                     };
 
-                    expect(await categoryService.update(acceptValue)).toEqual(
-                        expect.arrayContaining([expect.objectContaining(expectedValue)])
-                    );
+                    expect(await categoryService.update(acceptValue)).toMatchObject(expectedValue);
                 });
             });
         });

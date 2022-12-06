@@ -14,12 +14,10 @@ async function getCreatedCategory(params: { categoryService: CategoryService; us
     const categoryToCreate = getCategoryToCrate();
     const { categoryService, user } = params;
 
-    const [createdCategory] = await categoryService.create({
+    return categoryService.create({
         categoryToCreate,
         user: { id: user.id, categories: [] },
     });
-
-    return createdCategory;
 }
 
 describe('CategoryTransactionService', () => {

@@ -12,7 +12,7 @@ import type { Category } from '~/shared/types';
 export class CategoryService {
     constructor(private categoryFacadeHelper: CategoryFacadeHelper) {}
 
-    async create({ categoryToCreate, user }: CreateParams): Promise<Category[]> {
+    async create({ categoryToCreate, user }: CreateParams): Promise<Category> {
         validateValueExistence({
             matchValueCallback: (category) => category.name === categoryToCreate.name,
             values: user.categories,
@@ -20,9 +20,14 @@ export class CategoryService {
             shouldValueExist: false,
         });
 
-        const categories = libs.addCategory({ categories: user.categories, categoryToAdd: categoryToCreate });
+        const { categories, category } = libs.addCategory({
+            categories: user.categories,
+            categoryToAdd: categoryToCreate,
+        });
 
-        return this.categoryFacadeHelper.saveCategories({ userId: user.id, categories: categories });
+        await this.categoryFacadeHelper.saveCategories({ userId: user.id, categories: categories });
+
+        return category;
     }
 
     async createDefaultCategories(defaultCategories: CreateDefaultCategoriesDto): Promise<Category[]> {
@@ -35,7 +40,7 @@ export class CategoryService {
         return this.categoryFacadeHelper.getAllCategories({ userId: id });
     }
 
-    async update(params: UpdateParams): Promise<Category[]> {
+    async update(params: UpdateParams): Promise<Category> {
         const { fieldsToUpdateById, id, user } = params;
 
         validateIsValueDefined({
@@ -45,13 +50,15 @@ export class CategoryService {
 
         libs.validateCategoryConstraint({ categories: user.categories, categoryToValidateId: id });
 
-        const categories = libs.updateCategory({
+        const { categories, category } = libs.updateCategory({
             categories: user.categories,
             categoryToUpdateId: id,
             fieldsToUpdateById,
         });
 
-        return this.categoryFacadeHelper.saveCategories({ userId: user.id, categories });
+        await this.categoryFacadeHelper.saveCategories({ userId: user.id, categories });
+
+        return category;
     }
 
     async delete(params: DeleteParams): Promise<Category[]> {

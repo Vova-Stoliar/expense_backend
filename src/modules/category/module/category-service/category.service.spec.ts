@@ -4,7 +4,7 @@ import { CategoryFacadeHelper } from '~/modules/category/helpers/classes/categor
 import { getCategoryHelperMock } from '~/modules/category/helpers/classes/category-facade-helper/mock';
 import * as libs from '~/modules/category/lib';
 import { CategoryService } from '~/modules/category/module/category-service/category.service';
-import { generateCategory, generateUser } from '~/shared/constants/test';
+import { DATE_TIME, generateCategory, generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
 import * as __shared_lib from '~/shared/lib';
 
@@ -67,16 +67,23 @@ describe('CategoryService', () => {
         });
 
         describe('when "category to create" does not exist', () => {
-            it('should return categories', async () => {
+            it('should return created category', async () => {
                 const { categoryService, validateValueExistence } = await getMocks();
-                const { categories } = generateUser();
-
                 validateValueExistence.mockImplementation();
 
                 const categoryToCreate = getCategoryToCrate();
                 const user = getUser();
 
-                expect(await categoryService.create({ categoryToCreate, user })).toEqual(categories);
+                jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
+
+                const expectedResult = {
+                    ...categoryToCreate,
+                    id: expect.toBeUUID(),
+                    createdAt: DATE_TIME,
+                    updatedAt: DATE_TIME,
+                };
+
+                expect(await categoryService.create({ categoryToCreate, user })).toEqual(expectedResult);
             });
         });
     });
@@ -153,18 +160,31 @@ describe('CategoryService', () => {
 
         describe('when "category to update" exists', () => {
             describe('and when "category to update" matches constraint', () => {
-                it('should return categories', async () => {
+                it('should return updated category', async () => {
                     const { categoryService, validateIsValueDefined, validateCategoryConstraint } = await getMocks();
-                    const { categories } = generateUser();
-                    const { id } = generateCategory();
+                    const category = generateCategory();
 
                     validateCategoryConstraint.mockImplementation();
                     validateIsValueDefined.mockImplementation();
 
                     const fieldsToUpdateById = getFieldsToUpdateById();
-                    const user = getUser();
 
-                    expect(await categoryService.update({ fieldsToUpdateById, id, user })).toEqual(categories);
+                    const acceptValue = {
+                        fieldsToUpdateById,
+                        id: category.id,
+                        user: getUser(),
+                    };
+
+                    const expectedResult = {
+                        ...category,
+                        ...fieldsToUpdateById,
+                        createdAt: DATE_TIME,
+                        updatedAt: DATE_TIME,
+                    };
+
+                    jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
+
+                    expect(await categoryService.update(acceptValue)).toEqual(expectedResult);
                 });
             });
         });

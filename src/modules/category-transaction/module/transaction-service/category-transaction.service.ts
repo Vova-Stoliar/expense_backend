@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import type { CategoryTransaction } from '@prisma/client';
 import { TransactionFacadeHelper } from '~/modules/category-transaction/helpers/classes/transaction-facade-helper';
-import { transformTransaction, transformCategories } from '~/modules/category-transaction/lib';
+import { transformTransaction, updateCategory } from '~/modules/category-transaction/lib';
 import type { CreateParams, GetAll } from '~/modules/category-transaction/types';
 import { validateIsValueDefined } from '~/shared/lib';
 
@@ -17,7 +17,7 @@ export class CategoryTransactionService {
             error: new BadRequestException(),
         });
 
-        const categories = transformCategories({
+        const categories = updateCategory({
             categoryId,
             transactionAmount: transactionToCreate.amount,
             categories: user.categories,

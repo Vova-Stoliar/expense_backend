@@ -1,4 +1,3 @@
-import * as libs from '~/modules/category/lib';
 import { addCategory } from '~/modules/category/lib';
 import { DATE_TIME, generateCategory } from '~/shared/constants/test';
 
@@ -11,9 +10,21 @@ const getAcceptValue = () => {
     return { categoryToAdd, categories: [category] };
 };
 
+const getAddedCategory = () => {
+    const { categoryToAdd } = getAcceptValue();
+
+    return {
+        ...categoryToAdd,
+        createdAt: DATE_TIME,
+        updatedAt: DATE_TIME,
+        id: expect.toBeUUID(),
+    };
+};
+
 describe('addCategory', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        jest.restoreAllMocks();
 
         jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
     });
@@ -23,11 +34,18 @@ describe('addCategory', () => {
     });
 
     it('should add "category" to passed "categories and return "categories"', () => {
-        jest.spyOn(libs, 'transformCategory').mockReturnValue(generateCategory());
-        expect(addCategory(getAcceptValue())).toEqual(expect.arrayContaining([generateCategory()]));
+        jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
+
+        expect(addCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([getAddedCategory()]));
     });
 
     it('should return "categories"', () => {
-        expect(addCategory(getAcceptValue())).toEqual(expect.arrayContaining([generateCategory()]));
+        expect(addCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([generateCategory()]));
+    });
+
+    it('should return "category"', () => {
+        jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
+
+        expect(addCategory(getAcceptValue()).category).toEqual(getAddedCategory());
     });
 });

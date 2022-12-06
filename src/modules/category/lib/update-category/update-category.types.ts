@@ -6,3 +6,8 @@ export interface UpdateCategoryParams {
     fieldsToUpdateById: UpdateCategoryDto;
     categoryToUpdateId: Category['id'];
 }
+
+export interface TransformedCategories {
+    categories: Category[];
+    category: Category;
+}

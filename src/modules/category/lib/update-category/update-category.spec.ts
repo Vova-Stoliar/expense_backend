@@ -39,7 +39,7 @@ describe('updateCategory', () => {
     });
 
     it('should return categories', () => {
-        expect(updateCategory(getAcceptValue())).toEqual(expect.arrayContaining([getFirstCategory()]));
+        expect(updateCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([getFirstCategory()]));
     });
 
     it('should update category by id', () => {
@@ -50,6 +50,17 @@ describe('updateCategory', () => {
             ...fieldsToUpdateById,
         };
 
-        expect(updateCategory(getAcceptValue())).toEqual(expect.arrayContaining([updatedSecondCategory]));
+        expect(updateCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([updatedSecondCategory]));
+    });
+
+    it('should return update category by id', () => {
+        const { fieldsToUpdateById } = getAcceptValue();
+
+        const updatedSecondCategory = {
+            ...getSecondCategory(),
+            ...fieldsToUpdateById,
+        };
+
+        expect(updateCategory(getAcceptValue()).category).toEqual(updatedSecondCategory);
     });
 });

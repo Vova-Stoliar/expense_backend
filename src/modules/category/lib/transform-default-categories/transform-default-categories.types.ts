@@ -1,5 +1,5 @@
-import type { Category } from '~/shared/types';
+import type { CreateCategoryDto } from '~/modules/category/dto';
 
 export interface TransformDefaultCategories {
-    categories: Pick<Category, 'name' | 'amount' | 'notes'>[];
+    categories: CreateCategoryDto[];
 }

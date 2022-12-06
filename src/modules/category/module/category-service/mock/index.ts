@@ -1,13 +1,13 @@
-import { generateUser } from '~/shared/constants/test';
+import { generateCategory } from '~/shared/constants/test';
 
 export const getCategoryServiceMock = () => {
-    const { categories } = generateUser();
+    const category = generateCategory();
 
     return {
-        create: jest.fn().mockResolvedValue(categories),
-        createDefaultCategories: jest.fn().mockResolvedValue(categories),
-        getAll: jest.fn().mockResolvedValue(categories),
-        update: jest.fn().mockResolvedValue(categories),
-        delete: jest.fn().mockResolvedValue(categories),
+        create: jest.fn().mockResolvedValue(category),
+        createDefaultCategories: jest.fn().mockResolvedValue([category]),
+        getAll: jest.fn().mockResolvedValue([category]),
+        update: jest.fn().mockResolvedValue(category),
+        delete: jest.fn().mockResolvedValue([category]),
     };
 };

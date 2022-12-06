@@ -3,6 +3,6 @@ import type { CreateParams } from '~/modules/category-transaction/types';
 
 type Categories = Pick<CreateParams['user'], 'categories'>;
 
-export interface TransformCategories extends Categories, Pick<CreateParams, 'categoryId'> {
+export interface UpdateCategory extends Categories, Pick<CreateParams, 'categoryId'> {
     transactionAmount: CreateTransactionDto['amount'];
 }

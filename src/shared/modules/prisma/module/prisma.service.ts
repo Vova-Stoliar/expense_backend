@@ -27,16 +27,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
             await app.close();
         });
     }
-
-    // TODO refactor
-    async cleanDatabase() {
-        if (process.env['NODE_ENV'] === 'production') return;
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const models = Reflect.ownKeys(this).filter((key) => key[0] !== '_');
-
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        return Promise.all(models.map((modelKey) => this[modelKey].deleteMany()));
-    }
 }

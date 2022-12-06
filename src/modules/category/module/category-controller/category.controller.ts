@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import type { User } from '@prisma/client';
 import { CreateCategoryDto, UpdateCategoryDto } from '~/modules/category/dto';
 import { CreateDefaultCategoriesDto } from '~/modules/category/dto/create-default-categories.dto';
@@ -9,21 +10,29 @@ import { CheckPolicies } from '~/shared/decorators/check-policies.decorator';
 import type { Category } from '~/shared/types';
 import { CategoryService } from '../category-service/category.service';
 
+const categoryExample = {};
+
+@ApiBearerAuth()
 @Controller('categories')
 export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
     @Post()
+    @ApiCreatedResponse({
+        schema: {
+            example: categoryExample,
+        },
+    })
     create(
         @Body() createCategoryDto: CreateCategoryDto,
         @GetUserFromReq() user: CreateParams['user']
-    ): Promise<Category[]> {
+    ): Promise<Category> {
         return this.categoryService.create({ categoryToCreate: createCategoryDto, user });
     }
 
     @Post('default')
     @CheckPolicies(getPolicyHandlers().createDefaultCategories)
-    createDefaultCategories(@Body() defaultCategories: CreateDefaultCategoriesDto) {
+    createDefaultCategories(@Body() defaultCategories: CreateDefaultCategoriesDto): Promise<Category[]> {
         return this.categoryService.createDefaultCategories(defaultCategories);
     }
 
@@ -37,7 +46,7 @@ export class CategoryController {
         @Body() fieldsToUpdateById: UpdateCategoryDto,
         @Param('id') id: UpdateParams['id'],
         @GetUserFromReq() user: UpdateParams['user']
-    ): Promise<Category[]> {
+    ): Promise<Category> {
         return this.categoryService.update({ id, user, fieldsToUpdateById });
     }
 
