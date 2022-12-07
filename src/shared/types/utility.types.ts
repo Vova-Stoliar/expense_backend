@@ -11,3 +11,5 @@ export type Replace<Type, Key extends keyof Type, TypeByKey> = Omit<Type, Key> &
 };
 
 export type PartialOnly<T, K extends keyof T> = Omit<T, K> & PartialPick<T, K>;
+
+export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>;

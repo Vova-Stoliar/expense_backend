@@ -1,18 +1,16 @@
-import { Body, Controller, Param, ParseUUIDPipe } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Param, ParseUUIDPipe } from '@nestjs/common';
 import type { CategoryTransaction } from '@prisma/client';
-import { Create, GetAll } from '~/modules/category-transaction/decorators/routes';
 import { CreateTransactionDto } from '~/modules/category-transaction/dto';
 import { CategoryTransactionService } from '~/modules/category-transaction/module/category-transaction-service';
 import type { CreateParams, GetAllCategories } from '~/modules/category-transaction/types';
 import { GetUserFromReq, GetUserFromReqPropertyByKey } from '~/shared/decorators';
+import * as Controller from '~/modules/category-transaction/decorators/controller';
 
-@ApiBearerAuth()
-@Controller('categories/transaction')
+@Controller.Controller()
 export class CategoryTransactionController {
     constructor(private readonly transactionService: CategoryTransactionService) {}
 
-    @Create()
+    @Controller.Create()
     create(
         @Body() createTransactionDto: CreateTransactionDto,
         @Param('categoryId', ParseUUIDPipe) categoryId: CreateParams['categoryId'],
@@ -21,7 +19,7 @@ export class CategoryTransactionController {
         return this.transactionService.create({ transactionToCreate: createTransactionDto, categoryId, user });
     }
 
-    @GetAll()
+    @Controller.GetAll()
     getAll(
         @GetUserFromReqPropertyByKey('id') userId: GetAllCategories['userId'],
         @Param('categoryId', ParseUUIDPipe) categoryId: GetAllCategories['categoryId']

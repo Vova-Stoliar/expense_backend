@@ -1,7 +1,6 @@
 import * as NestCommon from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { RefreshToken } from '~/modules/auth/decorators/refresh-token.decorator';
-import { Login, Logout, ResetPassword, Signup } from '~/modules/auth/decorators/routes';
+import { Login, Logout, Refresh, ResetPassword, Signup } from '~/modules/auth/decorators/controller';
 import { UserToLoginDto, UserToResetPasswordDto, UserToSignupDto } from '~/modules/auth/dto';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { GetUserFromReq, GetUserFromReqPropertyByKey } from '~/shared/decorators';
@@ -31,7 +30,7 @@ export class AuthController {
         return this.authService.resetPassword(user);
     }
 
-    @RefreshToken()
+    @Refresh()
     async refresh(@GetUserFromReq() user: Pick<User, 'email' | 'id'>): Promise<Tokens> {
         return this.authService.refresh(user);
     }
