@@ -1,15 +1,14 @@
 import type { CategoryTransaction } from '@prisma/client';
-
-const DATE_TIME = new Date().toISOString();
+import { DATE_TIME } from '~/shared/constants/test';
 
 export const generateCategoryTransaction = (): CategoryTransaction => {
     return {
-        notes: '',
+        notes: 'notes about transaction',
         amount: 10,
-        categoryId: 'I am categoryId',
-        id: 'I am id',
+        categoryId: 'fe21c394-17d0-43dd-b7be-382afb2dbf90',
+        id: 'fe21c394-17d0-43dd-b7be-382afb2dbf90',
         createdAt: new Date(DATE_TIME),
         updatedAt: new Date(DATE_TIME),
-        userId: 'I am userId',
+        userId: 'fe21c394-17d0-43dd-b7be-382afb2dbf90',
     };
 };
