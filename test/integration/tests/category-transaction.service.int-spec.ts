@@ -3,7 +3,7 @@ import type { User } from '@prisma/client';
 import { AppModule } from '~/app/app.module';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
-import { CategoryTransactionService } from '~/modules/category-transaction/module/transaction-service';
+import { CategoryTransactionService } from '~/modules/category-transaction/module/category-transaction-service';
 import { CategoryService } from '~/modules/category/module/category-service/category.service';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
 import { PrismaService } from '~/shared/modules/prisma';

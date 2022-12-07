@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import type { CategoryTransaction } from '@prisma/client';
 import { TransactionFacadeHelper } from '~/modules/category-transaction/helpers/classes/transaction-facade-helper';
 import { transformTransaction, updateCategory } from '~/modules/category-transaction/lib';
-import type { CreateParams, GetAll } from '~/modules/category-transaction/types';
+import type { CreateParams, GetAllCategories } from '~/modules/category-transaction/types';
 import { validateIsValueDefined } from '~/shared/lib';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class CategoryTransactionService {
         });
     }
 
-    async getAll(params: GetAll) {
+    async getAll(params: GetAllCategories) {
         return this.transactionFacadeHelper.getAll(params);
     }
 }

@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
-import { CategoryTransactionService } from '~/modules/category-transaction/module/transaction-service';
-import { getCategoryTransactionServiceMock } from '~/modules/category-transaction/module/transaction-service/mock';
+import { CategoryTransactionService } from '~/modules/category-transaction/module/category-transaction-service';
+import { getCategoryTransactionServiceMock } from '../category-transaction-service/mock';
 import { generateCategory, generateUser } from '~/shared/constants/test';
 import { getMockByToken } from '~/shared/lib';
 import { CategoryTransactionController } from './category-transaction.controller';

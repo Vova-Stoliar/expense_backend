@@ -9,7 +9,7 @@ export const generateCategory = (category: Partial<Category> = {}): Category => 
         createdAt: DATE_TIME,
         amount: 0,
         updatedAt: DATE_TIME,
-        notes: 'notes about car',
+        notes: '',
         name: 'Car',
         ...category,
     };

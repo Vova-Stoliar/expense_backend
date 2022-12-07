@@ -7,6 +7,6 @@ export interface CreateParams extends Pick<CategoryTransaction, 'categoryId'> {
     user: Replace<Pick<User, 'id' | 'categories'>, 'categories', Category[]>;
 }
 
-export interface GetAll extends Pick<CategoryTransaction, 'categoryId'> {
+export interface GetAllCategories extends Pick<CategoryTransaction, 'categoryId'> {
     userId: User['id'];
 }

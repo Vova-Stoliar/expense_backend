@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TransactionHelper } from '~/modules/category-transaction/helpers/classes/transaction-helper';
 import type { CreateTransaction } from '~/modules/category-transaction/helpers/types';
-import type { GetAll } from '~/modules/category-transaction/types';
+import type { GetAllCategories } from '~/modules/category-transaction/types';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class TransactionFacadeHelper {
         return params.transactionToCreate;
     }
 
-    async getAll(params: GetAll) {
+    async getAll(params: GetAllCategories) {
         const { userId, categoryId } = params;
 
         return this.categoryTransactionRepository.findMany({
