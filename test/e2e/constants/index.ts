@@ -1,21 +1,15 @@
-import type { AuthService } from '~/modules/auth/module/auth-service';
-import { generateCategory, generateUser } from '~/shared/constants/test';
-import type { Category } from '~/shared/types';
+import type { UserToSignupDto } from '~/modules/auth/dto';
+import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
+import { generateUser } from '~/shared/constants/test';
 
-export const getUserToSignup = () => {
+export const getUserToSignup = (user: Partial<UserToSignupDto> = {}): UserToSignupDto => {
     const { email, userName, displayName, password } = generateUser();
 
-    return {
-        email,
-        userName,
-        displayName,
-        password,
-        confirmPassword: password,
-    };
+    return { email, userName, displayName, password, confirmPassword: password, ...user };
 };
 
-export const getCategoryToCrate = (category: Partial<Category> = {}) => {
-    const { name, notes, amount } = generateCategory({ name: 'Sport', ...category });
+export const getTransactionToCreate = () => {
+    const { amount, notes } = generateCategoryTransaction();
 
-    return { name, notes, amount };
+    return { amount, notes };
 };

@@ -3,17 +3,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '~/app/app.module';
-import type { UserToResetPasswordDto, UserToSignupDto, UserToLoginDto } from '~/modules/auth/dto';
-import { generateUser } from '~/shared/constants/test';
+import type { UserToLoginDto, UserToResetPasswordDto } from '~/modules/auth/dto';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
 import type { PartialExcept } from '~/shared/types';
-
-const getUserToSignup = (user: Partial<UserToSignupDto> = {}): UserToSignupDto => {
-    const { email, userName, displayName, password } = generateUser();
-
-    return { email, userName, displayName, password, confirmPassword: password, ...user };
-};
+import { getUserToSignup } from '../constants';
 
 describe('Auth (e2e)', () => {
     let app: INestApplication;

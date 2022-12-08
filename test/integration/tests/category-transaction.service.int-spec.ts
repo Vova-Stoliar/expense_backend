@@ -1,24 +1,15 @@
 import { Test } from '@nestjs/testing';
-import type { User } from '@prisma/client';
 import { AppModule } from '~/app/app.module';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import { generateCategoryTransaction } from '~/modules/category-transaction/constants/test';
 import { CategoryTransactionService } from '~/modules/category-transaction/module/category-transaction-service';
+import type { DeleteTransaction } from '~/modules/category-transaction/types';
 import { CategoryService } from '~/modules/category/module/category-service/category.service';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
-import { getCategoryToCrate, getCreatedUser } from '../constants';
-
-async function getCreatedCategory(params: { categoryService: CategoryService; user: Pick<User, 'id'> }) {
-    const categoryToCreate = getCategoryToCrate();
-    const { categoryService, user } = params;
-
-    return categoryService.create({
-        categoryToCreate,
-        user: { id: user.id, categories: [] },
-    });
-}
+import { getCreatedUser } from '../constants';
+import { getCategoryTransaction, getCreatedCategory } from '../lib';
 
 describe('CategoryTransactionService', () => {
     let categoryService: CategoryService;
@@ -63,11 +54,11 @@ describe('CategoryTransactionService', () => {
                 const user = await getCreatedUser({ authService });
                 const createdCategory = await getCreatedCategory({ categoryService, user });
 
-                const transactionToCreate = generateCategoryTransaction();
+                const { amount, notes } = generateCategoryTransaction();
 
                 const acceptValue = {
                     categoryId: createdCategory.id,
-                    transactionToCreate: { amount: transactionToCreate.amount, notes: transactionToCreate.notes },
+                    transactionToCreate: { amount, notes },
                     user: {
                         id: user.id,
                         categories: [createdCategory],
@@ -76,11 +67,11 @@ describe('CategoryTransactionService', () => {
 
                 const expectedValue = {
                     id: expect.toBeUUID(),
-                    amount: transactionToCreate.amount,
-                    notes: transactionToCreate.notes,
+                    amount,
+                    notes,
                 };
 
-                expect(await categoryTransactionService.create(acceptValue)).toEqual(expectedValue);
+                expect(await categoryTransactionService.create(acceptValue)).toMatchObject(expectedValue);
             });
         });
 
@@ -132,6 +123,89 @@ describe('CategoryTransactionService', () => {
             expect(await categoryTransactionService.getAll(acceptValue)).toEqual(
                 expect.arrayContaining([expect.objectContaining(expectedValue)])
             );
+        });
+    });
+
+    describe('delete', () => {
+        describe('when category exists', () => {
+            describe('and when transaction exists', () => {
+                it('should not throw', async () => {
+                    const user = await getCreatedUser({ authService });
+                    const createdCategory = await getCreatedCategory({ categoryService, user });
+                    const transaction = await getCategoryTransaction({
+                        categoryTransactionService,
+                        category: createdCategory,
+                        userId: user.id,
+                    });
+
+                    const acceptValue: DeleteTransaction = {
+                        transactionId: transaction.id,
+                        categoryId: createdCategory.id,
+                        user: {
+                            id: user.id,
+                            categories: [createdCategory],
+                        },
+                    };
+
+                    await expect(categoryTransactionService.delete(acceptValue)).resolves.not.toThrow();
+                });
+            });
+        });
+    });
+
+    describe('get', () => {
+        it('should return transaction by id', async () => {
+            const user = await getCreatedUser({ authService });
+            const createdCategory = await getCreatedCategory({ categoryService, user });
+            const transaction = await getCategoryTransaction({
+                categoryTransactionService,
+                category: createdCategory,
+                userId: user.id,
+            });
+
+            const acceptValue = { categoryId: createdCategory.id, transactionId: transaction.id };
+
+            const expectedValue = {
+                id: transaction.id,
+                amount: transaction.amount,
+                notes: transaction.notes,
+            };
+
+            expect(await categoryTransactionService.get(acceptValue)).toMatchObject(expectedValue);
+        });
+    });
+
+    describe('update', () => {
+        it('should return transaction by id', async () => {
+            const user = await getCreatedUser({ authService });
+            const createdCategory = await getCreatedCategory({ categoryService, user });
+            const transaction = await getCategoryTransaction({
+                categoryTransactionService,
+                category: createdCategory,
+                userId: user.id,
+            });
+
+            const fieldsToUpdate = {
+                notes: 'updated',
+            };
+
+            const expectedValue = {
+                amount: transaction.amount,
+                id: transaction.id,
+                notes: fieldsToUpdate.notes,
+            };
+
+            const acceptValue = {
+                transactionId: transaction.id,
+                user: {
+                    id: user.id,
+                    categories: [createdCategory],
+                },
+                categoryId: createdCategory.id,
+                fieldsToUpdate,
+            };
+
+            expect(await categoryTransactionService.update(acceptValue)).toMatchObject(expectedValue);
         });
     });
 });

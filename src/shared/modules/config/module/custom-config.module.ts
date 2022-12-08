@@ -10,10 +10,10 @@ import { CustomConfigService } from './custom-config.service';
         ConfigModule.forRoot({
             validationSchema: Joi.object<EnvironmentVariables, true>({
                 NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
-                DATABASE_URL: Joi.string().default('postgresql://postgres:123@localhost:5432/expense?schema=public'),
+                DATABASE_URL: Joi.string().required(),
                 BCRYPT_SALT_ROUNDS: Joi.number().default(10),
-                ACCESS_TOKEN_SECRET: Joi.string().default('fdsfdsavdstav'),
-                REFRESH_TOKEN_SECRET: Joi.string().default('qwewret21232'),
+                ACCESS_TOKEN_SECRET: Joi.string().required(),
+                REFRESH_TOKEN_SECRET: Joi.string().required(),
             }),
         }),
     ],
