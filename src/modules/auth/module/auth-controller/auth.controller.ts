@@ -1,47 +1,37 @@
 import * as NestCommon from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { RefreshToken } from '~/modules/auth/decorators/refresh-token.decorator';
+import { Login, Logout, Refresh, ResetPassword, Signup } from '~/modules/auth/decorators/controller';
 import { UserToLoginDto, UserToResetPasswordDto, UserToSignupDto } from '~/modules/auth/dto';
 import { AuthService } from '~/modules/auth/module/auth-service';
-import { GetUserFromReq, GetUserFromReqPropertyByKey, Public } from '~/shared/decorators';
+import { GetUserFromReq, GetUserFromReqPropertyByKey } from '~/shared/decorators';
 import type { BaseUser, Tokens } from '~/shared/types';
 
 @NestCommon.Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Public()
-    @NestCommon.Post('signup')
+    @Signup()
     async signup(@NestCommon.Body() userToSignUp: UserToSignupDto): Promise<{ user: BaseUser } & Tokens> {
         return this.authService.signup(userToSignUp);
     }
 
-    @Public()
-    @NestCommon.Post('login')
+    @Login()
     async login(@NestCommon.Body() userToLogin: UserToLoginDto): Promise<{ user: BaseUser } & Tokens> {
         return this.authService.login(userToLogin);
     }
 
-    @NestCommon.Get('logout')
-    @NestCommon.HttpCode(NestCommon.HttpStatus.NO_CONTENT)
+    @Logout()
     async logout(@GetUserFromReqPropertyByKey('id') id: User['id']): Promise<void> {
         await this.authService.logout({ id });
     }
 
-    @NestCommon.Post('resetPassword')
-    @NestCommon.HttpCode(NestCommon.HttpStatus.OK)
+    @ResetPassword()
     async resetPassword(@NestCommon.Body() user: UserToResetPasswordDto): Promise<{ user: BaseUser } & Tokens> {
         return this.authService.resetPassword(user);
     }
 
-    @RefreshToken()
-    @NestCommon.Get('refresh')
+    @Refresh()
     async refresh(@GetUserFromReq() user: Pick<User, 'email' | 'id'>): Promise<Tokens> {
         return this.authService.refresh(user);
-    }
-
-    @NestCommon.Get('check')
-    async check() {
-        return 'I am check';
     }
 }

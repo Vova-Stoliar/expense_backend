@@ -14,15 +14,20 @@
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-        "test": "jest",
-        "test:watch": "jest --watch",
-        "test:cov": "jest --coverage",
+        "test": "jest --config jest.json",
+        "test:watch": "jest --watch --config jest.json",
+        "test:cov": "jest --coverage --config jest.json",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "test:e2e": "dotenv -e .env.test -- jest -i --config jest-e2e.json",
         "prisma:studio": "prisma studio",
+        "prisma:studio:test": "dotenv -e .env.test -- npx prisma studio",
+        "prisma:migrate:test:create:only": "dotenv -e .env.test npx prisma migrate dev",
         "prisma:migrate:dev:create:only": "prisma migrate dev --create-only",
         "prisma:db:push": "prisma db push",
-        "prisma:generate": "prisma generate"
+        "prisma:generate": "prisma generate",
+        "db:restart": "docker compose down && docker compose up -d",
+        "pretest:int": "yarn db:restart && dotenv -e .env.test -- prisma migrate reset --force",
+        "test:int:watch": "dotenv -e .env.test -- jest -i --watch --config jest-int.json"
     },
     "dependencies": {
         "@casl/ability": "^6.3.2",
@@ -33,6 +38,7 @@
         "@nestjs/mapped-types": "*",
         "@nestjs/passport": "^9.0.0",
         "@nestjs/platform-express": "^9.0.0",
+        "@nestjs/swagger": "^6.1.3",
         "@prisma/client": "^4.6.1",
         "@types/bcrypt": "^5.0.0",
         "bcrypt": "^5.1.0",
@@ -59,6 +65,7 @@
         "@types/uuid": "^9.0.0",
         "@typescript-eslint/eslint-plugin": "^5.0.0",
         "@typescript-eslint/parser": "^5.0.0",
+        "dotenv-cli": "^6.0.0",
         "eslint": "^8.0.1",
         "eslint-config-prettier": "^8.3.0",
         "eslint-import-resolver-typescript": "^3.5.2",
@@ -68,6 +75,7 @@
         "husky": "^8.0.0",
         "jest": "28.1.3",
         "jest-mock-extended": "2.0.4",
+        "pactum": "^3.3.1",
         "prettier": "^2.3.2",
         "prisma": "^4.6.1",
         "source-map-support": "^0.5.20",
@@ -84,8 +92,8 @@
             "json",
             "ts"
         ],
-        "rootDir": "src",
-        "testRegex": ".*\\.spec\\.ts$",
+        "rootDir": ".",
+        "testRegex": ".*\\.(spec|int-spec|e2e-spec)\\.ts$",
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"
         },
@@ -93,9 +101,12 @@
             "**/*.(t|j)s"
         ],
         "moduleNameMapper": {
-            "^~/(.*)$": "<rootDir>/$1"
+            "^~/(.*)$": "<rootDir>/src/$1"
         },
-        "coverageDirectory": "../coverage",
-        "testEnvironment": "node"
+        "coverageDirectory": "coverage",
+        "testEnvironment": "node",
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/shared/jest/index.ts"
+        ]
     }
 }

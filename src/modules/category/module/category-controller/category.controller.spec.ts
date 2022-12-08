@@ -34,7 +34,7 @@ describe('CategoryController', () => {
     });
 
     describe('create', () => {
-        it('should return categories', async () => {
+        it('should return created category', async () => {
             const { categoryController } = await getMocks();
             const { id, categories } = generateUser();
             const { name, notes, amount } = generateCategory();
@@ -50,7 +50,7 @@ describe('CategoryController', () => {
                 categories,
             };
 
-            expect(await categoryController.create(crateCategoryDto, user)).toEqual(categories);
+            expect(await categoryController.create(crateCategoryDto, user)).toEqual(generateCategory());
         });
     });
 
@@ -94,7 +94,7 @@ describe('CategoryController', () => {
                 categories,
             };
 
-            expect(await categoryController.update(fieldsToUpdateById, id, user)).toEqual(categories);
+            expect(await categoryController.update(fieldsToUpdateById, id, user)).toEqual(generateCategory());
         });
     });
 

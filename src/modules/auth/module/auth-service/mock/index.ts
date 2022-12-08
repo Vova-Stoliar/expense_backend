@@ -1,3 +1,5 @@
+import { expect } from '@jest/globals';
+import { validate as uuidValidate } from 'uuid';
 import { generateTokens } from '~/modules/auth/constants/test';
 import { generateUser } from '~/shared/constants/test';
 

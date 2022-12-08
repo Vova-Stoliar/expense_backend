@@ -11,25 +11,25 @@ interface IUserUserToSignup extends Omit<BaseUserWith<'password'>, 'id'> {
 export class UserToSignupDto implements IUserUserToSignup {
     @IsNotEmpty()
     @IsEmail()
-    email!: string;
+    email!: IUserUserToSignup['email'];
 
     @IsNotEmpty()
     @IsString()
     @MinLength(5)
     @MaxLength(30)
     @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: MESSAGES.weakPassword })
-    password!: string;
+    password!: IUserUserToSignup['password'];
 
     @IsNotEmpty()
     @IsString()
     @IsEqualTo<IUserUserToSignup>('password')
-    confirmPassword!: string;
+    confirmPassword!: IUserUserToSignup['confirmPassword'];
 
     @IsNotEmpty()
     @IsString()
-    userName!: string;
+    userName!: IUserUserToSignup['userName'];
 
     @IsNotEmpty()
     @IsString()
-    displayName!: string;
+    displayName!: IUserUserToSignup['displayName'];
 }
