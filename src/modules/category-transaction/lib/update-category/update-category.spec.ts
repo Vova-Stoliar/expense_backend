@@ -10,7 +10,9 @@ const getAcceptValue = () => {
 
     return {
         categoryId: firstCategory.id,
-        transactionAmount: 10,
+        updatedCategoryFields: {
+            amount: 23,
+        },
         categories: [firstCategory, secondCategory],
     };
 };
@@ -21,22 +23,26 @@ describe('updateCategory', () => {
     });
 
     it('should return categories', () => {
-        // expect(updateCategory(getAcceptValue())).toEqual(expect.arrayContaining([getSecondCategory()]));
-        expect('a').toBe('a');
+        expect(updateCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([getSecondCategory()]));
     });
 
     it('should update "category" by "categoryId"', () => {
-        const { transactionAmount } = getAcceptValue();
+        const { updatedCategoryFields } = getAcceptValue();
 
         const expectedValue = {
             ...getFirstCategory(),
+            ...updatedCategoryFields,
             updatedAt: DATE_TIME,
-            amount: getFirstCategory().amount + transactionAmount,
         };
 
         jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
 
-        expect('a').toBe('a');
-        // expect(updateCategory(getAcceptValue())).toEqual(expect.arrayContaining([expectedValue]));
+        expect(updateCategory(getAcceptValue()).categories).toEqual(expect.arrayContaining([expectedValue]));
+    });
+
+    it('should return updatedAt', () => {
+        jest.useFakeTimers().setSystemTime(new Date(DATE_TIME));
+
+        expect(updateCategory(getAcceptValue()).updatedAt).toBe(DATE_TIME);
     });
 });

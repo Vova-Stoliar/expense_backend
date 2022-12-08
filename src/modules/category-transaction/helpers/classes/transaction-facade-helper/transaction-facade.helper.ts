@@ -21,7 +21,7 @@ export class TransactionFacadeHelper {
         return params.transactionToCreate;
     }
 
-    async getAll(params: GetAllTransactions): Promise<BaseCategoryTransaction[]> {
+    async getAllTransactions(params: GetAllTransactions): Promise<BaseCategoryTransaction[]> {
         const { userId, categoryId } = params;
 
         return this.categoryTransactionRepository.findMany({
@@ -42,7 +42,7 @@ export class TransactionFacadeHelper {
         return params.transaction;
     }
 
-    async validateCategoryTransaction(
+    async validateTransaction(
         params: Pick<CategoryTransaction, 'id' | 'categoryId'>
     ): Promise<BaseCategoryTransaction> {
         const { id, categoryId } = params;

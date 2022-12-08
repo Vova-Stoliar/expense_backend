@@ -34,7 +34,7 @@ export class CategoryTransactionService {
     }
 
     async getAll(params: Types.GetAllTransactions): Promise<BaseCategoryTransaction[]> {
-        return this.transactionFacadeHelper.getAll(params);
+        return this.transactionFacadeHelper.getAllTransactions(params);
     }
 
     async delete(params: Types.DeleteTransaction): Promise<void> {
@@ -45,7 +45,7 @@ export class CategoryTransactionService {
             error: new BadRequestException(),
         });
 
-        const transaction = await this.transactionFacadeHelper.validateCategoryTransaction({
+        const transaction = await this.transactionFacadeHelper.validateTransaction({
             id: transactionId,
             categoryId,
         });
@@ -59,10 +59,10 @@ export class CategoryTransactionService {
         await this.transactionFacadeHelper.deleteTransaction({ transaction, userId: user.id, categories });
     }
 
-    get(params: Types.GetTransaction): Promise<BaseCategoryTransaction> {
+    async get(params: Types.GetTransaction): Promise<BaseCategoryTransaction> {
         const { categoryId, transactionId } = params;
 
-        return this.transactionFacadeHelper.validateCategoryTransaction({ id: transactionId, categoryId });
+        return this.transactionFacadeHelper.validateTransaction({ id: transactionId, categoryId });
     }
 
     async update(
@@ -76,7 +76,7 @@ export class CategoryTransactionService {
             error: new BadRequestException(),
         });
 
-        const transaction = await this.transactionFacadeHelper.validateCategoryTransaction({
+        const transaction = await this.transactionFacadeHelper.validateTransaction({
             id: transactionId,
             categoryId,
         });
@@ -88,7 +88,6 @@ export class CategoryTransactionService {
         });
 
         return this.transactionFacadeHelper.updateTransaction({
-            transactionId,
             transaction: { ...transaction, ...fieldsToUpdate, updatedAt },
             categories,
             userId: user.id,

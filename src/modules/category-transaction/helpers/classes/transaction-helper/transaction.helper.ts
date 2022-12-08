@@ -62,12 +62,12 @@ export class TransactionHelper {
     }
 
     async updateTransaction(params: UpdateTransactionParams) {
-        const { transactionId, userId, transaction, categories } = params;
+        const { userId, transaction, categories } = params;
 
         await this.prismaService.$transaction([
             this.categoryTransactionRepository.updateMany({
                 where: {
-                    id: transactionId,
+                    id: transaction.id,
                 },
                 data: transaction,
             }),

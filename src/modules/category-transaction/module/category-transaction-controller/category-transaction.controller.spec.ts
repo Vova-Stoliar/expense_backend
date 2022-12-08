@@ -37,12 +37,13 @@ describe('CategoryTransactionController', () => {
         it('should return "created category transaction"', async () => {
             const { categoryTransactionController } = await getMocks();
 
-            const { amount, notes, id } = generateCategoryTransaction();
+            const { amount, notes, id, updatedAt, createdAt } = generateCategoryTransaction();
             const { id: categoryId } = generateCategory();
+            const { categories, id: userId } = generateUser();
 
-            const user = { id: generateUser().id, categories: generateUser().categories };
+            const user = { id: userId, categories };
             const createTransactionDto = { amount, notes };
-            const returnValue = { amount, notes, id };
+            const returnValue = { amount, notes, id, updatedAt, createdAt };
 
             expect(await categoryTransactionController.create(createTransactionDto, categoryId, user)).toEqual(
                 returnValue
@@ -54,13 +55,67 @@ describe('CategoryTransactionController', () => {
         it('should return all "transactions" by "category"', async () => {
             const { categoryTransactionController } = await getMocks();
 
-            const { amount, notes, id } = generateCategoryTransaction();
+            const { amount, notes, id, updatedAt, createdAt } = generateCategoryTransaction();
             const { id: categoryId } = generateCategory();
             const { id: userId } = generateUser();
 
-            const returnValue = { amount, notes, id };
+            const expectedValue = { amount, notes, id, updatedAt, createdAt };
 
-            expect(await categoryTransactionController.getAll(userId, categoryId)).toEqual([returnValue]);
+            expect(await categoryTransactionController.getAll(userId, categoryId)).toEqual([expectedValue]);
+        });
+    });
+
+    describe('delete', () => {
+        it('should not throw', async () => {
+            const { categoryTransactionController } = await getMocks();
+
+            const { id: transactionId } = generateCategoryTransaction();
+            const { id: categoryId } = generateCategory();
+            const { id: userId, categories } = generateUser();
+
+            await expect(
+                categoryTransactionController.delete(categoryId, transactionId, { categories, id: userId })
+            ).resolves.not.toThrow();
+        });
+    });
+
+    describe('get', () => {
+        it('should return transaction by id', async () => {
+            const { categoryTransactionController } = await getMocks();
+
+            const { id: transactionId } = generateCategoryTransaction();
+            const { id: categoryId } = generateCategory();
+            const { amount, notes, id, updatedAt, createdAt } = generateCategoryTransaction();
+
+            const expectedValue = { amount, notes, id, updatedAt, createdAt };
+
+            expect(await categoryTransactionController.get(categoryId, transactionId)).toEqual(expectedValue);
+        });
+    });
+
+    describe('update', () => {
+        it('should return transaction by id', async () => {
+            const { categoryTransactionController } = await getMocks();
+
+            const { id: transactionId } = generateCategoryTransaction();
+            const { id: categoryId } = generateCategory();
+            const { categories, id: userId } = generateUser();
+            const { amount, notes, id, updatedAt, createdAt } = generateCategoryTransaction();
+
+            const fieldsToUpdate = {
+                notes: 'updated',
+            };
+
+            const user = {
+                id: userId,
+                categories,
+            };
+
+            const expectedValue = { amount, notes, id, updatedAt, createdAt };
+
+            expect(await categoryTransactionController.update(categoryId, transactionId, fieldsToUpdate, user)).toEqual(
+                expectedValue
+            );
         });
     });
 });
