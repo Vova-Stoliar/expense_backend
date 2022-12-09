@@ -1,7 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import type { CategoryTransaction } from '@prisma/client';
 import { CreateTransactionDto } from './create-transaction.dto';
-import type { PartialPick } from '~/shared/types';
 
 type IUpdateTransactionDto = PartialPick<CategoryTransaction, 'amount' | 'notes'>;
 

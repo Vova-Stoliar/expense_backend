@@ -1,6 +1,6 @@
 import type { User, CategoryTransaction } from '@prisma/client';
 import type { UpdateTransactionDto, CreateTransactionDto } from '~/modules/category-transaction/dto';
-import type { Category, Replace } from '~/shared/types';
+import type { Category } from '~/shared/types';
 
 export interface CreateTransaction extends Pick<CategoryTransaction, 'categoryId'> {
     transactionToCreate: CreateTransactionDto;

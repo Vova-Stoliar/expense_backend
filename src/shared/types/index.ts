@@ -1,6 +1,5 @@
 import type { CategoryTransaction, User } from '@prisma/client';
 
-export * from './utility.types';
 export * from './casl.types';
 
 export type BaseUser = Pick<User, 'email' | 'userName' | 'displayName' | 'id'>;

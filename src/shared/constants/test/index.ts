@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client';
-import type { Category, Replace } from '~/shared/types';
+import type { Category } from '~/shared/types';
 
 export const DATE_TIME = new Date().toISOString();
 

@@ -4,7 +4,7 @@ import { TransactionFacadeHelper } from '~/modules/category-transaction/helpers/
 import { updateCategory } from '~/modules/category-transaction/lib';
 import type * as Types from '~/modules/category-transaction/types';
 import { validateIsValueDefined } from '~/shared/lib';
-import type { BaseCategoryTransaction, DateTime, Replace } from '~/shared/types';
+import type { BaseCategoryTransaction, DateTime } from '~/shared/types';
 
 @Injectable()
 export class CategoryTransactionService {

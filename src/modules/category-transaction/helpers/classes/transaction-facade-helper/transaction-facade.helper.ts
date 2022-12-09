@@ -4,7 +4,7 @@ import { TransactionHelper } from '~/modules/category-transaction/helpers/classe
 import type * as Types from '~/modules/category-transaction/helpers/types';
 import type { GetAllTransactions } from '~/modules/category-transaction/types';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
-import type { BaseCategoryTransaction, DateTime, Replace } from '~/shared/types';
+import type { BaseCategoryTransaction, DateTime } from '~/shared/types';
 
 @Injectable()
 export class TransactionFacadeHelper {

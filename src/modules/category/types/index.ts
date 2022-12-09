@@ -1,7 +1,7 @@
 import type { User } from '@prisma/client';
 import type { CreateCategoryDto } from '~/modules/category/dto';
 import type { UpdateCategoryDto } from '~/modules/category/dto/update-category.dto';
-import type { Category, Replace } from '~/shared/types';
+import type { Category } from '~/shared/types';
 
 export interface CreateParams {
     categoryToCreate: CreateCategoryDto;

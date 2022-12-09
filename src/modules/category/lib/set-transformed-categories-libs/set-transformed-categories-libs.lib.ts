@@ -1,6 +1,5 @@
 import type { SetTransformedCategories } from './set-transformed-categories-libs.types';
 import type { TransformedCategories } from '~/modules/category/types';
-import type { PartialPick } from '~/shared/types';
 
 export const setTransformedCategoriesLibs = () => {
     return { setCategories, setOtherCategory };

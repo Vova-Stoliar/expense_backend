@@ -1,5 +1,3 @@
-import type { WithUndefined } from '~/shared/types';
-
 declare global {
     namespace jest {
         interface Matchers<R> {
