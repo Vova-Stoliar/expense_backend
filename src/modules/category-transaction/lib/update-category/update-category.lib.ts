@@ -1,6 +1,5 @@
 import type { UpdateCategoriesParams } from './update-category.types';
 
-// TODO test
 export function updateCategory(params: UpdateCategoriesParams) {
     const { categoryId, updatedCategoryFields } = params;
 
