@@ -8,13 +8,7 @@ import { CategoryTransactionRepository } from '~/repositories/category-transacti
 import { generateCategory } from '~/shared/constants/test';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
-import { getUserToSignup } from '../constants';
-
-const getTransacionToCreate = () => {
-    const { amount, notes } = generateCategoryTransaction();
-
-    return { amount, notes };
-};
+import { getTransactionToCreate, getUserToSignup } from '../constants';
 
 describe('CategoryTransaction (e2e)', () => {
     let app: INestApplication;
@@ -66,7 +60,7 @@ describe('CategoryTransaction (e2e)', () => {
                     const response = await request(app.getHttpServer())
                         .post(`/categories/transaction/${categories.body[0].id}`)
                         .auth(body.accessToken, { type: 'bearer' })
-                        .send(getTransacionToCreate());
+                        .send(getTransactionToCreate());
 
                     expect(response.status).toBe(201);
                 });
@@ -117,11 +111,110 @@ describe('CategoryTransaction (e2e)', () => {
 
                 await request(app.getHttpServer())
                     .post(`/categories/transaction/${categories.body[0].id}`)
-                    .send(getTransacionToCreate())
+                    .send(getTransactionToCreate())
                     .auth(body.accessToken, { type: 'bearer' });
 
                 const response = await request(app.getHttpServer())
                     .get(`/categories/transaction/${categories.body[0].id}`)
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                expect(response.status).toBe(200);
+            });
+        });
+    });
+
+    describe('Delete /categories/transaction/:categoryId/:transactionId', () => {
+        describe('when user is not authorized', () => {
+            it('should throw Unauthorized error', async () => {
+                const response = await request(app.getHttpServer()).delete(
+                    `/categories/transaction/${generateCategory().id}/${generateCategoryTransaction().id}`
+                );
+
+                expect(response.status).toBe(401);
+            });
+        });
+
+        describe('when user is authorized', () => {
+            it('should delete category', async () => {
+                const { body } = await request(app.getHttpServer()).post('/auth/signup').send(getUserToSignup());
+
+                const categories = await request(app.getHttpServer())
+                    .get('/categories')
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const transaction = await request(app.getHttpServer())
+                    .post(`/categories/transaction/${categories.body[0].id}`)
+                    .send(getTransactionToCreate())
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const response = await request(app.getHttpServer())
+                    .delete(`/categories/transaction/${categories.body[0].id}/${transaction.body.id}`)
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                expect(response.status).toBe(204);
+            });
+        });
+    });
+
+    describe('Get /categories/transaction/:categoryId/:transactionId', () => {
+        describe('when user is not authorized', () => {
+            it('should throw Unauthorized error', async () => {
+                const response = await request(app.getHttpServer()).get(
+                    `/categories/transaction/${generateCategory().id}/${generateCategoryTransaction().id}`
+                );
+
+                expect(response.status).toBe(401);
+            });
+        });
+
+        describe('when user is authorized', () => {
+            it('should return a transaction', async () => {
+                const { body } = await request(app.getHttpServer()).post('/auth/signup').send(getUserToSignup());
+
+                const categories = await request(app.getHttpServer())
+                    .get('/categories')
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const transaction = await request(app.getHttpServer())
+                    .post(`/categories/transaction/${categories.body[0].id}`)
+                    .send(getTransactionToCreate())
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const response = await request(app.getHttpServer())
+                    .get(`/categories/transaction/${categories.body[0].id}/${transaction.body.id}`)
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                expect(response.status).toBe(200);
+            });
+        });
+    });
+
+    describe('Patch /categories/transaction/:categoryId/:transactionId', () => {
+        describe('when user is not authorized', () => {
+            it('should throw Unauthorized error', async () => {
+                const response = await request(app.getHttpServer()).patch(
+                    `/categories/transaction/${generateCategory().id}/${generateCategoryTransaction().id}`
+                );
+
+                expect(response.status).toBe(401);
+            });
+        });
+
+        describe('when user is authorized', () => {
+            it('should return a updated transaction', async () => {
+                const { body } = await request(app.getHttpServer()).post('/auth/signup').send(getUserToSignup());
+
+                const categories = await request(app.getHttpServer())
+                    .get('/categories')
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const transaction = await request(app.getHttpServer())
+                    .post(`/categories/transaction/${categories.body[0].id}`)
+                    .send(getTransactionToCreate())
+                    .auth(body.accessToken, { type: 'bearer' });
+
+                const response = await request(app.getHttpServer())
+                    .patch(`/categories/transaction/${categories.body[0].id}/${transaction.body.id}`)
                     .auth(body.accessToken, { type: 'bearer' });
 
                 expect(response.status).toBe(200);

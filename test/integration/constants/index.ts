@@ -14,7 +14,7 @@ export const getUserToSignup = () => {
     };
 };
 
-export const getCategoryToCrate = (category: Partial<Category> = {}) => {
+export const getCategoryToCreate = (category: Partial<Category> = {}) => {
     const { name, notes, amount } = generateCategory({ name: 'Sport', ...category });
 
     return { name, notes, amount };

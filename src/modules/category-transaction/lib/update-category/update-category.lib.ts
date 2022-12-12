@@ -1,17 +1,24 @@
-import type { UpdateCategory } from './update-category.types';
+import type { UpdateCategoriesParams } from './update-category.types';
 
-export function updateCategory(params: UpdateCategory) {
-    const { categories, categoryId, transactionAmount } = params;
+export function updateCategory(params: UpdateCategoriesParams) {
+    const { categoryId, updatedCategoryFields } = params;
 
-    return categories.map((category) => {
+    const updatedAt = new Date().toISOString();
+
+    const categories = params.categories.map((category) => {
         if (category.id === categoryId) {
             return {
                 ...category,
-                amount: category.amount + transactionAmount,
+                ...updatedCategoryFields,
                 updatedAt: new Date().toISOString(),
             };
         }
 
         return category;
     });
+
+    return {
+        categories,
+        updatedAt,
+    };
 }

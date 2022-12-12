@@ -1,8 +1,9 @@
-import type { CreateTransactionDto } from '~/modules/category-transaction/dto';
-import type { CreateParams } from '~/modules/category-transaction/types';
+import type { CreateTransaction, UpdateTransaction } from '~/modules/category-transaction/types';
+import type { Category } from '~/shared/types';
 
-type Categories = Pick<CreateParams['user'], 'categories'>;
+type Categories = Pick<CreateTransaction['user'], 'categories'>;
+type CategoryId = Pick<UpdateTransaction, 'categoryId'>;
 
-export interface UpdateCategory extends Categories, Pick<CreateParams, 'categoryId'> {
-    transactionAmount: CreateTransactionDto['amount'];
+export interface UpdateCategoriesParams extends CategoryId, Categories {
+    updatedCategoryFields: Partial<Category>;
 }

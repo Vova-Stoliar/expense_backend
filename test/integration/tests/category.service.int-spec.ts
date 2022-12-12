@@ -1,5 +1,4 @@
 import { Test } from '@nestjs/testing';
-import type { User } from '@prisma/client';
 import { AppModule } from '~/app/app.module';
 import { AuthService } from '~/modules/auth/module/auth-service';
 import type { CreateDefaultCategoriesDto } from '~/modules/category/dto';
@@ -8,21 +7,8 @@ import { CategoryTransactionRepository } from '~/repositories/category-transacti
 import { generateCategory } from '~/shared/constants/test';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
-import type { Category } from '~/shared/types';
-import { getCategoryToCrate, getCreatedUser } from '../constants';
-
-async function getCreatedCategory(params: {
-    categoryService: CategoryService;
-    user: Pick<User, 'id'>;
-    categoryToCreate?: Pick<Category, 'amount' | 'name' | 'notes'>;
-}) {
-    const { categoryService, user, categoryToCreate = getCategoryToCrate() } = params;
-
-    return categoryService.create({
-        categoryToCreate,
-        user: { id: user.id, categories: [] },
-    });
-}
+import { getCategoryToCreate, getCreatedUser } from '../constants';
+import { getCreatedCategory } from '../lib';
 
 describe('CategoryService', () => {
     let categoryService: CategoryService;
@@ -63,7 +49,7 @@ describe('CategoryService', () => {
             it('should throw error', async () => {
                 const user = await getCreatedUser({ authService });
 
-                const categoryToCreate = getCategoryToCrate();
+                const categoryToCreate = getCategoryToCreate();
                 const { amount, name, notes, id, updatedAt, createdAt } = generateCategory({
                     name: categoryToCreate.name,
                 });
@@ -84,7 +70,7 @@ describe('CategoryService', () => {
             it('should return created category', async () => {
                 const user = await getCreatedUser({ authService });
 
-                const categoryToCreate = getCategoryToCrate();
+                const categoryToCreate = getCategoryToCreate();
                 const { amount, name, notes } = categoryToCreate;
 
                 const acceptValue = {
@@ -163,7 +149,7 @@ describe('CategoryService', () => {
         it('should return categories', async () => {
             const user = await getCreatedUser({ authService });
 
-            const categoryToCreate = getCategoryToCrate();
+            const categoryToCreate = getCategoryToCreate();
             const { amount, name, notes } = categoryToCreate;
 
             await categoryService.create({ categoryToCreate, user: { id: user.id, categories: [] } });
@@ -245,7 +231,7 @@ describe('CategoryService', () => {
                         },
                     };
 
-                    const { name, notes } = getCategoryToCrate();
+                    const { name, notes } = getCategoryToCreate();
 
                     const expectedValue = {
                         id: expect.toBeUUID(),

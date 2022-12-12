@@ -3,7 +3,7 @@ import { setTransformedCategoriesLibs, transformCategory } from '~/modules/categ
 import type { TransformDefaultCategories } from './transform-default-categories.types';
 import type { TransformedCategories } from '~/modules/category/types';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
-import type { Category, PartialOnly } from '~/shared/types';
+import type { Category } from '~/shared/types';
 
 export function transformDefaultCategories(params: TransformDefaultCategories) {
     const { categories, otherCategory } = transformCategories(params);

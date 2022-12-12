@@ -4,7 +4,7 @@ import { BcryptHelper } from '~/modules/auth/helpers/classes/bcrypt-helper';
 import { DefaultRepositoryHelper } from '~/modules/auth/helpers/classes/default-repository-helper';
 import { JwtHelper } from '~/modules/auth/helpers/classes/jwt-helper';
 import { UserRepository } from '~/shared/repositories/user';
-import type { BaseUser, BaseUserWith, PartialPick, Tokens } from '~/shared/types';
+import type { BaseUser, BaseUserWith, Tokens } from '~/shared/types';
 
 @Injectable()
 export class AuthFacadeHelper {

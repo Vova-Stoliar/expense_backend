@@ -29,28 +29,71 @@ describe('TransactionHelper', () => {
         expect(transactionHelper).toBeDefined();
     });
 
-    describe('createCategoryTransaction', () => {
-        it('should return void', async () => {
+    describe('createTransaction', () => {
+        it('should not throw', async () => {
             const { transactionHelper } = await getMocks();
 
-            const { amount, notes, id } = generateCategoryTransaction();
+            const { amount, notes, id, createdAt } = generateCategoryTransaction();
             const { id: categoryId } = generateCategory();
             const { categories, id: userId } = generateUser();
 
-            const acceptValue = {
-                transactionToCreate: {
-                    id,
-                    notes,
-                    amount,
-                },
-                categoryId,
-                user: {
-                    categories,
-                    id: userId,
-                },
+            const user = { id: userId, categories };
+
+            const transactionToCreate = {
+                amount,
+                notes,
+                id,
+                createdAt: createdAt.toISOString(),
+                updatedAt: createdAt.toISOString(),
             };
 
-            await expect(transactionHelper.createCategoryTransaction(acceptValue)).resolves.not.toThrow();
+            await expect(
+                transactionHelper.createTransaction({ transactionToCreate, user, categoryId })
+            ).resolves.not.toThrow();
+        });
+    });
+
+    describe('deleteTransaction', () => {
+        it('should not throw', async () => {
+            const { transactionHelper } = await getMocks();
+
+            const { id: transactionId } = generateCategoryTransaction();
+            const { id: userId, categories } = generateUser();
+
+            const acceptValue = {
+                transaction: {
+                    id: transactionId,
+                },
+                userId,
+                categories,
+            };
+
+            await expect(transactionHelper.deleteTransaction(acceptValue)).resolves.not.toThrow();
+        });
+    });
+
+    describe('updateTransaction', () => {
+        it('should not throw', async () => {
+            const { transactionHelper } = await getMocks();
+
+            const transaction = generateCategoryTransaction();
+            const user = generateUser();
+
+            const transactionToUpdate = {
+                amount: transaction.amount,
+                notes: transaction.notes,
+                id: transaction.id,
+                updatedAt: transaction.updatedAt.toISOString(),
+                createdAt: transaction.createdAt,
+            };
+
+            const acceptValue = {
+                userId: user.id,
+                transaction: transactionToUpdate,
+                categories: user.categories,
+            };
+
+            await expect(transactionHelper.updateTransaction(acceptValue)).resolves.not.toThrow();
         });
     });
 });

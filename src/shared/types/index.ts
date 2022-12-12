@@ -1,11 +1,12 @@
-import type { User } from '@prisma/client';
+import type { CategoryTransaction, User } from '@prisma/client';
 
-export * from './utility.types';
 export * from './casl.types';
 
 export type BaseUser = Pick<User, 'email' | 'userName' | 'displayName' | 'id'>;
 
 export type BaseUserWith<K extends keyof User> = BaseUser & Pick<User, K>;
+
+export type BaseCategoryTransaction = Pick<CategoryTransaction, 'id' | 'amount' | 'notes' | 'updatedAt' | 'createdAt'>;
 
 export interface DateTime {
     createdAt: string;

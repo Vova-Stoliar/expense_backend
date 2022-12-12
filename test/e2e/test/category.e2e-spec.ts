@@ -3,18 +3,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '~/app/app.module';
-import type { UserToSignupDto } from '~/modules/auth/dto';
 import type { CreateCategoryDto } from '~/modules/category/dto';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
-import { generateCategory, generateUser } from '~/shared/constants/test';
+import { generateCategory } from '~/shared/constants/test';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
-
-const getUserToSignup = (user: Partial<UserToSignupDto> = {}): UserToSignupDto => {
-    const { email, userName, displayName, password } = generateUser();
-
-    return { email, userName, displayName, password, confirmPassword: password, ...user };
-};
+import { getUserToSignup } from '../constants';
 
 describe('Category (e2e)', () => {
     let app: INestApplication;
