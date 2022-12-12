@@ -21,6 +21,6 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false
     },
-    "include": ["src", "**/*.d.ts", "test"],
+    "include": ["src", "**/*.d.ts", "test", "setup-tests.ts"],
     "exclude": ["node_modules", "dist"]
 }

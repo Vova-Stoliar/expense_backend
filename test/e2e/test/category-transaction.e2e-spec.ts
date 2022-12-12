@@ -201,7 +201,7 @@ describe('CategoryTransaction (e2e)', () => {
         });
 
         describe('when user is authorized', () => {
-            it('should return a updated transaction', async () => {
+            it('should return a updated transaction 1', async () => {
                 const { body } = await request(app.getHttpServer()).post('/auth/signup').send(getUserToSignup());
 
                 const categories = await request(app.getHttpServer())
@@ -215,7 +215,8 @@ describe('CategoryTransaction (e2e)', () => {
 
                 const response = await request(app.getHttpServer())
                     .patch(`/categories/transaction/${categories.body[0].id}/${transaction.body.id}`)
-                    .auth(body.accessToken, { type: 'bearer' });
+                    .auth(body.accessToken, { type: 'bearer' })
+                    .send({ amount: 10 });
 
                 expect(response.status).toBe(200);
             });

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { PrismaService } from '~/shared/modules/prisma';
 
+// implements Prisma.DefaultDelegate<undefined>
+
 @Injectable()
 export class DefaultRepository {
     constructor(private prismaService: PrismaService) {}
@@ -16,5 +18,9 @@ export class DefaultRepository {
 
     upsert<T extends Prisma.DefaultUpsertArgs>(args: Prisma.SelectSubset<T, Prisma.DefaultUpsertArgs>) {
         return this.prismaService.default.upsert(args);
+    }
+
+    deleteMany<T extends Prisma.DefaultDeleteManyArgs>(args?: Prisma.SelectSubset<T, Prisma.DefaultDeleteManyArgs>) {
+        return this.prismaService.default.deleteMany(args);
     }
 }
