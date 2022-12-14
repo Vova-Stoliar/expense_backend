@@ -4,6 +4,7 @@ import { AuthService } from '~/modules/auth/module/auth-service';
 import type { CreateDefaultCategoriesDto } from '~/modules/category/dto';
 import { CategoryService } from '~/modules/category/module/category-service/category.service';
 import { CategoryTransactionRepository } from '~/repositories/category-transaction';
+import { DefaultRepository } from '~/repositories/default';
 import { generateCategory } from '~/shared/constants/test';
 import { PrismaService } from '~/shared/modules/prisma';
 import { UserRepository } from '~/shared/repositories/user';
@@ -14,8 +15,10 @@ describe('CategoryService', () => {
     let categoryService: CategoryService;
     let prismaService: PrismaService;
     let authService: AuthService;
+
     let categoryTransactionRepository: CategoryTransactionRepository;
     let userRepository: UserRepository;
+    let defaultRepository: DefaultRepository;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -28,12 +31,21 @@ describe('CategoryService', () => {
 
         categoryTransactionRepository = moduleRef.get<CategoryTransactionRepository>(CategoryTransactionRepository);
         userRepository = moduleRef.get<UserRepository>(UserRepository);
+        defaultRepository = moduleRef.get<DefaultRepository>(DefaultRepository);
 
-        await prismaService.$transaction([categoryTransactionRepository.deleteMany(), userRepository.deleteMany()]);
+        await prismaService.$transaction([
+            categoryTransactionRepository.deleteMany(),
+            userRepository.deleteMany(),
+            defaultRepository.deleteMany(),
+        ]);
     });
 
     afterEach(async () => {
-        await prismaService.$transaction([categoryTransactionRepository.deleteMany(), userRepository.deleteMany()]);
+        await prismaService.$transaction([
+            categoryTransactionRepository.deleteMany(),
+            userRepository.deleteMany(),
+            defaultRepository.deleteMany(),
+        ]);
     });
 
     afterAll(async () => {

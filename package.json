@@ -107,6 +107,9 @@
         "testEnvironment": "node",
         "setupFilesAfterEnv": [
             "<rootDir>/src/shared/jest/index.ts"
+        ],
+        "setupFiles": [
+            "<rootDir>/setup-tests.ts"
         ]
     }
 }

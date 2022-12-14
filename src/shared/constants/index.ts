@@ -19,11 +19,11 @@ export const DECORATORS_KEYS = {
 } as const;
 
 export const DEFAULT_CATEGORIES = {
-    other: 'Other',
     salary: 'Salary',
     food: 'Food',
     travels: 'Travels',
     gifts: 'Gifts',
+    other: 'Other',
 } as const;
 
 export const DEFAULT_DATA_NAMES = {
