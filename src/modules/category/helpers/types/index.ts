@@ -5,3 +5,10 @@ export interface SaveCategoriesParams {
     categories: Category[];
     userId: User['id'];
 }
+
+export interface DeleteCategoryTransaction {
+    deletedCategoryId: Category['id'];
+    otherCategoryId: Category['id'];
+    userId: User['id'];
+    categories: Category[];
+}

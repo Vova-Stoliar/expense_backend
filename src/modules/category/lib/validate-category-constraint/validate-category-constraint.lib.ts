@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
-import type { ValidateCategoryConstraintParams } from '~/modules/category/types';
+import type { ValidateCategory } from './validate-category-constraint.types';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
 
-export function validateCategoryConstraint(params: ValidateCategoryConstraintParams) {
+export function validateCategoryConstraint(params: ValidateCategory) {
     const { categories, categoryToValidateId } = params;
 
     const isOtherCategory = categories.some(({ name, id }) => {

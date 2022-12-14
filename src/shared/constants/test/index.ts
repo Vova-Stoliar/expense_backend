@@ -1,22 +1,22 @@
+import type { User } from '@prisma/client';
 import type { Category } from '~/shared/types';
 
 export const DATE_TIME = new Date().toISOString();
 
-export const generateCategory = (params?: Partial<Category>): Category => {
-    const { id = 'I am id', name = 'I am a name', amount = 0, notes = '' } = params ?? {};
-
+export const generateCategory = (category: Partial<Category> = {}): Category => {
     return {
-        id,
+        id: '4302c642-0cce-4254-a7ea-ff007e4dc0f2',
         createdAt: DATE_TIME,
-        amount,
+        amount: 0,
         updatedAt: DATE_TIME,
-        name,
-        notes,
+        notes: '',
+        name: 'Car',
+        ...category,
     };
 };
 
-export const generateUser = () => ({
-    id: 'fdsgdfewfdfds',
+export const generateUser = (user: Partial<Replace<User, 'categories', Category[]>> = {}) => ({
+    id: '4302c642-0cce-4254-a7ea-ff007e4dc0f2',
     userName: 'Vova Stoliar',
     email: 'vova.stoliar123@gmail.com',
     displayName: 'Admiral',
@@ -25,4 +25,5 @@ export const generateUser = () => ({
     updatedAt: new Date().toISOString(),
     categories: [generateCategory()],
     isAdmin: true,
+    ...user,
 });

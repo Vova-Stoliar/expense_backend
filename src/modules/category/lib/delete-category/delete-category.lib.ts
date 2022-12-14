@@ -1,57 +1,45 @@
-import { getSetTransformedCategoriesLibs } from '~/modules/category/lib';
-import type { DeleteCategory, SetTransformedCategories } from '~/modules/category/types';
+import { setTransformedCategoriesLibs } from '~/modules/category/lib';
+import type { TransformedCategories } from '~/modules/category/types';
 import { DEFAULT_CATEGORIES } from '~/shared/constants';
 import type { Category } from '~/shared/types';
+import type { DeleteCategory, HandleOtherCategoryParams, UpdateOtherCategory } from './delete-category.types';
 
-interface TransformedCategories {
-    categories: Category[];
-    otherCategory: Category;
-    deletedCategory: Category;
-}
-
-type UpdateOtherCategory = Pick<TransformedCategories, 'deletedCategory' | 'otherCategory'>;
-
-export function deleteCategory(params: DeleteCategory) {
-    const { categories, otherCategory, deletedCategory } = getTransformedCategories({
-        categories: params.categories,
-        categoryToDeleteId: params.categoryToDeleteId,
-    });
-
-    return [...categories, updateOtherCategory({ deletedCategory, otherCategory })];
-}
-
-function getTransformedCategories(params: DeleteCategory) {
-    const { categoryToDeleteId, categories } = params;
-    const { setCategories, setOtherCategory } = getSetTransformedCategoriesLibs();
+export function deleteCategory(params: DeleteCategory): TransformedCategories {
+    const { categoryToDelete, categories } = params;
+    const { setCategories } = setTransformedCategoriesLibs();
 
     return categories.reduce((transformedCategories, category) => {
-        if (category.id === categoryToDeleteId) return setCategoryToDelete({ transformedCategories, category });
+        if (categoryToDelete.id === category.id) return transformedCategories;
 
         if (category.name === DEFAULT_CATEGORIES.other) {
-            return setOtherCategory<TransformedCategories>({ transformedCategories, category });
+            return handleOtherCategory({
+                otherCategory: updateOtherCategory({ categoryToDelete, otherCategory: category }),
+                transformedCategories,
+            });
         }
 
-        return setCategories<TransformedCategories>({ transformedCategories, category });
+        return setCategories({ transformedCategories, category });
     }, {} as TransformedCategories);
 }
 
-function setCategoryToDelete<T extends Pick<TransformedCategories, 'deletedCategory'>>(
-    params: SetTransformedCategories<T>
-) {
-    const { transformedCategories, category } = params;
+function handleOtherCategory(params: HandleOtherCategoryParams) {
+    const { setCategories, setOtherCategory } = setTransformedCategoriesLibs();
+    const { otherCategory, transformedCategories } = params;
 
-    return {
-        ...transformedCategories,
-        deletedCategory: category,
-    };
+    setOtherCategory({
+        transformedCategories,
+        category: otherCategory,
+    });
+
+    return setCategories({ transformedCategories, category: otherCategory });
 }
 
 function updateOtherCategory(params: UpdateOtherCategory): Category {
-    const { deletedCategory, otherCategory } = params;
+    const { categoryToDelete, otherCategory } = params;
 
     return {
         ...otherCategory,
         updatedAt: new Date().toISOString(),
-        amount: otherCategory.amount + deletedCategory.amount,
+        amount: otherCategory.amount + categoryToDelete.amount,
     };
 }

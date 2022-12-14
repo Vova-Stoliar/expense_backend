@@ -1,4 +1,4 @@
-import { PickType } from '@nestjs/mapped-types';
+import { PickType } from '@nestjs/swagger';
 import type { User } from '@prisma/client';
 import { IsNotEmpty, IsUUID } from 'class-validator';
 import { UserToSignupDto } from '~/modules/auth/dto';
@@ -13,5 +13,5 @@ export class UserToResetPasswordDto
 {
     @IsUUID()
     @IsNotEmpty()
-    id!: User['id'];
+    id!: IUserToResetPassword['id'];
 }
