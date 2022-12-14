@@ -4,23 +4,23 @@
         "paths": {
             "~/*": ["src/*"]
         },
-        "module": "commonjs",
         "declaration": true,
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
-        "target": "es2017",
         "sourceMap": true,
         "outDir": "./dist",
         "baseUrl": "./",
         "incremental": true,
-        "skipLibCheck": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictBindCallApply": false,
-        "forceConsistentCasingInFileNames": false,
+
         "noUncheckedIndexedAccess": false,
-        "noFallthroughCasesInSwitch": false
+        "exactOptionalPropertyTypes": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
     },
-    "exclude": ["node_modules"]
+    "include": ["src", "**/*.d.ts", "test", "setup-tests.ts"],
+    "exclude": ["node_modules", "dist"]
 }
